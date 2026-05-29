@@ -14,6 +14,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.capstone.smartbite.R
@@ -73,6 +76,12 @@ class CameraFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCameraBinding.inflate(inflater, container, false)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(top = systemBars.top)
+            insets
+        }
 
         // Set klik listener
         binding.cardcamera.setOnClickListener { startCamera() }
