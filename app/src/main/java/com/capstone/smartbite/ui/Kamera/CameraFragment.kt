@@ -35,9 +35,8 @@ import java.io.File
 
 class CameraFragment : Fragment(){
 
-
-
-    private lateinit var binding: FragmentCameraBinding
+    private var _binding: FragmentCameraBinding? = null
+    private val binding get() = _binding!!
 
 
     private var currentImageUri: Uri? = null
@@ -75,11 +74,11 @@ class CameraFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCameraBinding.inflate(inflater, container, false)
+        _binding = FragmentCameraBinding.inflate(inflater, container, false)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = systemBars.top)
+            binding.root.updatePadding(top = systemBars.top)
             insets
         }
 
@@ -251,6 +250,12 @@ class CameraFragment : Fragment(){
     private fun showLoading(isLoading: Boolean) {
         binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
         private const val CURRENT_IMAGE_URI_KEY = "currentImageUri"

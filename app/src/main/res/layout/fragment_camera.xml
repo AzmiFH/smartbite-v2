@@ -1,146 +1,145 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/miaw"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
     tools:context=".ui.Kamera.CameraFragment">
 
-    <TextView
-        android:id="@+id/text_home"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/camera_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressIndicator"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="16dp">
 
-    <!-- CardView untuk gambar -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- LinearLayout untuk tombol Camera dan Galeri -->
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="336dp"
-        android:layout_height="385dp"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp">
-
-        <ImageView
-            android:id="@+id/gambaruplode"
-            android:layout_width="351dp"
-            android:layout_height="400dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/baseline_image_24" />
-    </androidx.cardview.widget.CardView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <!-- CardView untuk Camera -->
+        <!-- Preview Gambar asli Anda dengan rasio tetap -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/card_image_preview"
             android:layout_width="0dp"
-            android:layout_height="140dp"
-            android:layout_margin="16dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
+            app:layout_constraintDimensionRatio="1:1.1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressIndicator"
+            app:layout_constraintWidth_percent="0.9">
+
+            <ImageView
+                android:id="@+id/gambaruplode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_image_24" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Tombol Camera asli Anda -->
+        <androidx.cardview.widget.CardView
             android:id="@+id/cardcamera"
-            android:layout_weight="1">
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toStartOf="@+id/cardgaleri"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_image_preview">
 
             <LinearLayout
-                android:padding="2dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <ImageView
                     android:id="@+id/kameraimage"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/baseline_photo_camera_24"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:adjustViewBounds="true" />
+                    android:src="@drawable/baseline_photo_camera_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Camera"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_marginTop="4dp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
-        <!-- CardView untuk Galeri -->
+        <!-- Tombol Galeri asli Anda -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardgaleri"
             android:layout_width="0dp"
-            android:layout_height="140dp"
-            android:layout_margin="16dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="8dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
-            android:id="@+id/cardgaleri"
-            android:layout_weight="1">
+            app:layout_constraintBottom_toBottomOf="@+id/cardcamera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cardcamera"
+            app:layout_constraintTop_toTopOf="@+id/cardcamera">
 
             <LinearLayout
-                android:padding="2dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/baseline_add_photo_alternate_24"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:adjustViewBounds="true" />
+                    android:src="@drawable/baseline_add_photo_alternate_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Galeri"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_marginTop="4dp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/button_analisa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:text="Analisa" />
+        <!-- Tombol Analisa asli Anda -->
+        <Button
+            android:id="@+id/button_analisa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/white"
+            android:text="Analisa"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardcamera"
+            app:layout_constraintWidth_percent="0.9" />
 
-
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

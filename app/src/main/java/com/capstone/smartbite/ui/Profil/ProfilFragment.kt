@@ -26,7 +26,9 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ProfilFragment : Fragment(), View.OnClickListener {
 
-    private lateinit var binding: FragmentProfilBinding
+    private var _binding: FragmentProfilBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var mUserPreference: UserPreference
     private lateinit var userModel: UserModel
 
@@ -48,15 +50,20 @@ class ProfilFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfilBinding.inflate(inflater, container, false)
+        _binding = FragmentProfilBinding.inflate(inflater, container, false)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = systemBars.top)
+            binding.root.updatePadding(top = systemBars.top)
             insets
         }
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

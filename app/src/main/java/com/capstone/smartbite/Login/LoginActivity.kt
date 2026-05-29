@@ -2,6 +2,10 @@ package com.capstone.smartbite.Login
 
 import android.content.Intent
 import android.os.Bundle
+import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -32,11 +36,15 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            // Hanya berikan padding atas agar logo tidak kena poni
+            // Padding bawah dibiarkan 0 agar white card menyentuh dasar layar
+            binding.main.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
+
+        setupTextStyling()
 
         auth = FirebaseAuth.getInstance()
 
@@ -98,6 +106,33 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun setupTextStyling() {
+        val titleText = "Track Your Nutrition,\nTransform Your Health"
+        val spannable = SpannableString(titleText)
+
+        // Color "Nutrition" blue (#4285F4 - Google Blue style or similar)
+        val nutritionStart = titleText.indexOf("Nutrition")
+        val nutritionEnd = nutritionStart + "Nutrition".length
+        spannable.setSpan(
+            ForegroundColorSpan(Color.parseColor("#4285F4")),
+            nutritionStart,
+            nutritionEnd,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        // Color "Health" green (#34A853 - Google Green style)
+        val healthStart = titleText.indexOf("Health")
+        val healthEnd = healthStart + "Health".length
+        spannable.setSpan(
+            ForegroundColorSpan(Color.parseColor("#34A853")),
+            healthStart,
+            healthEnd,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        //binding.tvTitle.text = spannable
     }
 
     private fun showLoading(isLoading: Boolean) {

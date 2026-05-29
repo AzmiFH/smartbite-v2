@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.capstone.smartbite.Login.LoginActivity
 import com.capstone.smartbite.R
@@ -28,6 +31,13 @@ class SettingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.root.updatePadding(top = systemBars.top)
+            insets
+        }
+
         return binding.root
     }
 
