@@ -1,6 +1,8 @@
 package com.capstone.smartbite.ui.Kamera
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity.RESULT_CANCELED
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -11,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -82,9 +85,11 @@ class CameraFragment : Fragment(){
             insets
         }
 
+        startScanningAnimation()
+
         // Set klik listener
-        binding.cardcamera.setOnClickListener { startCamera() }
-        binding.cardgaleri.setOnClickListener { startGallery() }
+        binding.btnGallery.setOnClickListener { startGallery() }
+        binding.btnReset.setOnClickListener { startCamera() } // Re-take photo
         binding.buttonAnalisa.setOnClickListener { uploadImage() }
 
         // Tampilkan gambar yang sudah ada
@@ -97,6 +102,23 @@ class CameraFragment : Fragment(){
         }
 
         return binding.root
+    }
+
+    private fun startScanningAnimation() {
+        binding.scanLine.post {
+            val parentHeight = binding.scanAreaContainer.height.toFloat()
+            val animation = ObjectAnimator.ofFloat(
+                binding.scanLine,
+                "translationY",
+                0f,
+                parentHeight - binding.scanLine.height
+            )
+            animation.duration = 2000
+            animation.interpolator = LinearInterpolator()
+            animation.repeatCount = ValueAnimator.INFINITE
+            animation.repeatMode = ValueAnimator.REVERSE
+            animation.start()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

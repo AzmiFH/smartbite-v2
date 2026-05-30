@@ -24,12 +24,14 @@
         <!-- Activity Form User Preference -->
         <activity
             android:name=".FormUserPreferenceActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <!-- Activity Hasil Kamera -->
         <activity
             android:name=".ui.Kamera.ResultActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <!-- LoginActivity menjadi LAUNCHER -->
         <activity
@@ -47,6 +49,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" />
 
         <!-- FileProvider untuk akses kamera/gambar -->
