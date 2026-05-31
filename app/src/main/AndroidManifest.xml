@@ -50,6 +50,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/app_name" />
 
         <!-- FileProvider untuk akses kamera/gambar -->

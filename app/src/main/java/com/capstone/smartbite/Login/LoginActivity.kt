@@ -38,9 +38,8 @@ class LoginActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Hanya berikan padding atas agar logo tidak kena poni
-            // Padding bawah dibiarkan 0 agar white card menyentuh dasar layar
-            binding.main.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            // Berikan padding atas dan bawah agar konten tidak tertutup status bar dan navigasi 3 button
+            binding.main.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 

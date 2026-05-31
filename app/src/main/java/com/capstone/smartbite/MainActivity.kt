@@ -8,13 +8,15 @@ import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.capstone.smartbite.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
+class  MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -24,13 +26,31 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.navView) { v, insets ->
+        // Handle insets for the main container (Status Bar)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.container) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(0, 0, 0, systemBars.bottom)
+            v.updatePadding(
+                left = systemBars.left,
+                top = systemBars.top,
+                right = systemBars.right
+            )
             insets
         }
 
         val navView: BottomNavigationView = binding.navView
+
+        // Handle insets for the BottomNavigationView (Push it above 3-button navigation & match size)
+        ViewCompat.setOnApplyWindowInsetsListener(navView) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val baseHeight = (50 * resources.displayMetrics.density).toInt()
+            
+            val params = v.layoutParams
+            params.height = baseHeight + systemBars.bottom
+            v.layoutParams = params
+
+            v.setPadding(0, 0, 0, systemBars.bottom)
+            insets
+        }
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
