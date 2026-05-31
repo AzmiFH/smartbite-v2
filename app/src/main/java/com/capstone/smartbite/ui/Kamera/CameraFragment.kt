@@ -129,7 +129,7 @@ class CameraFragment : Fragment(){
     }
 
 
-    private fun startCamera() {
+    fun startCamera() {
         currentImageUri = getImageUri(requireContext())
         launcherIntentCamera.launch(currentImageUri!!)
     }
@@ -138,15 +138,25 @@ class CameraFragment : Fragment(){
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
         if (isSuccess) {
-            // Setelah pengambilan gambar berhasil, simpan URI gambar ke ViewModel
-
-            // Tampilkan gambar hasil pengambilan kamera
             showImage()
-
-            // Lakukan analisis gambar setelah gambar disimpa
+            // Reset data cadangan karena pengambilan gambar baru berhasil
+            lastResult = null
+            lastImageUri = null
         } else {
-            currentImageUri = null
-            showToast("Pengambilan gambar dibatalkan")
+            // Jika kamera dibatalkan DAN kita punya data cadangan dari Retake
+            if (lastResult != null && lastImageUri != null) {
+                val intent = Intent(requireContext(), ResultActivity::class.java)
+                intent.putExtra("result", lastResult)
+                intent.putExtra("imageUri", lastImageUri)
+                launcherResultActivity.launch(intent)
+                
+                // Reset setelah digunakan
+                lastResult = null
+                lastImageUri = null
+            } else {
+                currentImageUri = null
+                showToast("Pengambilan gambar dibatalkan")
+            }
         }
     }
 
@@ -227,7 +237,7 @@ class CameraFragment : Fragment(){
                     val intent = Intent(requireContext(), ResultActivity::class.java)
                     intent.putExtra("result", response)
                     intent.putExtra("imageUri", uri.toString()) // Send image URI
-                    startActivity(intent)
+                    launcherResultActivity.launch(intent)
 
                 } catch (e: HttpException) {
                     val errorBody = e.response()?.errorBody()?.string()
@@ -241,6 +251,21 @@ class CameraFragment : Fragment(){
                 }
             }
         } ?: showToast(getString(R.string.empty_image_warning))
+    }
+
+    private var lastResult: FileUploadResponse? = null
+    private var lastImageUri: String? = null
+
+    private val launcherResultActivity = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == ResultActivity.RESULT_RETAKE) {
+            val intent = result.data
+            lastResult = intent?.getSerializableExtra("last_result") as? FileUploadResponse
+            lastImageUri = intent?.getStringExtra("last_imageUri")
+            
+            startCamera()
+        }
     }
 
     fun onError(error: String) {

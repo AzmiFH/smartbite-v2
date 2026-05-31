@@ -1,55 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:background="#000000"
     tools:context=".ui.Kamera.ResultActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- Foto Makanan Utama -->
+    <ImageView
+        android:id="@+id/previewImageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="24dp">
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/logo_login" />
 
-        <!-- Preview Gambar asli Anda dengan rasio tetap 1:1 -->
-        <ImageView
-            android:id="@+id/previewImageView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitCenter"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="1.0"
-            app:srcCompat="@drawable/baseline_image_24" />
+    <!-- Overlay Buttons -->
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/ic_back_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Teks Hasil asli Anda -->
-        <TextView
-            android:id="@+id/resultTextView"
-            android:layout_width="0dp"
+    <ImageButton
+        android:id="@+id/btn_close"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/ic_close_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Kartu Informasi Putih -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/info_card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-60dp"
+        android:background="@drawable/bg_white_rounded_top"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/previewImageView">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/result"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/previewImageView" />
+            android:padding="24dp">
 
-        <!-- Grafik asli Anda -->
-        <com.dewakoding.androidchartjs.AndroidChartJSView
-            android:id="@+id/android_chart_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="300dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/resultTextView" />
+            <!-- Handle Line -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="3dp"
+                android:background="#E0E0E0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            <!-- Nama Makanan -->
+            <TextView
+                android:id="@+id/tv_food_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#000000"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Ayam Goreng" />
+
+            <!-- Tags -->
+            <LinearLayout
+                android:id="@+id/tag_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_food_name">
+
+                <TextView
+                    android:id="@+id/tv_tag_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_tag"
+                    android:text="CHICKEN"
+                    android:textAllCaps="true"
+                    android:textColor="#555555"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_tag_portion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/bg_tag"
+                    android:text="PORTION"
+                    android:textAllCaps="true"
+                    android:textColor="#555555"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Total Kalori Bar -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/calorie_bar"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_total_calories"
+                android:paddingHorizontal="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/tag_container">
+
+                <TextView
+                    android:id="@+id/tv_calories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Total 260 kcal" />
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/bg_circle_primary"
+                    android:backgroundTint="#FFFFFF"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_dashboard_black_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#FF9800" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Macros Row -->
+            <LinearLayout
+                android:id="@+id/macros_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/calorie_bar">
+
+                <!-- Protein -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_macro_card"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/lbl_protein"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Protein"
+                        android:textColor="#555555"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_protein"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="8dp"
+                        android:max="100"
+                        android:progress="60"
+                        android:progressDrawable="@drawable/circular_progress_protein"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lbl_protein" />
+
+                    <TextView
+                        android:id="@+id/tv_protein_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_protein"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_protein"
+                        app:layout_constraintStart_toStartOf="@+id/progress_protein"
+                        app:layout_constraintTop_toTopOf="@+id/progress_protein"
+                        tools:text="21.9g" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Fat -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="4dp"
+                    android:background="@drawable/bg_macro_card"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/lbl_fat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fat"
+                        android:textColor="#555555"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_fat"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="8dp"
+                        android:max="100"
+                        android:progress="45"
+                        android:progressDrawable="@drawable/circular_progress_fat"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lbl_fat" />
+
+                    <TextView
+                        android:id="@+id/tv_fat_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_fat"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_fat"
+                        app:layout_constraintStart_toStartOf="@+id/progress_fat"
+                        app:layout_constraintTop_toTopOf="@+id/progress_fat"
+                        tools:text="12.5g" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Carbs -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_macro_card"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:id="@+id/lbl_carbs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Carbs"
+                        android:textColor="#555555"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_carbs"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="8dp"
+                        android:max="100"
+                        android:progress="30"
+                        android:progressDrawable="@drawable/circular_progress_carbs"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lbl_carbs" />
+
+                    <TextView
+                        android:id="@+id/tv_carbs_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_carbs"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_carbs"
+                        app:layout_constraintStart_toStartOf="@+id/progress_carbs"
+                        app:layout_constraintTop_toTopOf="@+id/progress_carbs"
+                        tools:text="10.7g" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/macros_container"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btn_retake"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_btn_retake_red"
+                    android:text="Retake Photo"
+                    android:textAllCaps="false"
+                    android:textColor="#E74C3C"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
+
+                <Button
+                    android:id="@+id/btn_add_meal"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_btn_add_meal"
+                    android:text="Add Meal"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

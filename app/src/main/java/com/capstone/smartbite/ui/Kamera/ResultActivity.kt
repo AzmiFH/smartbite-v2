@@ -1,5 +1,6 @@
 package com.capstone.smartbite.ui.Kamera
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +27,7 @@ class ResultActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
 
@@ -35,43 +36,51 @@ class ResultActivity : AppCompatActivity() {
 
         // Tampilkan gambar
         imageUri?.let {
-            findViewById<ImageView>(R.id.previewImageView).setImageURI(it)
+            binding.previewImageView.setImageURI(it)
         }
 
-        // Tampilkan chart dan teks jika result tersedia
+        // Tampilkan data jika result tersedia
         result?.let {
             val nutrition = it.nutrition
 
-            // Pie chart
-            binding.androidChart1.setChart(
-                ChartType.PIE,
-                arrayOf("Calories", "Protein", "Fat", "Carbohydrates"),
-                arrayOf(
-                    nutrition.calories.toFloat(),
-                    nutrition.proteins.toString().toFloatOrNull() ?: 0f,
-                    nutrition.fat.toString().toFloatOrNull() ?: 0f,
-                    nutrition.carbohydrate.toString().toFloatOrNull() ?: 0f
-                ).map { value -> value.toInt() }.toTypedArray(),
-                "of quantity"
-            )
+            binding.tvFoodName.text = it.food
+            binding.tvTagCategory.text = "FOOD" // Default or dynamic if available
+            binding.tvCalories.text = "Total ${nutrition.calories} kcal"
+            
+            val protein = nutrition.proteins.toString().toFloatOrNull() ?: 0f
+            val fat = nutrition.fat.toString().toFloatOrNull() ?: 0f
+            val carbs = nutrition.carbohydrate.toString().toFloatOrNull() ?: 0f
 
-            // Result text
-            val resultText = String.format(
-                "Food: %s\nCalories: %d\nProtein: %.2fg\nFat: %.2fg\nCarbohydrates: %.2fg",
-                it.food,
-                nutrition.calories,
-                nutrition.proteins.toString().toFloatOrNull() ?: 0f,
-                nutrition.fat.toString().toFloatOrNull() ?: 0f,
-                nutrition.carbohydrate.toString().toFloatOrNull() ?: 0f
-            )
+            binding.tvProteinVal.text = String.format("%.1fg", protein)
+            binding.tvFatVal.text = String.format("%.1fg", fat)
+            binding.tvCarbsVal.text = String.format("%.1fg", carbs)
 
-            findViewById<TextView>(R.id.resultTextView).text = resultText
+            // Hitung progress (Sederhana: 100g sebagai 100%)
+            binding.progressProtein.progress = (protein * 2).toInt().coerceAtMost(100)
+            binding.progressFat.progress = (fat * 2).toInt().coerceAtMost(100)
+            binding.progressCarbs.progress = (carbs * 2).toInt().coerceAtMost(100)
 
         } ?: Log.e("ResultActivity", "No result received!")
+
+        binding.btnBack.setOnClickListener { finish() }
+        binding.btnClose.setOnClickListener { finish() }
+        binding.btnRetake.setOnClickListener {
+            // Kirim balik data lama agar bisa dibuka kembali jika kamera di-cancel
+            val intent = Intent()
+            intent.putExtra("last_result", result)
+            intent.putExtra("last_imageUri", imageUri.toString())
+            setResult(RESULT_RETAKE, intent)
+            finish()
+        }
+        binding.btnAddMeal.setOnClickListener {
+            // Logika simpan data
+            finish()
+        }
     }
 
     companion object {
         const val EXTRA_IMAGE_URI = "extra_image_uri"
         const val EXTRA_RESULT = "extra_result"
+        const val RESULT_RETAKE = 101
     }
 }
