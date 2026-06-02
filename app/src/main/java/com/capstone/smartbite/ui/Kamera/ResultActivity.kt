@@ -63,7 +63,11 @@ class ResultActivity : AppCompatActivity() {
         } ?: Log.e("ResultActivity", "No result received!")
 
         binding.btnBack.setOnClickListener { finish() }
-        binding.btnClose.setOnClickListener { finish() }
+        binding.btnClose.setOnClickListener {
+            // Sinyal untuk pindah ke dashboard
+            setResult(RESULT_GO_TO_DASHBOARD)
+            finish()
+        }
         binding.btnRetake.setOnClickListener {
             // Kirim balik data lama agar bisa dibuka kembali jika kamera di-cancel
             val intent = Intent()
@@ -82,5 +86,6 @@ class ResultActivity : AppCompatActivity() {
         const val EXTRA_IMAGE_URI = "extra_image_uri"
         const val EXTRA_RESULT = "extra_result"
         const val RESULT_RETAKE = 101
+        const val RESULT_GO_TO_DASHBOARD = 102
     }
 }

@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.capstone.smartbite.R
 import com.capstone.smartbite.data.ApiConfig
 import com.capstone.smartbite.data.FileUploadResponse
@@ -214,41 +215,49 @@ class CameraFragment : Fragment(){
         currentImageUri?.let {
             binding.gambaruplode.setImageURI(it)
             binding.buttonAnalisa.visibility = View.VISIBLE
+            // Pastikan imageUri (data cadangan) sinkron jika diperlukan
+            imageUri = it
         }
     }
 
     private fun uploadImage() {
-        currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, requireContext())
-            showLoading(true)
-            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val multipartBody = MultipartBody.Part.createFormData(
-                "file",
-                imageFile.name,
-                requestImageFile
-            )
+        val uriToUpload = currentImageUri ?: imageUri
+        uriToUpload?.let { uri ->
+            try {
+                val imageFile = uriToFile(uri, requireContext())
+                showLoading(true)
+                val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+                val multipartBody = MultipartBody.Part.createFormData(
+                    "file",
+                    imageFile.name,
+                    requestImageFile
+                )
 
-            lifecycleScope.launch {
-                try {
-                    val apiService = ApiConfig.getApiService()
-                    val response = apiService.uploadImage(multipartBody)
+                lifecycleScope.launch {
+                    try {
+                        val apiService = ApiConfig.getApiService()
+                        val response = apiService.uploadImage(multipartBody)
 
-                    // Navigate to ResultActivity with data
-                    val intent = Intent(requireContext(), ResultActivity::class.java)
-                    intent.putExtra("result", response)
-                    intent.putExtra("imageUri", uri.toString()) // Send image URI
-                    launcherResultActivity.launch(intent)
+                        // Navigate to ResultActivity with data
+                        val intent = Intent(requireContext(), ResultActivity::class.java)
+                        intent.putExtra("result", response)
+                        intent.putExtra("imageUri", uri.toString()) // Send image URI
+                        launcherResultActivity.launch(intent)
 
-                } catch (e: HttpException) {
-                    val errorBody = e.response()?.errorBody()?.string()
-                    val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
-                    showToast(errorResponse.message)
-                } catch (e: Exception) {
-                    Log.e("Upload Image", "Unexpected error: ${e.message}")
-                    showToast("An unexpected error occurred. Please try again.")
-                } finally {
-                    showLoading(false)
+                    } catch (e: HttpException) {
+                        val errorBody = e.response()?.errorBody()?.string()
+                        val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
+                        showToast(errorResponse.message)
+                    } catch (e: Exception) {
+                        Log.e("Upload Image", "Unexpected error: ${e.message}")
+                        showToast("An unexpected error occurred. Please try again.")
+                    } finally {
+                        showLoading(false)
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("Upload Image", "Error converting URI to file: ${e.message}")
+                showToast("Gagal memproses gambar. Silakan coba lagi.")
             }
         } ?: showToast(getString(R.string.empty_image_warning))
     }
@@ -265,7 +274,21 @@ class CameraFragment : Fragment(){
             lastImageUri = intent?.getStringExtra("last_imageUri")
             
             startCamera()
+        } else if (result.resultCode == ResultActivity.RESULT_GO_TO_DASHBOARD) {
+            // Pindah ke Dashboard
+            findNavController().navigate(R.id.navigation_dashboard)
+        } else {
+            // Jika user keluar dari ResultActivity (Back, Close, atau Add Meal)
+            // Bersihkan data scan agar user mulai dari awal lagi
+            clearScanData()
         }
+    }
+
+    private fun clearScanData() {
+        currentImageUri = null
+        imageUri = null
+        binding.gambaruplode.setImageResource(R.drawable.baseline_image_24)
+        binding.buttonAnalisa.visibility = View.GONE
     }
 
     fun onError(error: String) {
