@@ -21,6 +21,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
 class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private lateinit var dashboardViewModel: DashboardViewModel
@@ -38,16 +42,16 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.headerContainer.updatePadding(top = systemBars.top)
+            binding.topBar.updatePadding(top = systemBars.top)
             insets
         }
 
-        dashboardViewModel = ViewModelProvider(requireActivity()).get(DashboardViewModel::class.java)
+        dashboardViewModel = ViewModelProvider(requireActivity())[DashboardViewModel::class.java]
 
-        adapter = DashboardAdapter { event ->
-            val eventId = event.id
+        adapter = DashboardAdapter { _ ->
+            // Handle item click
         }
 
         binding.recyclerView.adapter = adapter
@@ -89,9 +93,18 @@ class DashboardFragment : Fragment() {
 
         if (user != null) {
             val userName = user.displayName
-            binding.name.text = "Hai, $userName"
+            binding.tvGreeting.text = "Halo, $userName!"
         } else {
-            binding.name.text = "Welcome, Guest"
+            binding.tvGreeting.text = "Halo, Guest!"
         }
+
+        setupCurrentDate()
+    }
+
+    private fun setupCurrentDate() {
+        val calendar = Calendar.getInstance().time
+        val dateFormat = SimpleDateFormat("EEEE, d MMM yyyy", Locale("id", "ID"))
+        val formattedDate = dateFormat.format(calendar)
+        binding.tvCurrentDate.text = formattedDate
     }
 }
