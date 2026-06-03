@@ -1,26 +1,27 @@
 package com.capstone.smartbite.ui.dashboard
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.capstone.smartbite.R
 import com.capstone.smartbite.databinding.FragmentDashboardBinding
-import com.capstone.smartbite.databinding.FragmentSettingBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -30,6 +31,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardViewModel: DashboardViewModel
     private val binding get() = _binding!!
     private lateinit var adapter: DashboardAdapter
+    private lateinit var progressPagerAdapter: ProgressPagerAdapter
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
@@ -65,8 +67,29 @@ class DashboardFragment : Fragment() {
         }
         dashboardViewModel.loadActiveEvents()
 
-        return root
+        setupProgressPager()
 
+        return root
+    }
+
+    private fun setupProgressPager() {
+        progressPagerAdapter = ProgressPagerAdapter()
+        binding.vpDailyProgress.adapter = progressPagerAdapter
+
+        binding.vpDailyProgress.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                updateDots(position)
+            }
+        })
+    }
+
+    private fun updateDots(position: Int) {
+        val activeColor = ContextCompat.getColor(requireContext(), R.color.text_black_bold)
+        val inactiveColor = Color.parseColor("#E0E0E0")
+
+        binding.dot1.backgroundTintList = ColorStateList.valueOf(if (position == 0) activeColor else inactiveColor)
+        binding.dot2.backgroundTintList = ColorStateList.valueOf(if (position == 1) activeColor else inactiveColor)
     }
 
     private fun showLoading(isLoading: Boolean) {
