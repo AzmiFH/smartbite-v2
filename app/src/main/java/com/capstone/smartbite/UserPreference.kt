@@ -12,6 +12,7 @@ internal class UserPreference(context: Context) {
         private const val PHONE_NUMBER = "phone"
         private const val ADD = "alamat"
         private const val PROFILE_IMAGE_URI = "profile_image_uri"
+        private const val IS_ONBOARDING_FINISHED = "is_onboarding_finished"
     }
 
     private val preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -25,6 +26,16 @@ internal class UserPreference(context: Context) {
         editor.putString(ADD, value.add)
         editor.putString(PROFILE_IMAGE_URI, value.profileImage?.toString())
         editor.apply()
+    }
+
+    fun setOnboardingFinished(isFinished: Boolean) {
+        val editor = preferences.edit()
+        editor.putBoolean(IS_ONBOARDING_FINISHED, isFinished)
+        editor.apply()
+    }
+
+    fun isOnboardingFinished(): Boolean {
+        return preferences.getBoolean(IS_ONBOARDING_FINISHED, false)
     }
 
     fun getUser(): UserModel {

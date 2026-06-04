@@ -16,6 +16,7 @@ import com.capstone.smartbite.MainActivity
 import com.capstone.smartbite.R
 import com.capstone.smartbite.UserModel
 import com.capstone.smartbite.UserPreference
+import com.capstone.smartbite.onboarding.OnboardingActivity
 import com.capstone.smartbite.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -52,10 +53,14 @@ class LoginActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
-            // The user is already signed in, navigate to MainActivity
-            val intent = Intent(this, MainActivity::class.java)
+            val userPreference = UserPreference(this)
+            val intent = if (userPreference.isOnboardingFinished()) {
+                Intent(this, MainActivity::class.java)
+            } else {
+                Intent(this, OnboardingActivity::class.java)
+            }
             startActivity(intent)
-            finish() // finish the current activity to prevent the user from coming back to the SignInActivity using the back button
+            finish()
         }
 
         binding.buttonLogin.setOnClickListener {
@@ -113,7 +118,14 @@ class LoginActivity : AppCompatActivity() {
                             userPreference.setUser(currentModel)
                         }
                     }
-                    startActivity(Intent(this, MainActivity::class.java))
+                    
+                    val userPreference = UserPreference(this)
+                    val intent = if (userPreference.isOnboardingFinished()) {
+                        Intent(this, MainActivity::class.java)
+                    } else {
+                        Intent(this, OnboardingActivity::class.java)
+                    }
+                    startActivity(intent)
                     finish()
                 } else {
                     Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()

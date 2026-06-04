@@ -107,6 +107,6 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.15.1")
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-
-
+    // Number Picker
+    implementation(libs.number.picker)
 }
