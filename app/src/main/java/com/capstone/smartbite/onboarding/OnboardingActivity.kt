@@ -38,7 +38,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setupViewPager() {
         val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 3 // Updated to 3 steps
+            override fun getItemCount(): Int = 4
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
@@ -50,7 +50,7 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
         binding.viewPagerOnboarding.adapter = adapter
-        binding.viewPagerOnboarding.isUserInputEnabled = false // Disable swiping
+        binding.viewPagerOnboarding.isUserInputEnabled = false
 
         binding.viewPagerOnboarding.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
