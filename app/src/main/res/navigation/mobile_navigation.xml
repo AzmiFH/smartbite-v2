@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_camera"
-        android:name="com.capstone.smartbite.ui.Kamera.CameraFragment"
+        android:name="com.capstone.smartbite.ui.kamera.CameraFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_camera" />
 
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.capstone.smartbite.ui.Profil.ProfilFragment"
+        android:name="com.capstone.smartbite.ui.profil.ProfilFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_profil" />
 </navigation>

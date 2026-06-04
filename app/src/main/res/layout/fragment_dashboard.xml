@@ -467,13 +467,6 @@
                 android:layout_marginTop="16dp"
                 android:visibility="gone" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="End of personalized recommendations"
-                android:textColor="@color/text_subtitle" />
-
         </LinearLayout>
     </ScrollView>
 

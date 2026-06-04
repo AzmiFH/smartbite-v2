@@ -2,7 +2,7 @@
     <string name="app_name">SmartBite</string>
     <string name="title_home">Camera</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Settings</string>
+    <string name="title_notifications">Profile</string>
     <string name="gallery">Galeri</string>
     <string name="analyze">analis</string>
     <string name="result">result</string>
@@ -32,5 +32,26 @@
     <string name="select_photo">Ubah Foto</string>
     <string name="change">Ubah</string>
     <string name="terms_and_privacy_text">By signing in, you agree to our Terms of Service and Privacy Policy</string>
+    <string name="gender">Gender</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="years">Years</string>
+    <string name="kg">kg</string>
+    <string name="cm">cm</string>
+    <string name="profile_title">Profile</string>
+    <string name="nutrition_strategy_title">NUTRITION STRATEGY</string>
+    <string name="update_metrics_title">Update Body Metrics &amp; Goals</string>
+    <string name="update_metrics_desc">Recalculate BMR &amp; daily calorie targets</string>
+    <string name="preferences_title">PREFERENCES</string>
+    <string name="smart_notifications">Smart Notifications</string>
+    <string name="smart_notifications_desc">Meal reminders &amp; AI tips</string>
+    <string name="language">Language</string>
+    <string name="language_desc">English (US)</string>
+    <string name="help_center">Help Center</string>
+    <string name="help_center_desc">FAQs &amp; Support</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="camera_permission">Camera Permission</string>
+    <string name="authorized">Authorized</string>
+    <string name="denied">Denied</string>
 
 </resources>

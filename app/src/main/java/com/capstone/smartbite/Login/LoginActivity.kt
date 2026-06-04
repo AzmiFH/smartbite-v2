@@ -14,6 +14,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.capstone.smartbite.MainActivity
 import com.capstone.smartbite.R
+import com.capstone.smartbite.UserModel
+import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -98,7 +100,19 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 showLoading(false)
                 if (task.isSuccessful) {
-                    val user = auth.currentUser
+                    val firebaseUser = auth.currentUser
+                    if (firebaseUser != null) {
+                        val userPreference = UserPreference(this)
+                        val currentModel = userPreference.getUser()
+                        
+                        // Only pre-fill if local name is empty
+                        if (currentModel.name.isNullOrEmpty()) {
+                            currentModel.name = firebaseUser.displayName
+                            currentModel.email = firebaseUser.email
+                            currentModel.profileImage = firebaseUser.photoUrl
+                            userPreference.setUser(currentModel)
+                        }
+                    }
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
