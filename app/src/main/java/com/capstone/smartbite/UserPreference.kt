@@ -12,6 +12,12 @@ internal class UserPreference(context: Context) {
         private const val PHONE_NUMBER = "phone"
         private const val ADD = "alamat"
         private const val PROFILE_IMAGE_URI = "profile_image_uri"
+        private const val GENDER = "gender"
+        private const val HEIGHT = "height"
+        private const val WEIGHT = "weight"
+        private const val TARGET_WEIGHT = "target_weight"
+        private const val GOAL = "goal"
+        private const val ACTIVITY_LEVEL = "activity_level"
         private const val IS_ONBOARDING_FINISHED = "is_onboarding_finished"
     }
 
@@ -25,6 +31,12 @@ internal class UserPreference(context: Context) {
         editor.putString(PHONE_NUMBER, value.phoneNumber)
         editor.putString(ADD, value.add)
         editor.putString(PROFILE_IMAGE_URI, value.profileImage?.toString())
+        editor.putString(GENDER, value.gender)
+        editor.putInt(HEIGHT, value.height)
+        editor.putInt(WEIGHT, value.weight)
+        editor.putInt(TARGET_WEIGHT, value.targetWeight)
+        editor.putString(GOAL, value.goal)
+        editor.putString(ACTIVITY_LEVEL, value.activityLevel)
         editor.apply()
     }
 
@@ -46,6 +58,12 @@ internal class UserPreference(context: Context) {
         model.phoneNumber = preferences.getString(PHONE_NUMBER, "")
         model.add = preferences.getString(ADD, "")
         model.profileImage = preferences.getString(PROFILE_IMAGE_URI, null)?.let { Uri.parse(it) }
+        model.gender = preferences.getString(GENDER, "")
+        model.height = preferences.getInt(HEIGHT, 0)
+        model.weight = preferences.getInt(WEIGHT, 0)
+        model.targetWeight = preferences.getInt(TARGET_WEIGHT, 0)
+        model.goal = preferences.getString(GOAL, "Weight Loss Focus")
+        model.activityLevel = preferences.getString(ACTIVITY_LEVEL, "")
         return model
     }
 }

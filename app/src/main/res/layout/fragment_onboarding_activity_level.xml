@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Aktivitas Harian"
+        android:textColor="@color/text_primary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:lineSpacingExtra="4sp"
+        android:text="Bantu kami menyesuaikan kebutuhan kalori dan nutrisi harianmu berdasarkan seberapa aktif kamu bergerak."
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <LinearLayout
+        android:id="@+id/ll_activity_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
+
+        <!-- Low Activity -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_low"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_gender_card_unselected"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp">
+
+            <View
+                android:id="@+id/v_icon_bg_low"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_circle_green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sofa"
+                app:layout_constraintBottom_toBottomOf="@id/v_icon_bg_low"
+                app:layout_constraintEnd_toEndOf="@id/v_icon_bg_low"
+                app:layout_constraintStart_toStartOf="@id/v_icon_bg_low"
+                app:layout_constraintTop_toTopOf="@id/v_icon_bg_low" />
+
+            <TextView
+                android:id="@+id/tv_low_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Rendah"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/iv_check_low"
+                app:layout_constraintStart_toEndOf="@id/v_icon_bg_low"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Sedikit bergerak, pekerjaan kantor"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_low_title"
+                app:layout_constraintStart_toStartOf="@id/tv_low_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_low_title" />
+
+            <ImageView
+                android:id="@+id/iv_check_low"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_check_circle_outline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Medium Activity -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_gender_card_unselected"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp">
+
+            <View
+                android:id="@+id/v_icon_bg_medium"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_circle_green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_walk"
+                app:layout_constraintBottom_toBottomOf="@id/v_icon_bg_medium"
+                app:layout_constraintEnd_toEndOf="@id/v_icon_bg_medium"
+                app:layout_constraintStart_toStartOf="@id/v_icon_bg_medium"
+                app:layout_constraintTop_toTopOf="@id/v_icon_bg_medium" />
+
+            <TextView
+                android:id="@+id/tv_medium_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Sedang"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/iv_check_medium"
+                app:layout_constraintStart_toEndOf="@id/v_icon_bg_medium"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Olahraga 1–3 hari/minggu, aktif bergerak"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_medium_title"
+                app:layout_constraintStart_toStartOf="@id/tv_medium_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_medium_title" />
+
+            <ImageView
+                android:id="@+id/iv_check_medium"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_check_circle_outline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- High Activity -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_high"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_gender_card_unselected"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp">
+
+            <View
+                android:id="@+id/v_icon_bg_high"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_icon_circle_green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_fitness"
+                app:layout_constraintBottom_toBottomOf="@id/v_icon_bg_high"
+                app:layout_constraintEnd_toEndOf="@id/v_icon_bg_high"
+                app:layout_constraintStart_toStartOf="@id/v_icon_bg_high"
+                app:layout_constraintTop_toTopOf="@id/v_icon_bg_high" />
+
+            <TextView
+                android:id="@+id/tv_high_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Tinggi"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/iv_check_high"
+                app:layout_constraintStart_toEndOf="@id/v_icon_bg_high"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Olahraga 4–7 hari/minggu, pekerjaan fisik"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_high_title"
+                app:layout_constraintStart_toStartOf="@id/tv_high_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_high_title" />
+
+            <ImageView
+                android:id="@+id/iv_check_high"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_check_circle_outline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/onboarding_button_bg"
+        android:alpha="0.5"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lanjut"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_chevron_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.55" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

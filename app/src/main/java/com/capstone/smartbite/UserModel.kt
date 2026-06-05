@@ -15,5 +15,7 @@ data class UserModel (
     var gender: String? = null,
     var height: Int = 0,
     var weight: Int = 0,
-    var goal: String? = "Weight Loss Focus"
+    var targetWeight: Int = 0,
+    var goal: String? = "Weight Loss Focus",
+    var activityLevel: String? = null
 ) : Parcelable

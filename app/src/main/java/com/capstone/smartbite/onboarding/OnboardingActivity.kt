@@ -1,6 +1,7 @@
 package com.capstone.smartbite.onboarding
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -38,7 +39,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setupViewPager() {
         val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 5 // Nama, Gender, Age, Height, Weight
+            override fun getItemCount(): Int = 8 // Nama, Gender, Age, Goal, Height, Weight, Activity, Finish
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
@@ -47,6 +48,9 @@ class OnboardingActivity : AppCompatActivity() {
                     2 -> OnboardingAgeFragment()
                     3 -> OnboardingHeightFragment()
                     4 -> OnboardingWeightFragment()
+                    5 -> OnboardingGoalFragment()
+                    6 -> OnboardingActivityLevelFragment()
+                    7 -> OnboardingFinishFragment()
                     else -> OnboardingNameFragment()
                 }
             }
@@ -57,32 +61,52 @@ class OnboardingActivity : AppCompatActivity() {
         binding.viewPagerOnboarding.registerOnPageChangeCallback(object : androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                val step = position + 1
-                val totalSteps = 11
                 
-                binding.tvStepIndicator.text = "$step/$totalSteps"
+                if (position == 7) {
+                    binding.btnBack.visibility = View.GONE
+                    binding.tvStepIndicator.visibility = View.GONE
+                    binding.clProgressContainer.visibility = View.GONE
+                    return
+                } else {
+                    binding.btnBack.visibility = View.VISIBLE
+                    binding.tvStepIndicator.visibility = View.VISIBLE
+                    binding.clProgressContainer.visibility = View.VISIBLE
+                }
+
+                val step = position + 1
+                val totalSteps = 7
+                
+                binding.tvStepIndicator.text = "Langkah $step dari $totalSteps"
                 
                 // Update Progress & Title
                 when (position) {
                     0 -> {
                         binding.tvTitleStep.text = "Name"
-                        updateProgress(10, "10%")
+                        updateProgress(14, "14%")
                     }
                     1 -> {
                         binding.tvTitleStep.text = "Gender"
-                        updateProgress(20, "20%")
+                        updateProgress(28, "28%")
                     }
                     2 -> {
                         binding.tvTitleStep.text = "Age"
-                        updateProgress(30, "30%")
+                        updateProgress(42, "42%")
                     }
                     3 -> {
-                        binding.tvTitleStep.text = "Height"
-                        updateProgress(36, "36%")
+                        binding.tvTitleStep.text = "Goal"
+                        updateProgress(56, "56%")
                     }
                     4 -> {
+                        binding.tvTitleStep.text = "Height"
+                        updateProgress(70, "70%")
+                    }
+                    5 -> {
                         binding.tvTitleStep.text = "Weight"
-                        updateProgress(45, "45%")
+                        updateProgress(84, "84%")
+                    }
+                    6 -> {
+                        binding.tvTitleStep.text = "Activity"
+                        updateProgress(100, "100%")
                     }
                 }
             }
