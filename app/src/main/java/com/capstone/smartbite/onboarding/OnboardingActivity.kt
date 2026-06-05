@@ -38,13 +38,15 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setupViewPager() {
         val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 4
+            override fun getItemCount(): Int = 5 // Nama, Gender, Age, Height, Weight
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
                     0 -> OnboardingNameFragment()
                     1 -> OnboardingGenderFragment()
                     2 -> OnboardingAgeFragment()
+                    3 -> OnboardingHeightFragment()
+                    4 -> OnboardingWeightFragment()
                     else -> OnboardingNameFragment()
                 }
             }
@@ -56,14 +58,44 @@ class OnboardingActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 val step = position + 1
-                binding.onboardingProgress.progress = step
-                binding.tvStepIndicator.text = "$step/5"
+                val totalSteps = 11
+                
+                binding.tvStepIndicator.text = "$step/$totalSteps"
+                
+                // Update Progress & Title
+                when (position) {
+                    0 -> {
+                        binding.tvTitleStep.text = "Name"
+                        updateProgress(10, "10%")
+                    }
+                    1 -> {
+                        binding.tvTitleStep.text = "Gender"
+                        updateProgress(20, "20%")
+                    }
+                    2 -> {
+                        binding.tvTitleStep.text = "Age"
+                        updateProgress(30, "30%")
+                    }
+                    3 -> {
+                        binding.tvTitleStep.text = "Height"
+                        updateProgress(36, "36%")
+                    }
+                    4 -> {
+                        binding.tvTitleStep.text = "Weight"
+                        updateProgress(45, "45%")
+                    }
+                }
             }
         })
     }
 
+    private fun updateProgress(progress: Int, percentText: String) {
+        binding.onboardingProgress.progress = progress
+        binding.tvProgressPercent.text = percentText
+    }
+
     fun nextStep() {
-        if (binding.viewPagerOnboarding.currentItem < 4) {
+        if (binding.viewPagerOnboarding.currentItem < 10) {
             binding.viewPagerOnboarding.currentItem += 1
         } else {
             // Finish onboarding

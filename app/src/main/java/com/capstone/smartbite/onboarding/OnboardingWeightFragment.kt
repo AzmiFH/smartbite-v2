@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.capstone.smartbite.UserPreference
-import com.capstone.smartbite.databinding.FragmentOnboardingHeightBinding
+import com.capstone.smartbite.databinding.FragmentOnboardingWeightBinding
 import com.kevalpatel2106.rulerpicker.RulerValuePickerListener
 
-class OnboardingHeightFragment : Fragment() {
+class OnboardingWeightFragment : Fragment() {
 
-    private var _binding: FragmentOnboardingHeightBinding? = null
+    private var _binding: FragmentOnboardingWeightBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var userPreference: UserPreference
@@ -20,7 +20,7 @@ class OnboardingHeightFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentOnboardingHeightBinding.inflate(inflater, container, false)
+        _binding = FragmentOnboardingWeightBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,32 +30,32 @@ class OnboardingHeightFragment : Fragment() {
         userPreference = UserPreference(requireContext())
         val user = userPreference.getUser()
 
-        setupRulerPicker(user.height)
+        setupRulerPicker(user.weight)
 
         binding.btnNext.setOnClickListener {
-            user.height = binding.heightRulerPicker.currentValue
+            user.weight = binding.weightRulerPicker.currentValue
             userPreference.setUser(user)
             (activity as? OnboardingActivity)?.nextStep()
         }
     }
 
-    private fun setupRulerPicker(currentHeight: Int) {
-        binding.heightRulerPicker.apply {
+    private fun setupRulerPicker(currentWeight: Int) {
+        binding.weightRulerPicker.apply {
             // Set initial value
-            val initialValue = if (currentHeight > 100) currentHeight else 170
+            val initialValue = if (currentWeight > 30) currentWeight else 70
             selectValue(initialValue)
-            binding.tvHeightValue.text = initialValue.toString()
-            binding.tvRulerBadge.text = "$initialValue cm"
+            binding.tvWeightValue.text = initialValue.toString()
+            binding.tvRulerBadge.text = "$initialValue kg"
 
             setValuePickerListener(object : RulerValuePickerListener {
                 override fun onValueChange(value: Int) {
-                    binding.tvHeightValue.text = value.toString()
-                    binding.tvRulerBadge.text = "$value cm"
+                    binding.tvWeightValue.text = value.toString()
+                    binding.tvRulerBadge.text = "$value kg"
                 }
 
                 override fun onIntermediateValueChange(selectedValue: Int) {
-                    binding.tvHeightValue.text = selectedValue.toString()
-                    binding.tvRulerBadge.text = "$selectedValue cm"
+                    binding.tvWeightValue.text = selectedValue.toString()
+                    binding.tvRulerBadge.text = "$selectedValue kg"
                 }
             })
         }

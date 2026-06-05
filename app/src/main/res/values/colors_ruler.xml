@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ruler_bg">#EAF0F6</color>
+    <color name="ruler_indicator">#0F6E56</color>
+    <color name="ruler_tick_major">#1D9E75</color>
+    <color name="ruler_tick_mid">#5DCAA5</color>
+    <color name="ruler_tick_minor">#9FE1CB</color>
+    <color name="ruler_label">#0F6E56</color>
+</resources>

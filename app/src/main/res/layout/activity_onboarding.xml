@@ -17,19 +17,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/text_primary" />
 
-    <ProgressBar
-        android:id="@+id/onboarding_progress"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="0dp"
-        android:layout_height="8dp"
-        android:layout_marginHorizontal="16dp"
-        android:max="5"
-        android:progress="1"
-        android:progressDrawable="@drawable/onboarding_progress_fill"
-        android:background="@drawable/onboarding_progress_bg"
+    <TextView
+        android:id="@+id/tv_title_step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Step"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/btn_back"
-        app:layout_constraintEnd_toStartOf="@+id/tv_step_indicator"
-        app:layout_constraintStart_toEndOf="@id/btn_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/btn_back" />
 
     <TextView
@@ -37,18 +35,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="1/5"
-        android:textColor="@color/text_primary"
+        android:text="1/11"
+        android:textColor="@color/text_secondary"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/onboarding_progress"
+        app:layout_constraintBottom_toBottomOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/onboarding_progress" />
+        app:layout_constraintTop_toTopOf="@id/btn_back" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_back">
+
+        <ProgressBar
+            android:id="@+id/onboarding_progress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:max="100"
+            android:progress="10"
+            android:progressDrawable="@drawable/onboarding_progress_fill"
+            android:background="@drawable/onboarding_progress_bg"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_progress_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="10%"
+            android:textColor="@color/brand_green"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onboarding_progress" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_onboarding"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_back" />
+        app:layout_constraintTop_toBottomOf="@id/cl_progress_container" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

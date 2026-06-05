@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="nav_color">#E2DFDF</color>
     <color name="bg_login">#0B2621</color>
+
     <!-- Warna Teks Utama (Text Primary) -->
     <color name="text_primary">#212121</color>
 
@@ -25,7 +26,7 @@
     <color name="nav_glow_green">#1A34A853</color> <!-- Transparent green for glow -->
 
     <!-- New Dashboard Colors -->
-    <color name="brand_green">#1B5E20</color>
+    <color name="brand_green">#1D9E75</color>
     <color name="insight_bg">#E8F5E9</color>
     <color name="insight_title">#4CAF50</color>
     <color name="text_black_bold">#212121</color>
@@ -55,7 +56,7 @@
 
     <!-- Ruler & Onboarding Colors -->
     <color name="ruler_bg_custom">#E1F5EE</color>
-    <color name="ruler_text_custom">#0F6E56</color>
+    <color name="ruler_text_custom">#1D9E75</color>
     <color name="ruler_border_custom">#9FE1CB</color>
     <color name="progress_bar_bg">#E0E0E0</color>
 </resources>

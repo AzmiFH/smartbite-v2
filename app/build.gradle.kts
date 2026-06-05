@@ -109,4 +109,5 @@ dependencies {
 
     // Number Picker
     implementation(libs.number.picker)
+    implementation(libs.ruler.picker)
 }
