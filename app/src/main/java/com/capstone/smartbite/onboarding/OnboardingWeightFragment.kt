@@ -42,11 +42,15 @@ class OnboardingWeightFragment : Fragment() {
 
     private fun setupRulerPicker(currentWeight: Int) {
         binding.weightRulerPicker.apply {
-            // Set initial value
-            val initialValue = if (currentWeight > 30) currentWeight else 70
-            selectValue(initialValue)
-            binding.tvWeightValue.text = initialValue.toString()
-            binding.tvRulerBadge.text = "$initialValue kg"
+            // Set initial value to the saved value or 0 if it's a new user
+            val initialValue = if (currentWeight > 0) currentWeight else 0
+            
+            // Use post to ensure the view is laid out before selecting value
+            post {
+                selectValue(initialValue)
+                binding.tvWeightValue.text = initialValue.toString()
+                binding.tvRulerBadge.text = "$initialValue kg"
+            }
 
             setValuePickerListener(object : RulerValuePickerListener {
                 override fun onValueChange(value: Int) {

@@ -42,11 +42,15 @@ class OnboardingHeightFragment : Fragment() {
 
     private fun setupRulerPicker(currentHeight: Int) {
         binding.heightRulerPicker.apply {
-            // Set initial value
-            val initialValue = if (currentHeight > 100) currentHeight else 170
-            selectValue(initialValue)
-            binding.tvHeightValue.text = initialValue.toString()
-            binding.tvRulerBadge.text = "$initialValue cm"
+            // Set initial value to the saved value or 0 if it's a new user
+            val initialValue = if (currentHeight > 0) currentHeight else 0
+            
+            // Use post to ensure the view is laid out before selecting value
+            post {
+                selectValue(initialValue)
+                binding.tvHeightValue.text = initialValue.toString()
+                binding.tvRulerBadge.text = "$initialValue cm"
+            }
 
             setValuePickerListener(object : RulerValuePickerListener {
                 override fun onValueChange(value: Int) {
