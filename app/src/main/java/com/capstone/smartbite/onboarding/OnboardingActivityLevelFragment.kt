@@ -28,7 +28,7 @@ class OnboardingActivityLevelFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
 
         // Pre-select if already exists
@@ -42,8 +42,9 @@ class OnboardingActivityLevelFragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             if (selectedLevel != null) {
-                user.activityLevel = selectedLevel
-                userPreference.setUser(user)
+                val currentUser = userPreference.getUser()
+                currentUser.activityLevel = selectedLevel
+                userPreference.setUser(currentUser)
                 (activity as? OnboardingActivity)?.nextStep()
             }
         }

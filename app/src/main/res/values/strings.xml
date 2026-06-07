@@ -50,5 +50,10 @@
     <string name="help_center">Help Center</string>
     <string name="help_center_desc">FAQs &amp; Support</string>
     <string name="sign_out">Sign Out</string>
-
+    <string name="delete_account">Hapus Akun</string>
+    <string name="delete_account_desc">Hapus semua data dan setel ulang profil</string>
+    <string name="delete_account_confirmation">Apakah Anda yakin ingin menghapus akun? Semua data profil akan dihapus permanen.</string>
+    <string name="delete_account_title">Konfirmasi Hapus Akun</string>
+    <string name="delete">Hapus</string>
+    <string name="cancel">Batal</string>
 </resources>

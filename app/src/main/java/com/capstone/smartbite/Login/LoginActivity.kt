@@ -12,10 +12,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.capstone.smartbite.MainActivity
 import com.capstone.smartbite.R
 import com.capstone.smartbite.UserModel
 import com.capstone.smartbite.UserPreference
+import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.onboarding.OnboardingActivity
 import com.capstone.smartbite.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -53,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
-            val userPreference = UserPreference(this)
+            val userPreference = UserPreference(this, currentUser.email)
             val intent = if (userPreference.isOnboardingFinished()) {
                 Intent(this, MainActivity::class.java)
             } else {
@@ -103,31 +105,39 @@ class LoginActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
-                showLoading(false)
                 if (task.isSuccessful) {
                     val firebaseUser = auth.currentUser
                     if (firebaseUser != null) {
-                        val userPreference = UserPreference(this)
-                        val currentModel = userPreference.getUser()
-                        
-                        // Only pre-fill if local name is empty
-                        if (currentModel.name.isNullOrEmpty()) {
-                            currentModel.name = firebaseUser.displayName
-                            currentModel.email = firebaseUser.email
-                            currentModel.profileImage = firebaseUser.photoUrl
-                            userPreference.setUser(currentModel)
+                        val email = firebaseUser.email
+                        lifecycleScope.launchWhenResumed {
+                            showLoading(true)
+                            val firebaseService = FirebaseService()
+                            val cloudProfile = email?.let { firebaseService.getUserProfile(it) }
+                            
+                            val userPreference = UserPreference(this@LoginActivity, email)
+                            
+                            if (cloudProfile != null) {
+                                // Data ada di cloud, simpan ke lokal
+                                userPreference.setUser(cloudProfile)
+                                userPreference.setOnboardingFinished(true)
+                                showLoading(false)
+                                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                finish()
+                            } else {
+                                // Data tidak ada di cloud, inisialisasi awal dari Google
+                                val currentModel = userPreference.getUser()
+                                currentModel.name = firebaseUser.displayName
+                                currentModel.email = firebaseUser.email
+                                currentModel.profileImage = firebaseUser.photoUrl
+                                userPreference.setUser(currentModel)
+                                showLoading(false)
+                                startActivity(Intent(this@LoginActivity, OnboardingActivity::class.java))
+                                finish()
+                            }
                         }
                     }
-                    
-                    val userPreference = UserPreference(this)
-                    val intent = if (userPreference.isOnboardingFinished()) {
-                        Intent(this, MainActivity::class.java)
-                    } else {
-                        Intent(this, OnboardingActivity::class.java)
-                    }
-                    startActivity(intent)
-                    finish()
                 } else {
+                    showLoading(false)
                     Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show()
                 }
             }

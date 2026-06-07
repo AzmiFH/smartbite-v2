@@ -27,7 +27,7 @@ class OnboardingAgeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
 
         // Explicitly using the class to avoid confusion
@@ -38,8 +38,9 @@ class OnboardingAgeFragment : Fragment() {
         }
 
         binding.btnNext.setOnClickListener {
-            user.age = agePicker?.value ?: 23
-            userPreference.setUser(user)
+            val currentUser = userPreference.getUser()
+            currentUser.age = agePicker?.value ?: 23
+            userPreference.setUser(currentUser)
             (activity as? OnboardingActivity)?.nextStep()
         }
     }

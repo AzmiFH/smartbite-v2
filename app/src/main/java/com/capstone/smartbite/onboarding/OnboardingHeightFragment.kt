@@ -27,14 +27,15 @@ class OnboardingHeightFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
 
         setupRulerPicker(user.height)
 
         binding.btnNext.setOnClickListener {
-            user.height = binding.heightRulerPicker.currentValue
-            userPreference.setUser(user)
+            val currentUser = userPreference.getUser()
+            currentUser.height = binding.heightRulerPicker.currentValue
+            userPreference.setUser(currentUser)
             (activity as? OnboardingActivity)?.nextStep()
         }
     }

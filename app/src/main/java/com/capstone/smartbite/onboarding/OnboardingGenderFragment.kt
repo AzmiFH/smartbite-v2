@@ -29,7 +29,7 @@ class OnboardingGenderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
 
         // Pre-select if already exists
@@ -38,17 +38,18 @@ class OnboardingGenderFragment : Fragment() {
         }
 
         binding.btnMale.setOnClickListener {
-            updateUI("Male")
+            updateUI("Pria")
         }
 
         binding.btnFemale.setOnClickListener {
-            updateUI("Female")
+            updateUI("Wanita")
         }
 
         binding.btnNext.setOnClickListener {
             if (selectedGender != null) {
-                user.gender = selectedGender
-                userPreference.setUser(user)
+                val currentUser = userPreference.getUser()
+                currentUser.gender = selectedGender
+                userPreference.setUser(currentUser)
                 (activity as? OnboardingActivity)?.nextStep()
             } else {
                 Toast.makeText(requireContext(), "Silakan pilih jenis kelamin", Toast.LENGTH_SHORT).show()
@@ -58,13 +59,13 @@ class OnboardingGenderFragment : Fragment() {
 
     private fun updateUI(gender: String) {
         selectedGender = gender
-        if (gender == "Male") {
+        if (gender == "Pria") {
             binding.btnMale.setBackgroundResource(R.drawable.bg_gender_card_selected)
             binding.ivCheckMale.setImageResource(R.drawable.ic_check_circle_filled)
             
             binding.btnFemale.setBackgroundResource(R.drawable.bg_gender_card_unselected)
             binding.ivCheckFemale.setImageResource(R.drawable.ic_check_circle_outline)
-        } else {
+        } else if (gender == "Wanita") {
             binding.btnFemale.setBackgroundResource(R.drawable.bg_gender_card_selected)
             binding.ivCheckFemale.setImageResource(R.drawable.ic_check_circle_filled)
             

@@ -30,7 +30,7 @@ class OnboardingGoalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
 
         // Pre-select if already exists
@@ -62,15 +62,16 @@ class OnboardingGoalFragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             if (selectedGoal != null) {
-                user.goal = selectedGoal
+                val currentUser = userPreference.getUser()
+                currentUser.goal = selectedGoal
                 
-                user.targetWeight = when (selectedGoal) {
+                currentUser.targetWeight = when (selectedGoal) {
                     "Weight Loss Focus" -> binding.edtTargetWeightLose.text.toString().toIntOrNull() ?: 0
                     "Muscle Building" -> binding.edtTargetWeightGain.text.toString().toIntOrNull() ?: 0
-                    else -> user.weight // Maintain weight means target is current weight
+                    else -> currentUser.weight // Maintain weight means target is current weight
                 }
 
-                userPreference.setUser(user)
+                userPreference.setUser(currentUser)
                 (activity as? OnboardingActivity)?.nextStep()
             }
         }

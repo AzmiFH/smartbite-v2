@@ -26,7 +26,7 @@ class OnboardingNameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
         
         // Pre-fill if name already exists from Google Login
@@ -37,8 +37,9 @@ class OnboardingNameFragment : Fragment() {
         binding.btnNext.setOnClickListener {
             val name = binding.edtName.text.toString().trim()
             if (name.isNotEmpty()) {
-                user.name = name
-                userPreference.setUser(user)
+                val currentUser = userPreference.getUser()
+                currentUser.name = name
+                userPreference.setUser(currentUser)
                 (activity as? OnboardingActivity)?.nextStep()
             } else {
                 binding.tilName.error = "Nama tidak boleh kosong"

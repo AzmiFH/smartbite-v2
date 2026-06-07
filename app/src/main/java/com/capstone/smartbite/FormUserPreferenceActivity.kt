@@ -12,8 +12,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.databinding.ActivityFormUserPreferenceBinding
+import kotlinx.coroutines.launch
 
 class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -128,7 +131,7 @@ class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveUser(name: String, email: String, age: String, phoneNo: String, alamat: String) {
-        val userPreference = UserPreference(this)
+        val userPreference = UserPreference(this, com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
 
         userModel.name = name
         userModel.email = email
@@ -138,6 +141,15 @@ class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
         userModel.profileImage = imageUri
 
         userPreference.setUser(userModel)
+
+        lifecycleScope.launch {
+            try {
+                FirebaseService().saveUserProfile(userModel)
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+
         Toast.makeText(this, "Data tersimpan", Toast.LENGTH_SHORT).show()
     }
 

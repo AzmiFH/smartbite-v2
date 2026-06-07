@@ -27,14 +27,15 @@ class OnboardingWeightFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext())
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
 
         setupRulerPicker(user.weight)
 
         binding.btnNext.setOnClickListener {
-            user.weight = binding.weightRulerPicker.currentValue
-            userPreference.setUser(user)
+            val currentUser = userPreference.getUser()
+            currentUser.weight = binding.weightRulerPicker.currentValue
+            userPreference.setUser(currentUser)
             (activity as? OnboardingActivity)?.nextStep()
         }
     }

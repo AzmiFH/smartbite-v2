@@ -3,7 +3,7 @@ package com.capstone.smartbite
 import android.content.Context
 import android.net.Uri
 
-internal class UserPreference(context: Context) {
+internal class UserPreference(context: Context, email: String? = null) {
     companion object {
         private const val PREFS_NAME = "user_pref"
         private const val NAME = "name"
@@ -21,7 +21,10 @@ internal class UserPreference(context: Context) {
         private const val IS_ONBOARDING_FINISHED = "is_onboarding_finished"
     }
 
-    private val preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val preferences = context.getSharedPreferences(
+        if (email != null) "${PREFS_NAME}_${email.replace(".", "_")}" else PREFS_NAME,
+        Context.MODE_PRIVATE
+    )
 
     fun setUser(value: UserModel) {
         val editor = preferences.edit()
@@ -48,6 +51,12 @@ internal class UserPreference(context: Context) {
 
     fun isOnboardingFinished(): Boolean {
         return preferences.getBoolean(IS_ONBOARDING_FINISHED, false)
+    }
+
+    fun clearUser() {
+        val editor = preferences.edit()
+        editor.clear()
+        editor.apply()
     }
 
     fun getUser(): UserModel {
