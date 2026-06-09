@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.databinding.FragmentOnboardingHeightBinding
-import com.kevalpatel2106.rulerpicker.RulerValuePickerListener
 
 class OnboardingHeightFragment : Fragment() {
 
@@ -15,6 +14,13 @@ class OnboardingHeightFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var userPreference: UserPreference
+    private var currentSelectedHeight: Int = HEIGHT_DEFAULT
+
+    companion object {
+        const val HEIGHT_MIN = 100
+        const val HEIGHT_MAX = 250
+        const val HEIGHT_DEFAULT = 160
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,42 +33,48 @@ class OnboardingHeightFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
-        val user = userPreference.getUser()
+        userPreference = UserPreference(
+            requireContext(),
+            com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email
+        )
 
-        setupRulerPicker(user.height)
+        val savedHeight = userPreference.getUser().height
+        currentSelectedHeight = if (savedHeight in HEIGHT_MIN..HEIGHT_MAX) savedHeight else HEIGHT_DEFAULT
+
+        setupRulerPicker()
 
         binding.btnNext.setOnClickListener {
-            val currentUser = userPreference.getUser()
-            currentUser.height = binding.heightRulerPicker.currentValue
-            userPreference.setUser(currentUser)
-            (activity as? OnboardingActivity)?.nextStep()
+            if (currentSelectedHeight in HEIGHT_MIN..HEIGHT_MAX) {
+                val currentUser = userPreference.getUser()
+                currentUser.height = currentSelectedHeight
+                userPreference.setUser(currentUser)
+                (activity as? OnboardingActivity)?.nextStep()
+            } else {
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    "Tinggi badan harus antara $HEIGHT_MIN - $HEIGHT_MAX cm",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
-    private fun setupRulerPicker(currentHeight: Int) {
+    private fun setupRulerPicker() {
+        // Tampilkan angka awal ke TextView besar
+        binding.tvHeightValue.text = currentSelectedHeight.toString()
+
         binding.heightRulerPicker.apply {
-            // Set initial value to the saved value or 0 if it's a new user
-            val initialValue = if (currentHeight > 0) currentHeight else 0
-            
-            // Use post to ensure the view is laid out before selecting value
-            post {
-                selectValue(initialValue)
-                binding.tvHeightValue.text = initialValue.toString()
-                binding.tvRulerBadge.text = "$initialValue cm"
+            // Listener saat penggaris sedang digeser secara real-time
+            onValueChanged = { value, _ ->
+                currentSelectedHeight = value.toInt()
+                binding.tvHeightValue.text = currentSelectedHeight.toString()
             }
 
-            setValuePickerListener(object : RulerValuePickerListener {
-                override fun onValueChange(value: Int) {
-                    binding.tvHeightValue.text = value.toString()
-                    binding.tvRulerBadge.text = "$value cm"
-                }
-
-                override fun onIntermediateValueChange(selectedValue: Int) {
-                    binding.tvHeightValue.text = selectedValue.toString()
-                    binding.tvRulerBadge.text = "$selectedValue cm"
-                }
-            })
+            // Listener saat penggaris berhenti digeser
+            onScrollEnd = { value, _ ->
+                currentSelectedHeight = value.toInt()
+                binding.tvHeightValue.text = currentSelectedHeight.toString()
+            }
         }
     }
 

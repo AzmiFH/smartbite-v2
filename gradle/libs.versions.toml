@@ -6,7 +6,7 @@ converterGson = "2.9.0"
 firebaseBom = "33.7.0"
 glide = "4.16.0"
 kotlin = "2.0.0"
-coreKtx = "1.15.0"
+coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -21,13 +21,14 @@ navigationUiKtx = "2.8.4"
 activity = "1.9.3"
 playServicesAuth = "21.3.0"
 retrofit = "2.9.0"
+rulerkit = "v1.0.1"
 rulerPicker = "v1.1"
 tensorflowLiteTaskVision = "0.4.4"
 ucrop = "2.2.8-native"
 ucropVersion = "2.2.8"
 uiTextAndroid = "1.7.5"
-tensorflowLiteSupport = "0.1.0"
-tensorflowLiteMetadata = "0.1.0"
+tensorflowLiteSupport = "0.4.4"
+tensorflowLiteMetadata = "0.4.4"
 constraintlayoutCore = "1.1.0"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
@@ -63,6 +64,7 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 ruler-picker = { module = "com.github.kevalpatel2106:android-ruler-picker", version.ref = "rulerPicker" }
+rulerkit = { module = "com.github.theadityatiwari:RulerKit", version.ref = "rulerkit" }
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVision" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 ucrop-v228 = { module = "com.github.yalantis:ucrop", version.ref = "ucropVersion" }

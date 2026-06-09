@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -45,7 +45,7 @@
             android:id="@+id/tv_height_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text="160"
             android:textColor="@color/text_primary"
             android:textSize="80sp"
             android:textStyle="bold" />
@@ -63,63 +63,25 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_marginTop="32dp"
+        android:padding="4dp"
         android:background="@drawable/bg_ruler_card"
         app:layout_constraintTop_toBottomOf="@id/ll_selected_value">
 
-        <com.kevalpatel2106.rulerpicker.RulerValuePicker
+        <com.nativeknights.rulerkit.RulerPickerView
             android:id="@+id/heightRulerPicker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="30dp"
-            android:paddingBottom="30dp"
-            app:indicator_color="@color/ruler_tick_major"
-            app:indicator_interval="12dp"
-            app:indicator_width="2dp"
-            app:notch_color="@android:color/transparent"
-            app:long_height_height_ratio="80%"
-            app:max_value="250"
-            app:min_value="0"
-            app:ruler_text_color="@color/ruler_label"
-            app:ruler_text_size="8sp"
-            app:short_height_height_ratio="40%" />
+            app:rulerInputType="height"
+            app:rulerUnit="cm"
+            app:rulerInitialValue="160"
+            app:rulerMinValue="100"
+            app:rulerMaxValue="250"
+            app:indicatorType="line"
+            app:indicatorColor="@color/brand_green"
+            app:indicatorWidth="6dp"
+            app:tickSpacing="18dp"
+            app:showValueLabel="false" />
 
-        <!-- Overlay Central Indicator (Matching ASCII Art style) -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginTop="22dp"
-                android:background="@drawable/ic_indicator_dot" />
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="56dp"
-                android:background="@drawable/ic_indicator_line" />
-
-            <TextView
-                android:id="@+id/tv_ruler_badge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-4dp"
-                android:background="@drawable/bg_value_bubble"
-                android:gravity="center"
-                android:minWidth="60dp"
-                android:paddingStart="12dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="4dp"
-                android:text="0 cm"
-                android:textColor="@color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
     </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

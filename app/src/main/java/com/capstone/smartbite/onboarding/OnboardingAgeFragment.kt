@@ -33,7 +33,7 @@ class OnboardingAgeFragment : Fragment() {
         // Explicitly using the class to avoid confusion
         val agePicker = binding.agePicker as? NumberPicker
 
-        val initialAge = if (user.age >= 10) user.age else 10
+        val initialAge = if (user.age in 15..80) user.age else 15
         agePicker?.value = initialAge
 
         binding.btnNext.setOnClickListener {

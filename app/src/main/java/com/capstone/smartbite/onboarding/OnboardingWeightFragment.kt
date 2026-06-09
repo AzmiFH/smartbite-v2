@@ -7,14 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.databinding.FragmentOnboardingWeightBinding
-import com.kevalpatel2106.rulerpicker.RulerValuePickerListener
 
 class OnboardingWeightFragment : Fragment() {
 
     private var _binding: FragmentOnboardingWeightBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var userPreference: UserPreference
+
+    // Karena RulerKit menggunakan Float, kita siapkan variabel pembantu
+    private var currentSelectedWeight: Int = WEIGHT_DEFAULT
+
+    companion object {
+        const val WEIGHT_MIN = 20
+        const val WEIGHT_MAX = 300
+        const val WEIGHT_DEFAULT = 60
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,42 +34,67 @@ class OnboardingWeightFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
-        val user = userPreference.getUser()
+        userPreference = UserPreference(
+            requireContext(),
+            com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email
+        )
 
-        setupRulerPicker(user.weight)
+        val savedWeight = userPreference.getUser().weight
+        currentSelectedWeight = if (savedWeight in WEIGHT_MIN..WEIGHT_MAX) savedWeight else WEIGHT_DEFAULT
 
-        binding.btnNext.setOnClickListener {
-            val currentUser = userPreference.getUser()
-            currentUser.weight = binding.weightRulerPicker.currentValue
-            userPreference.setUser(currentUser)
-            (activity as? OnboardingActivity)?.nextStep()
+        setupRulerPicker()
+        setupContinueButton()
+    }
+
+    private fun setupRulerPicker() {
+        // Tampilkan data awal ke Text kita yang besar
+        updateDisplay(currentSelectedWeight)
+
+        // 1. Pantau perubahan angka saat penggaris sedang digeser (real-time)
+        binding.weightRulerPicker.onValueChanged = { value, _ ->
+            // Mengubah nilai float dari library kembali menjadi Integer
+            currentSelectedWeight = value.toInt()
+            updateDisplay(currentSelectedWeight)
+        }
+
+        // 2. (Opsional) Memantau angka akhir saat geseran sudah berhenti
+        binding.weightRulerPicker.onScrollEnd = { value, _ ->
+            currentSelectedWeight = value.toInt()
+            updateDisplay(currentSelectedWeight)
         }
     }
 
-    private fun setupRulerPicker(currentWeight: Int) {
-        binding.weightRulerPicker.apply {
-            // Set initial value to the saved value or 0 if it's a new user
-            val initialValue = if (currentWeight > 0) currentWeight else 0
-            
-            // Use post to ensure the view is laid out before selecting value
-            post {
-                selectValue(initialValue)
-                binding.tvWeightValue.text = initialValue.toString()
-                binding.tvRulerBadge.text = "$initialValue kg"
+    private fun updateDisplay(value: Int) {
+        // Ubah angka besar di atas
+        binding.tvWeightValue.text = value.toString()
+
+        binding.tvWarning.visibility = when {
+            value < 30 -> {
+                binding.tvWarning.text = "Nilai ini sangat rendah, pastikan sudah akurat."
+                View.VISIBLE
             }
+            value > 200 -> {
+                binding.tvWarning.text = "Nilai ini sangat tinggi, pastikan sudah akurat."
+                View.VISIBLE
+            }
+            else -> View.GONE
+        }
+    }
 
-            setValuePickerListener(object : RulerValuePickerListener {
-                override fun onValueChange(value: Int) {
-                    binding.tvWeightValue.text = value.toString()
-                    binding.tvRulerBadge.text = "$value kg"
-                }
-
-                override fun onIntermediateValueChange(selectedValue: Int) {
-                    binding.tvWeightValue.text = selectedValue.toString()
-                    binding.tvRulerBadge.text = "$selectedValue kg"
-                }
-            })
+    private fun setupContinueButton() {
+        binding.btnNext.setOnClickListener {
+            if (currentSelectedWeight in WEIGHT_MIN..WEIGHT_MAX) {
+                val currentUser = userPreference.getUser()
+                currentUser.weight = currentSelectedWeight
+                userPreference.setUser(currentUser)
+                (activity as? OnboardingActivity)?.nextStep()
+            } else {
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    "Berat badan harus antara $WEIGHT_MIN - $WEIGHT_MAX kg",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
