@@ -28,7 +28,7 @@ class OnboardingNameFragment : Fragment() {
 
         userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
-        
+
         // Pre-fill if name already exists from Google Login
         if (!user.name.isNullOrEmpty()) {
             binding.edtName.setText(user.name)

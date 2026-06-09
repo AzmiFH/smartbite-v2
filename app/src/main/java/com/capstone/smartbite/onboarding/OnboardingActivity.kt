@@ -48,8 +48,8 @@ class OnboardingActivity : AppCompatActivity() {
                     2 -> OnboardingAgeFragment()
                     3 -> OnboardingHeightFragment()
                     4 -> OnboardingWeightFragment()
-                    5 -> OnboardingGoalFragment()
-                    6 -> OnboardingActivityLevelFragment()
+                    5 -> OnboardingActivityLevelFragment()
+                    6 -> OnboardingGoalFragment()
                     7 -> OnboardingFinishFragment()
                     else -> OnboardingNameFragment()
                 }
@@ -64,58 +64,43 @@ class OnboardingActivity : AppCompatActivity() {
                 
                 if (position == 7) {
                     binding.btnBack.visibility = View.GONE
-                    binding.tvStepIndicator.visibility = View.GONE
                     binding.clProgressContainer.visibility = View.GONE
                     return
                 } else {
                     binding.btnBack.visibility = View.VISIBLE
-                    binding.tvStepIndicator.visibility = View.VISIBLE
                     binding.clProgressContainer.visibility = View.VISIBLE
                 }
-
-                val step = position + 1
-                val totalSteps = 7
                 
-                binding.tvStepIndicator.text = "Langkah $step dari $totalSteps"
-                
-                // Update Progress & Title
+                // Update Progress
                 when (position) {
                     0 -> {
-                        binding.tvTitleStep.text = "Name"
-                        updateProgress(14, "14%")
+                        updateProgress(14)
                     }
                     1 -> {
-                        binding.tvTitleStep.text = "Gender"
-                        updateProgress(28, "28%")
+                        updateProgress(28)
                     }
                     2 -> {
-                        binding.tvTitleStep.text = "Age"
-                        updateProgress(42, "42%")
+                        updateProgress(42)
                     }
                     3 -> {
-                        binding.tvTitleStep.text = "Goal"
-                        updateProgress(56, "56%")
+                        updateProgress(56)
                     }
                     4 -> {
-                        binding.tvTitleStep.text = "Height"
-                        updateProgress(70, "70%")
+                        updateProgress(70)
                     }
                     5 -> {
-                        binding.tvTitleStep.text = "Weight"
-                        updateProgress(84, "84%")
+                        updateProgress(84)
                     }
                     6 -> {
-                        binding.tvTitleStep.text = "Activity"
-                        updateProgress(100, "100%")
+                        updateProgress(100)
                     }
                 }
             }
         })
     }
 
-    private fun updateProgress(progress: Int, percentText: String) {
+    private fun updateProgress(progress: Int) {
         binding.onboardingProgress.progress = progress
-        binding.tvProgressPercent.text = percentText
     }
 
     fun nextStep() {

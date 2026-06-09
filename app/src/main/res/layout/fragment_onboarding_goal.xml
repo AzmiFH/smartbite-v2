@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F8F9FD"
     android:padding="24dp">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Apa target Anda?"
-        android:textColor="@color/text_primary"
+        android:textColor="#1A1C1E"
         android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,17 +29,20 @@
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
         android:scrollbars="none"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toTopOf="@id/btn_next"
         app:layout_constraintTop_toBottomOf="@id/tv_subtitle">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="100dp"
             android:orientation="vertical">
 
             <!-- Maintain Weight -->
@@ -47,45 +51,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_gender_card_unselected"
+                android:background="@drawable/bg_goal_card_unselected"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="16dp">
 
                 <View
                     android:id="@+id/v_icon_bg_maintain"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/bg_icon_circle_green"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_goal_icon_unselected"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:id="@+id/iv_icon_maintain"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_maintain"
                     app:layout_constraintBottom_toBottomOf="@id/v_icon_bg_maintain"
                     app:layout_constraintEnd_toEndOf="@id/v_icon_bg_maintain"
                     app:layout_constraintStart_toStartOf="@id/v_icon_bg_maintain"
-                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_maintain" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_maintain"
+                    app:tint="@color/brand_green" />
 
                 <TextView
                     android:id="@+id/tv_maintain_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Menjaga Berat Badan"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/iv_check_maintain"
                     app:layout_constraintStart_toEndOf="@id/v_icon_bg_maintain"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_maintain" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Pertahankan gaya hidup sehat saat ini."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
@@ -98,9 +105,9 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_check_circle_outline"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_maintain"
+                    app:tint="#D1D5DB" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Lose Weight -->
@@ -109,45 +116,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_gender_card_unselected"
+                android:background="@drawable/bg_goal_card_unselected"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="16dp">
 
                 <View
                     android:id="@+id/v_icon_bg_lose"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/bg_icon_circle_green"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_goal_icon_unselected"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:id="@+id/iv_icon_lose"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_lose_weight"
                     app:layout_constraintBottom_toBottomOf="@id/v_icon_bg_lose"
                     app:layout_constraintEnd_toEndOf="@id/v_icon_bg_lose"
                     app:layout_constraintStart_toStartOf="@id/v_icon_bg_lose"
-                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_lose" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_lose"
+                    app:tint="@color/brand_green" />
 
                 <TextView
                     android:id="@+id/tv_lose_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Menurunkan Berat Badan"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/iv_check_lose"
                     app:layout_constraintStart_toEndOf="@id/v_icon_bg_lose"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_lose" />
 
                 <TextView
+                    android:id="@+id/tv_lose_desc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Fokus pada defisit kalori yang sehat."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
@@ -161,18 +172,20 @@
                     android:layout_height="24dp"
                     android:src="@drawable/ic_check_circle_outline"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_lose"
+                    app:tint="#D1D5DB" />
 
+                <!-- Expanded Input for Lose Weight -->
                 <LinearLayout
                     android:id="@+id/ll_target_weight_lose"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@id/tv_lose_title"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tv_lose_title"
-                    app:layout_constraintTop_toBottomOf="@id/v_icon_bg_lose">
+                    app:layout_constraintTop_toBottomOf="@id/tv_lose_desc">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -208,6 +221,28 @@
                             android:textColor="@color/text_secondary"
                             android:textSize="14sp" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_goal_info_lose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Rekomendasi: 0 - 0 kg"
+                        android:textColor="@color/brand_green"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_safety_warning_lose"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Target ini tidak aman bagi metabolisme Anda"
+                        android:textColor="#F44336"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -217,45 +252,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_gender_card_unselected"
+                android:background="@drawable/bg_goal_card_unselected"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="16dp">
 
                 <View
                     android:id="@+id/v_icon_bg_gain"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@drawable/bg_icon_circle_green"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/bg_goal_icon_unselected"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:id="@+id/iv_icon_gain"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_gain_muscle"
                     app:layout_constraintBottom_toBottomOf="@id/v_icon_bg_gain"
                     app:layout_constraintEnd_toEndOf="@id/v_icon_bg_gain"
                     app:layout_constraintStart_toStartOf="@id/v_icon_bg_gain"
-                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_gain" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_gain"
+                    app:tint="@color/brand_green" />
 
                 <TextView
                     android:id="@+id/tv_gain_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
                     android:text="Meningkatkan Massa Otot"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/iv_check_gain"
                     app:layout_constraintStart_toEndOf="@id/v_icon_bg_gain"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_gain" />
 
                 <TextView
+                    android:id="@+id/tv_gain_desc"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Surplus kalori dengan tinggi protein."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
@@ -269,18 +308,20 @@
                     android:layout_height="24dp"
                     android:src="@drawable/ic_check_circle_outline"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@id/v_icon_bg_gain"
+                    app:tint="#D1D5DB" />
 
+                <!-- Expanded Input for Gain Muscle -->
                 <LinearLayout
                     android:id="@+id/ll_target_weight_gain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="@id/tv_gain_title"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/tv_gain_title"
-                    app:layout_constraintTop_toBottomOf="@id/v_icon_bg_gain">
+                    app:layout_constraintTop_toBottomOf="@id/tv_gain_desc">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -316,6 +357,28 @@
                             android:textColor="@color/text_secondary"
                             android:textSize="14sp" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_goal_info_gain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Rekomendasi: 0 - 0 kg"
+                        android:textColor="@color/brand_green"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_safety_warning_gain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Target ini tidak aman bagi metabolisme Anda"
+                        android:textColor="#F44336"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

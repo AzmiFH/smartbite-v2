@@ -71,7 +71,7 @@ internal class UserPreference(context: Context, email: String? = null) {
         model.height = preferences.getInt(HEIGHT, 0)
         model.weight = preferences.getInt(WEIGHT, 0)
         model.targetWeight = preferences.getInt(TARGET_WEIGHT, 0)
-        model.goal = preferences.getString(GOAL, "Weight Loss Focus")
+        model.goal = preferences.getString(GOAL, null)
         model.activityLevel = preferences.getString(ACTIVITY_LEVEL, "")
         return model
     }
