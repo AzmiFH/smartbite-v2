@@ -11,6 +11,7 @@ import com.capstone.smartbite.MainActivity
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.databinding.FragmentOnboardingFinishBinding
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 class OnboardingFinishFragment : Fragment() {
@@ -28,6 +29,14 @@ class OnboardingFinishFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Load image from URL using Glide
+        val imageUrl = "https://images.openai.com/static-rsc-4/nFdsTSoug99GLEA24dm6vjobLiYUwXTeFfM4oJD2skeqTeedONLR-Ock7qJTtqSMWEO_OAzobkUCJ3I2H73ry3yN1aJSJHDkARaCdzMKys7rwyWXa_tAm-wU1YF6NkdeUO1m1WQ7ydwOamn4Bgg_STYGNwNZ22FdLH-q2XxchszFyUw_nnxRzS_S-U-xA3yu?purpose=fullsize"
+        Glide.with(this)
+            .load(imageUrl)
+            .placeholder(com.capstone.smartbite.R.drawable.bg_gender_card_unselected)
+            .centerCrop()
+            .into(binding.ivOnboardingSuccess)
 
         binding.btnGetStarted.setOnClickListener {
             val email = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email
@@ -49,6 +58,25 @@ class OnboardingFinishFragment : Fragment() {
                 startActivity(intent)
                 requireActivity().finish()
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateGoalText()
+    }
+
+    private fun updateGoalText() {
+        // Update Dynamic Text for Goal
+        val email = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email
+        val userPreference = UserPreference(requireContext(), email)
+        val user = userPreference.getUser()
+
+        binding.tvFinalGoal.text = when (user.goal) {
+            "Weight Loss Focus" -> "Menurunkan Berat Badan"
+            "Muscle Building" -> "Meningkatkan Massa Otot"
+            "Maintain Weight" -> "Menjaga Berat Badan"
+            else -> "Target Berat Badan"
         }
     }
 

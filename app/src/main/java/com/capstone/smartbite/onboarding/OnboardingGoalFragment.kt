@@ -33,6 +33,16 @@ class OnboardingGoalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
+        
+        setupListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshData()
+    }
+
+    private fun refreshData() {
         val user = userPreference.getUser()
 
         // Pre-select if already exists
@@ -46,7 +56,9 @@ class OnboardingGoalFragment : Fragment() {
                 }
             }
         }
+    }
 
+    private fun setupListeners() {
         binding.btnMaintain.setOnClickListener { updateUI("Maintain Weight") }
         binding.btnLoseWeight.setOnClickListener { updateUI("Weight Loss Focus") }
         binding.btnGainMuscle.setOnClickListener { updateUI("Muscle Building") }
@@ -163,6 +175,10 @@ class OnboardingGoalFragment : Fragment() {
     private fun updateUI(goal: String) {
         selectedGoal = goal
         val user = userPreference.getUser()
+        
+        // Simpan perubahan secara instan agar logika skip di Activity sinkron
+        user.goal = goal
+        userPreference.setUser(user)
         
         resetCard(binding.btnMaintain, binding.ivCheckMaintain)
         resetCard(binding.btnLoseWeight, binding.ivCheckLose)

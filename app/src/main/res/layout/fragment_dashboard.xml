@@ -84,7 +84,7 @@
                 android:textColor="@color/text_subtitle"
                 android:textSize="16sp" />
 
-            <!-- Smart Insight Card -->
+            <!-- BMI Status Card -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/insight_card"
                 android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                     android:background="@drawable/bg_circle_primary"
                     android:backgroundTint="#E0F2F1"
                     android:padding="8dp"
-                    android:src="@drawable/ic_insight_lamp"
+                    android:src="@drawable/ic_person_custom"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,7 +109,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:text="Smart Insight"
+                    android:text="BMI Status"
                     android:textColor="@color/insight_title"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:lineSpacingExtra="4dp"
-                    android:text="You are on track with carbs, but slightly low on protein. Consider a tempeh-based side for dinner."
+                    android:text="Menghitung status BMI Anda..."
                     android:textColor="@color/text_subtitle"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"

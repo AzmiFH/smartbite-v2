@@ -48,9 +48,8 @@
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:max="100"
-            android:progress="10"
-            android:progressDrawable="@drawable/onboarding_progress_fill"
-            android:background="@drawable/onboarding_progress_bg"
+            android:progress="0"
+            android:progressDrawable="@drawable/onboarding_progress_drawable"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

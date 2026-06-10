@@ -56,27 +56,29 @@
 
                 <TextView
                     android:id="@+id/tv_moderate_value"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
                     android:text="0.5 kg / minggu"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_check_moderate"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
+                    android:id="@+id/ll_recommended_badge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/bg_recommended_badge"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingHorizontal="8dp"
-                    android:paddingVertical="2dp"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_moderate_value"
-                    app:layout_constraintStart_toEndOf="@id/tv_moderate_value"
-                    app:layout_constraintTop_toTopOf="@id/tv_moderate_value">
+                    android:paddingVertical="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_moderate_value">
 
                     <ImageView
                         android:layout_width="12dp"
@@ -90,7 +92,7 @@
                         android:layout_marginStart="4dp"
                         android:text="Direkomendasikan"
                         android:textColor="@color/brand_green"
-                        android:textSize="10sp"
+                        android:textSize="11sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -107,19 +109,19 @@
                     android:id="@+id/tv_moderate_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="12dp"
                     android:text="Kecepatan Sedang"
                     android:textColor="@color/brand_green"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_moderate_value" />
+                    app:layout_constraintTop_toBottomOf="@id/ll_recommended_badge" />
 
                 <TextView
                     android:id="@+id/tv_moderate_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:text="Kecepatan berkelanjutan untuk kesuksesan jangka panjang. Terbaik untuk menjaga energi."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
@@ -129,7 +131,7 @@
                     android:id="@+id/ll_date_moderate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/bg_date_info"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -165,12 +167,14 @@
 
                 <TextView
                     android:id="@+id/tv_challenging_value"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
                     android:text="1.0 kg / minggu"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_check_challenging"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -187,7 +191,7 @@
                     android:id="@+id/tv_challenging_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:text="Menantang"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
@@ -199,7 +203,7 @@
                     android:id="@+id/tv_challenging_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:text="Membutuhkan komitmen dan disiplin yang lebih tinggi. Mungkin terasa lapar di awal."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
@@ -209,7 +213,7 @@
                     android:id="@+id/ll_date_challenging"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/bg_date_info"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -254,26 +258,8 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.45"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/ic_chevron_right"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline_center"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.55" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

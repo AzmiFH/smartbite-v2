@@ -72,32 +72,35 @@ class OnboardingActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 
-                if (position == 8) {
-                    binding.btnBack.visibility = View.GONE
-                    binding.clProgressContainer.visibility = View.GONE
-                    return
-                } else {
-                    binding.btnBack.visibility = View.VISIBLE
-                    binding.clProgressContainer.visibility = View.VISIBLE
-                }
+                // Pastikan tombol back dan progress bar selalu tampil
+                binding.btnBack.visibility = View.VISIBLE
+                binding.clProgressContainer.visibility = View.VISIBLE
                 
                 // Update Progress
                 when (position) {
-                    0 -> updateProgress(12)
-                    1 -> updateProgress(25)
-                    2 -> updateProgress(37)
+                    0 -> updateProgress(5) // Start with a small fill
+                    1 -> updateProgress(20)
+                    2 -> updateProgress(35)
                     3 -> updateProgress(50)
-                    4 -> updateProgress(62)
-                    5 -> updateProgress(75)
-                    6 -> updateProgress(87)
-                    7 -> updateProgress(100)
+                    4 -> updateProgress(65)
+                    5 -> updateProgress(80)
+                    6 -> updateProgress(90)
+                    7 -> updateProgress(95)
+                    8 -> updateProgress(100)
                 }
             }
         })
     }
 
-    private fun updateProgress(progress: Int) {
-        binding.onboardingProgress.progress = progress
+    private fun updateProgress(targetProgress: Int) {
+        val currentProgress = binding.onboardingProgress.progress
+        val animator = android.animation.ValueAnimator.ofInt(currentProgress, targetProgress)
+        animator.duration = 300
+        animator.interpolator = androidx.interpolator.view.animation.FastOutSlowInInterpolator()
+        animator.addUpdateListener { animation ->
+            binding.onboardingProgress.progress = animation.animatedValue as Int
+        }
+        animator.start()
     }
 
     fun nextStep() {

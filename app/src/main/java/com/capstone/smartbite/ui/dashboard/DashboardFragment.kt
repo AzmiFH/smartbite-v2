@@ -114,14 +114,44 @@ class DashboardFragment : Fragment() {
         val auth = Firebase.auth
         val user = auth.currentUser
 
+        val userPreference = com.capstone.smartbite.UserPreference(requireContext(), user?.email)
+        val userModel = userPreference.getUser()
+
         if (user != null) {
-            val userName = user.displayName
+            val userName = userModel.name ?: user.displayName ?: "User"
             binding.tvGreeting.text = "Halo, $userName!"
         } else {
             binding.tvGreeting.text = "Halo, Guest!"
         }
 
+        setupBMIStatus(userModel)
         setupCurrentDate()
+    }
+
+    private fun setupBMIStatus(user: com.capstone.smartbite.UserModel) {
+        if (user.height > 0 && user.weight > 0) {
+            val bmi = com.capstone.smartbite.utils.HealthMath.calculateBMI(user.weight.toDouble(), user.height)
+            val category = com.capstone.smartbite.utils.HealthMath.getBMICategory(bmi)
+
+            binding.tvInsightTitle.text = "BMI Status"
+            binding.tvInsightDesc.text = "BMI Anda saat ini adalah ${String.format("%.1f", bmi)} ($category). Terus jaga pola makanmu!"
+
+            val (colorRes, bgColor) = when (category) {
+                "Underweight" -> Pair(R.color.progress_carbs, "#FFF9C4")
+                "Normal" -> Pair(R.color.brand_green, "#E8F5E9")
+                "Overweight" -> Pair(R.color.progress_cal, "#FFF3E0")
+                "Obese" -> Pair(R.color.progress_cal, "#FFEBEE")
+                else -> Pair(R.color.brand_green, "#E8F5E9")
+            }
+
+            val color = ContextCompat.getColor(requireContext(), colorRes)
+            binding.tvInsightTitle.setTextColor(color)
+            binding.ivInsightIcon.backgroundTintList = ColorStateList.valueOf(Color.parseColor(bgColor))
+            binding.ivInsightIcon.imageTintList = ColorStateList.valueOf(color)
+        } else {
+            binding.tvInsightTitle.text = "BMI Status"
+            binding.tvInsightDesc.text = "Lengkapi data profilmu untuk melihat status BMI."
+        }
     }
 
     private fun setupCurrentDate() {
