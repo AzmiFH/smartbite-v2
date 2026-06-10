@@ -29,7 +29,10 @@ class OnboardingActivity : AppCompatActivity() {
         setupViewPager()
 
         binding.btnBack.setOnClickListener {
-            if (binding.viewPagerOnboarding.currentItem > 0) {
+            val current = binding.viewPagerOnboarding.currentItem
+            if (current == 8 && !shouldShowWeeklyGoal()) {
+                binding.viewPagerOnboarding.currentItem = 6
+            } else if (current > 0) {
                 binding.viewPagerOnboarding.currentItem -= 1
             } else {
                 finish()
@@ -37,9 +40,15 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
+    private fun shouldShowWeeklyGoal(): Boolean {
+        val userPreference = com.capstone.smartbite.UserPreference(this, com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
+        val goal = userPreference.getUser().goal
+        return goal == "Weight Loss Focus" || goal == "Muscle Building"
+    }
+
     private fun setupViewPager() {
         val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 8 // Nama, Gender, Age, Goal, Height, Weight, Activity, Finish
+            override fun getItemCount(): Int = 9 // Nama, Gender, Age, Goal, Height, Weight, Activity, Weekly Goal, Finish
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
@@ -50,7 +59,8 @@ class OnboardingActivity : AppCompatActivity() {
                     4 -> OnboardingWeightFragment()
                     5 -> OnboardingActivityLevelFragment()
                     6 -> OnboardingGoalFragment()
-                    7 -> OnboardingFinishFragment()
+                    7 -> OnboardingWeeklyGoalFragment()
+                    8 -> OnboardingFinishFragment()
                     else -> OnboardingNameFragment()
                 }
             }
@@ -62,7 +72,7 @@ class OnboardingActivity : AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 
-                if (position == 7) {
+                if (position == 8) {
                     binding.btnBack.visibility = View.GONE
                     binding.clProgressContainer.visibility = View.GONE
                     return
@@ -73,27 +83,14 @@ class OnboardingActivity : AppCompatActivity() {
                 
                 // Update Progress
                 when (position) {
-                    0 -> {
-                        updateProgress(14)
-                    }
-                    1 -> {
-                        updateProgress(28)
-                    }
-                    2 -> {
-                        updateProgress(42)
-                    }
-                    3 -> {
-                        updateProgress(56)
-                    }
-                    4 -> {
-                        updateProgress(70)
-                    }
-                    5 -> {
-                        updateProgress(84)
-                    }
-                    6 -> {
-                        updateProgress(100)
-                    }
+                    0 -> updateProgress(12)
+                    1 -> updateProgress(25)
+                    2 -> updateProgress(37)
+                    3 -> updateProgress(50)
+                    4 -> updateProgress(62)
+                    5 -> updateProgress(75)
+                    6 -> updateProgress(87)
+                    7 -> updateProgress(100)
                 }
             }
         })
@@ -104,10 +101,11 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     fun nextStep() {
-        if (binding.viewPagerOnboarding.currentItem < 10) {
+        val current = binding.viewPagerOnboarding.currentItem
+        if (current == 6 && !shouldShowWeeklyGoal()) {
+            binding.viewPagerOnboarding.currentItem = 8
+        } else if (current < 8) {
             binding.viewPagerOnboarding.currentItem += 1
-        } else {
-            // Finish onboarding
         }
     }
 }
