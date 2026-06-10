@@ -133,7 +133,7 @@
                     android:id="@+id/iv_gender_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_gender"
+                    android:src="@drawable/male_and_female_ic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/icon_metric_gray" />
@@ -226,7 +226,7 @@
                     android:id="@+id/iv_weight_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_weight"
+                    android:src="@drawable/weight"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/icon_metric_gray" />

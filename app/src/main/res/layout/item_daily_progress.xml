@@ -62,7 +62,7 @@
                 android:background="@drawable/bg_circle_primary"
                 android:backgroundTint="@color/progress_cal"
                 android:padding="3dp"
-                android:src="@drawable/ic_fire_24dp"
+                android:src="@drawable/calories"
                 app:tint="@color/white" />
 
             <TextView
