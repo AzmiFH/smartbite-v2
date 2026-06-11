@@ -68,6 +68,16 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.loadActiveEvents()
 
         setupProgressPager()
+        
+        dashboardViewModel.dailyNutrition.observe(viewLifecycleOwner) {
+            progressPagerAdapter.setDailyNutrition(it)
+        }
+
+        dashboardViewModel.consumedNutrition.observe(viewLifecycleOwner) {
+            it?.let { log ->
+                progressPagerAdapter.setConsumedNutrition(log)
+            }
+        }
 
         return root
     }
@@ -120,6 +130,11 @@ class DashboardFragment : Fragment() {
         if (user != null) {
             val userName = userModel.name ?: user.displayName ?: "User"
             binding.tvGreeting.text = "Halo, $userName!"
+            
+            // Calculate targets
+            dashboardViewModel.calculateDailyTargets(userModel)
+            // Load consumed nutrition
+            dashboardViewModel.loadConsumedNutrition(user.email!!)
         } else {
             binding.tvGreeting.text = "Halo, Guest!"
         }

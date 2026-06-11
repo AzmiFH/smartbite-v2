@@ -92,15 +92,34 @@ object HealthMath {
     }
 
     /**
-     * Menghitung estimasi durasi (jumlah minggu) untuk mencapai target berat badan
+     * Menghitung target nutrisi harian berdasarkan profil user
      */
-    fun calculateDurationWeeks(currentWeight: Int, targetWeight: Int, weeklyRate: Double): Int {
-        if (weeklyRate <= 0) return 0
-        val totalToLose = currentWeight - targetWeight
-        if (totalToLose == 0) return 0
+    fun calculateDailyNutrition(user: com.capstone.smartbite.UserModel): DailyNutritionTargets {
+        val tdee = calculateTDEE(user)
         
-        // Gunakan absolute untuk handle gain juga (durasi surplus)
-        val diff = if (totalToLose > 0) totalToLose else -totalToLose
-        return (diff / weeklyRate).toInt()
+        // Asumsi target mingguan (kg/minggu)
+        // Idealnya ini diambil dari UserPreference jika disimpan
+        val weeklyGoalRate = 0.5 
+        val dailyAdjustment = (weeklyGoalRate * 7700) / 7
+
+        val targetCalories = when (user.goal) {
+            "Weight Loss Focus" -> (tdee - dailyAdjustment).toInt()
+            "Muscle Building" -> (tdee + dailyAdjustment).toInt()
+            else -> tdee.toInt()
+        }.coerceAtLeast(if (user.gender == "Pria") 1500 else 1200)
+
+        // Distribusi Makro: 20% P, 55% C, 25% F
+        val protein = (targetCalories * 0.20 / 4).toInt()
+        val carbs = (targetCalories * 0.55 / 4).toInt()
+        val fat = (targetCalories * 0.25 / 9).toInt()
+
+        return DailyNutritionTargets(targetCalories, protein, carbs, fat)
     }
+
+    data class DailyNutritionTargets(
+        val calories: Int,
+        val protein: Int,
+        val carbs: Int,
+        val fat: Int
+    )
 }

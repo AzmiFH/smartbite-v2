@@ -1,12 +1,69 @@
 package com.capstone.smartbite.data
 
 import com.capstone.smartbite.UserModel
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class FirebaseService {
     private val db = FirebaseFirestore.getInstance()
     private val usersCollection = db.collection("users")
+
+    suspend fun addMealLog(email: String, calories: Double, protein: Double, carbs: Double, fat: Double) {
+        val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val logRef = usersCollection.document(email).collection("daily_logs").document(dateString)
+
+        val updates = hashMapOf(
+            "totalCalories" to FieldValue.increment(calories),
+            "totalProtein" to FieldValue.increment(protein),
+            "totalCarbs" to FieldValue.increment(carbs),
+            "totalFat" to FieldValue.increment(fat),
+            "lastUpdated" to FieldValue.serverTimestamp()
+        )
+
+        logRef.set(updates, com.google.firebase.firestore.SetOptions.merge()).await()
+    }
+
+    fun getDailyLog(email: String): Flow<DailyNutritionLog?> = callbackFlow {
+        val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val logRef = usersCollection.document(email).collection("daily_logs").document(dateString)
+
+        val registration = logRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                // Jangan panggil close(error) jika Anda ingin aplikasi tetap berjalan
+                // Cukup kirim null atau data kosong, dan log error-nya
+                android.util.Log.e("FirebaseService", "Firestore Error: ${error.message}")
+                trySend(null)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                val log = DailyNutritionLog(
+                    calories = snapshot.getDouble("totalCalories")?.toInt() ?: 0,
+                    protein = snapshot.getDouble("totalProtein")?.toInt() ?: 0,
+                    carbs = snapshot.getDouble("totalCarbs")?.toInt() ?: 0,
+                    fat = snapshot.getDouble("totalFat")?.toInt() ?: 0
+                )
+                trySend(log)
+            } else {
+                trySend(null)
+            }
+        }
+        awaitClose { registration.remove() }
+    }
+
+    data class DailyNutritionLog(
+        val calories: Int,
+        val protein: Int,
+        val carbs: Int,
+        val fat: Int
+    )
 
     suspend fun saveUserProfile(user: UserModel) {
         val userEmail = user.email ?: return

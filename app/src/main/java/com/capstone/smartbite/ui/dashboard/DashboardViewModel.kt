@@ -3,7 +3,9 @@ package com.capstone.smartbite.ui.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.capstone.smartbite.data.ApiConfig
+import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.data.ListFoodItem
 import com.capstone.smartbite.data.RecomenResponse
 import retrofit2.Call
@@ -17,6 +19,11 @@ class DashboardViewModel : ViewModel() {
     private val _food = MutableLiveData<List<ListFoodItem>>()
     val food: LiveData<List<ListFoodItem>> = _food
 
+    private val _dailyNutrition = MutableLiveData<com.capstone.smartbite.utils.HealthMath.DailyNutritionTargets>()
+    val dailyNutrition: LiveData<com.capstone.smartbite.utils.HealthMath.DailyNutritionTargets> = _dailyNutrition
+
+    private val _consumedNutrition = MutableLiveData<FirebaseService.DailyNutritionLog?>()
+    val consumedNutrition: LiveData<FirebaseService.DailyNutritionLog?> = _consumedNutrition
 
     private val _error = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> = _error
@@ -26,6 +33,24 @@ class DashboardViewModel : ViewModel() {
 
     companion object {
         private const val EVENT_ID = 1
+    }
+
+    fun loadConsumedNutrition(email: String) {
+        val service = FirebaseService()
+        service.getDailyLog(email)
+            .asLiveData()
+            .observeForever { log ->
+                // observeForever is used here because this is called once from Fragment
+                // but we should ideally use a more lifecycle-aware approach if possible.
+                // For now, adding a simple null check/error handling proxy if needed.
+                _consumedNutrition.value = log
+            }
+    }
+
+    fun calculateDailyTargets(user: com.capstone.smartbite.UserModel) {
+        if (user.height > 0 && user.weight > 0) {
+            _dailyNutrition.value = com.capstone.smartbite.utils.HealthMath.calculateDailyNutrition(user)
+        }
     }
 
     fun loadActiveEvents(){
