@@ -40,14 +40,14 @@ class OnboardingNameFragment : Fragment() {
                 val currentUser = userPreference.getUser()
                 currentUser.name = name
                 userPreference.setUser(currentUser)
-                (activity as? OnboardingActivity)?.nextStep()
+                (activity as? OnboardingNavigator)?.nextStep()
             } else {
                 binding.tilName.error = "Nama tidak boleh kosong"
             }
         }
 
         binding.btnSkip.setOnClickListener {
-            (activity as? OnboardingActivity)?.nextStep()
+            (activity as? OnboardingNavigator)?.nextStep()
         }
     }
 

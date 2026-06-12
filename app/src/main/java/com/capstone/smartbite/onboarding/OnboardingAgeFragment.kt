@@ -40,7 +40,7 @@ class OnboardingAgeFragment : Fragment() {
             val currentUser = userPreference.getUser()
             currentUser.age = agePicker?.value ?: 23
             userPreference.setUser(currentUser)
-            (activity as? OnboardingActivity)?.nextStep()
+            (activity as? OnboardingNavigator)?.nextStep()
         }
     }
 

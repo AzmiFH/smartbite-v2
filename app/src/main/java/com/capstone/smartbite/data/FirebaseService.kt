@@ -58,6 +58,21 @@ class FirebaseService {
         awaitClose { registration.remove() }
     }
 
+    suspend fun resetDailyLog(email: String) {
+        val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val logRef = usersCollection.document(email).collection("daily_logs").document(dateString)
+
+        val resetValues = hashMapOf(
+            "totalCalories" to 0,
+            "totalProtein" to 0,
+            "totalCarbs" to 0,
+            "totalFat" to 0,
+            "lastUpdated" to FieldValue.serverTimestamp()
+        )
+
+        logRef.set(resetValues, com.google.firebase.firestore.SetOptions.merge()).await()
+    }
+
     data class DailyNutritionLog(
         val calories: Int,
         val protein: Int,
@@ -106,6 +121,19 @@ class FirebaseService {
     }
 
     suspend fun deleteUserProfile(email: String) {
-        usersCollection.document(email).delete().await()
+        val userRef = usersCollection.document(email)
+        
+        // 1. Hapus sub-koleksi daily_logs (Batch Delete)
+        val dailyLogs = userRef.collection("daily_logs").get().await()
+        if (!dailyLogs.isEmpty) {
+            val batch = db.batch()
+            for (doc in dailyLogs) {
+                batch.delete(doc.reference)
+            }
+            batch.commit().await()
+        }
+
+        // 2. Hapus dokumen profil utama
+        userRef.delete().await()
     }
 }

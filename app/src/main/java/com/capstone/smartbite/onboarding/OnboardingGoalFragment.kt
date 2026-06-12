@@ -98,7 +98,7 @@ class OnboardingGoalFragment : Fragment() {
                 }
 
                 userPreference.setUser(currentUser)
-                (activity as? OnboardingActivity)?.nextStep()
+                (activity as? OnboardingNavigator)?.nextStep()
             }
         }
     }

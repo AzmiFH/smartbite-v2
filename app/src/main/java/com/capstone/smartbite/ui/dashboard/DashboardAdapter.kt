@@ -25,7 +25,7 @@ class DashboardAdapter (private val onItemClickListener: (ListFoodItem) -> Unit)
                 oldItem: ListFoodItem,
                 newItem: ListFoodItem
             ): Boolean {
-                return oldItem !== newItem
+                return oldItem == newItem
             }
         }
     }

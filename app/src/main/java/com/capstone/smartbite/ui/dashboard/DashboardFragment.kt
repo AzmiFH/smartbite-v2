@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.capstone.smartbite.R
@@ -22,6 +23,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -42,44 +46,7 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.topBar.updatePadding(top = systemBars.top)
-            insets
-        }
-
-        dashboardViewModel = ViewModelProvider(requireActivity())[DashboardViewModel::class.java]
-
-        adapter = DashboardAdapter { _ ->
-            // Handle item click
-        }
-
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        dashboardViewModel.food.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-        dashboardViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        dashboardViewModel.loadActiveEvents()
-
-        setupProgressPager()
-        
-        dashboardViewModel.dailyNutrition.observe(viewLifecycleOwner) {
-            progressPagerAdapter.setDailyNutrition(it)
-        }
-
-        dashboardViewModel.consumedNutrition.observe(viewLifecycleOwner) {
-            it?.let { log ->
-                progressPagerAdapter.setConsumedNutrition(log)
-            }
-        }
-
-        return root
+        return binding.root
     }
 
     private fun setupProgressPager() {
@@ -109,38 +76,78 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance()
-
-        // Configure Google Sign-In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
-        // Display user's name if signed in
-        val auth = Firebase.auth
-        val user = auth.currentUser
-
-        val userPreference = com.capstone.smartbite.UserPreference(requireContext(), user?.email)
-        val userModel = userPreference.getUser()
-
-        if (user != null) {
-            val userName = userModel.name ?: user.displayName ?: "User"
-            binding.tvGreeting.text = "Halo, $userName!"
-            
-            // Calculate targets
-            dashboardViewModel.calculateDailyTargets(userModel)
-            // Load consumed nutrition
-            dashboardViewModel.loadConsumedNutrition(user.email!!)
-        } else {
-            binding.tvGreeting.text = "Halo, Guest!"
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.topBar.updatePadding(top = systemBars.top)
+            insets
         }
 
-        setupBMIStatus(userModel)
+        dashboardViewModel = ViewModelProvider(requireActivity())[DashboardViewModel::class.java]
+        mAuth = FirebaseAuth.getInstance()
+        
+        // 1. Inisialisasi UI dasar SEGERA
         setupCurrentDate()
+        setupRecyclerView()
+        setupProgressPager()
+        setupObservers()
+
+        // 2. Muat data dari cache/local secara asinkron tanpa delay buatan
+        val user = Firebase.auth.currentUser
+        if (user != null) {
+            // Gunakan Default Dispatcher untuk kalkulasi agar tidak membebani Main Thread
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
+                val userPreference = com.capstone.smartbite.UserPreference(requireContext(), user.email)
+                val userModel = userPreference.getUser()
+                
+                withContext(Dispatchers.Main) {
+                    if (_binding == null) return@withContext
+                    val userName = userModel.name ?: user.displayName ?: "User"
+                    binding.tvGreeting.text = "Halo, $userName!"
+                    
+                    // Trigger data flow
+                    dashboardViewModel.setUserEmail(user.email!!)
+                    dashboardViewModel.calculateDailyTargets(userModel)
+                    setupBMIStatus(userModel)
+                }
+            }
+        }
+        
+        // 3. Konfigurasi Google Sign-In di latar belakang (Low Priority)
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            withContext(Dispatchers.Main) {
+                mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+            }
+        }
+    }
+
+    private fun setupRecyclerView() {
+        adapter = DashboardAdapter { _ -> }
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun setupObservers() {
+        dashboardViewModel.food.observe(viewLifecycleOwner) {
+            if (it != null && it.isNotEmpty()) {
+                binding.recyclerView.visibility = View.VISIBLE
+                adapter.submitList(it)
+            }
+        }
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
+        dashboardViewModel.dailyNutrition.observe(viewLifecycleOwner) {
+            progressPagerAdapter.setDailyNutrition(it)
+        }
+        dashboardViewModel.consumedNutrition.observe(viewLifecycleOwner) {
+            it?.let { log ->
+                progressPagerAdapter.setConsumedNutrition(log)
+            }
+        }
     }
 
     private fun setupBMIStatus(user: com.capstone.smartbite.UserModel) {

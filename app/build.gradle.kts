@@ -67,7 +67,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation("com.google.firebase:firebase-firestore:25.1.1")
     implementation(libs.play.services.auth)
-    implementation(libs.googleid)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
     // Networking

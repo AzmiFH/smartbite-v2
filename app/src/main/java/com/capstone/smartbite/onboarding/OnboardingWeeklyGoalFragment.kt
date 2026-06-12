@@ -35,7 +35,7 @@ class OnboardingWeeklyGoalFragment : Fragment() {
         }
 
         binding.btnNext.setOnClickListener {
-            (activity as? OnboardingActivity)?.nextStep()
+            (activity as? OnboardingNavigator)?.nextStep()
         }
     }
 

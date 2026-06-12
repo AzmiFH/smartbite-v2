@@ -45,7 +45,7 @@ class OnboardingActivityLevelFragment : Fragment() {
                 val currentUser = userPreference.getUser()
                 currentUser.activityLevel = selectedLevel
                 userPreference.setUser(currentUser)
-                (activity as? OnboardingActivity)?.nextStep()
+                (activity as? OnboardingNavigator)?.nextStep()
             }
         }
     }

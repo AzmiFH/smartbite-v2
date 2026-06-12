@@ -50,7 +50,7 @@ class OnboardingGenderFragment : Fragment() {
                 val currentUser = userPreference.getUser()
                 currentUser.gender = selectedGender
                 userPreference.setUser(currentUser)
-                (activity as? OnboardingActivity)?.nextStep()
+                (activity as? OnboardingNavigator)?.nextStep()
             } else {
                 Toast.makeText(requireContext(), "Silakan pilih jenis kelamin", Toast.LENGTH_SHORT).show()
             }

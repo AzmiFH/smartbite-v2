@@ -48,7 +48,7 @@ class OnboardingHeightFragment : Fragment() {
                 val currentUser = userPreference.getUser()
                 currentUser.height = currentSelectedHeight
                 userPreference.setUser(currentUser)
-                (activity as? OnboardingActivity)?.nextStep()
+                (activity as? OnboardingNavigator)?.nextStep()
             } else {
                 android.widget.Toast.makeText(
                     requireContext(),

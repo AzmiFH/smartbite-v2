@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.capstone.smartbite.databinding.ActivityOnboardingBinding
 
-class OnboardingActivity : AppCompatActivity() {
+class OnboardingActivity : AppCompatActivity(), OnboardingNavigator {
 
     private lateinit var binding: ActivityOnboardingBinding
 
@@ -103,7 +103,7 @@ class OnboardingActivity : AppCompatActivity() {
         animator.start()
     }
 
-    fun nextStep() {
+    override fun nextStep() {
         val current = binding.viewPagerOnboarding.currentItem
         if (current == 6 && !shouldShowWeeklyGoal()) {
             binding.viewPagerOnboarding.currentItem = 8

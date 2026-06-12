@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName
 	val message: String
 )
 
- class ListFoodItem(
+ data class ListFoodItem(
 
 	@field:SerializedName("image")
 	val image: String,

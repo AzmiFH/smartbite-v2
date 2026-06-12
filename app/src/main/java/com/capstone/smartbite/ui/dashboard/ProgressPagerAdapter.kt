@@ -12,11 +12,13 @@ class ProgressPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var consumedNutrition: com.capstone.smartbite.data.FirebaseService.DailyNutritionLog? = null
 
     fun setDailyNutrition(nutrition: com.capstone.smartbite.utils.HealthMath.DailyNutritionTargets) {
+        if (this.dailyNutrition == nutrition) return // Hindari update jika data sama
         this.dailyNutrition = nutrition
         notifyItemChanged(0)
     }
 
     fun setConsumedNutrition(consumed: com.capstone.smartbite.data.FirebaseService.DailyNutritionLog) {
+        if (this.consumedNutrition == consumed) return // Hindari update jika data sama
         this.consumedNutrition = consumed
         notifyItemChanged(0)
     }

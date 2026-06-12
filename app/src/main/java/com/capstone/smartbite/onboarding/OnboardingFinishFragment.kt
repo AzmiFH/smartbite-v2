@@ -49,14 +49,23 @@ class OnboardingFinishFragment : Fragment() {
             lifecycleScope.launch {
                 try {
                     FirebaseService().saveUserProfile(finalUser)
+                    
+                    // IF we are in UpdateBodyMetricsActivity, reset the daily log as requested
+                    if (activity is com.capstone.smartbite.ui.profil.UpdateBodyMetricsActivity && email != null) {
+                        FirebaseService().resetDailyLog(email)
+                    }
                 } catch (e: Exception) {
                     // Log error or show toast if needed
                 }
 
-                val intent = Intent(requireActivity(), MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                requireActivity().finish()
+                if (activity is com.capstone.smartbite.ui.profil.UpdateBodyMetricsActivity) {
+                    requireActivity().finish()
+                } else {
+                    val intent = Intent(requireActivity(), MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
             }
         }
     }

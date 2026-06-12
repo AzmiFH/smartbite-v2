@@ -87,7 +87,7 @@ class OnboardingWeightFragment : Fragment() {
                 val currentUser = userPreference.getUser()
                 currentUser.weight = currentSelectedWeight
                 userPreference.setUser(currentUser)
-                (activity as? OnboardingActivity)?.nextStep()
+                (activity as? OnboardingNavigator)?.nextStep()
             } else {
                 android.widget.Toast.makeText(
                     requireContext(),

@@ -4,10 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.capstone.smartbite.data.ApiConfig
+import androidx.lifecycle.viewModelScope
+import com.capstone.smartbite.UserModel
 import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.data.ListFoodItem
 import com.capstone.smartbite.data.RecomenResponse
+import com.capstone.smartbite.utils.HealthMath
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,11 +24,19 @@ class DashboardViewModel : ViewModel() {
     private val _food = MutableLiveData<List<ListFoodItem>>()
     val food: LiveData<List<ListFoodItem>> = _food
 
-    private val _dailyNutrition = MutableLiveData<com.capstone.smartbite.utils.HealthMath.DailyNutritionTargets>()
-    val dailyNutrition: LiveData<com.capstone.smartbite.utils.HealthMath.DailyNutritionTargets> = _dailyNutrition
+    private val _dailyNutrition = MutableLiveData<HealthMath.DailyNutritionTargets>()
+    val dailyNutrition: LiveData<HealthMath.DailyNutritionTargets> = _dailyNutrition
 
-    private val _consumedNutrition = MutableLiveData<FirebaseService.DailyNutritionLog?>()
-    val consumedNutrition: LiveData<FirebaseService.DailyNutritionLog?> = _consumedNutrition
+    private val userEmailFlow = MutableStateFlow<String?>(null)
+
+    val consumedNutrition: LiveData<FirebaseService.DailyNutritionLog?> = 
+        userEmailFlow.flatMapLatest { email ->
+            if (email != null) {
+                FirebaseService().getDailyLog(email)
+            } else {
+                kotlinx.coroutines.flow.flowOf(null)
+            }
+        }.asLiveData()
 
     private val _error = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> = _error
@@ -31,29 +44,21 @@ class DashboardViewModel : ViewModel() {
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 
-    companion object {
-        private const val EVENT_ID = 1
+    fun setUserEmail(email: String) {
+        userEmailFlow.value = email
     }
 
-    fun loadConsumedNutrition(email: String) {
-        val service = FirebaseService()
-        service.getDailyLog(email)
-            .asLiveData()
-            .observeForever { log ->
-                // observeForever is used here because this is called once from Fragment
-                // but we should ideally use a more lifecycle-aware approach if possible.
-                // For now, adding a simple null check/error handling proxy if needed.
-                _consumedNutrition.value = log
+    fun calculateDailyTargets(user: UserModel) {
+        viewModelScope.launch {
+            if (user.height > 0 && user.weight > 0) {
+                _dailyNutrition.postValue(HealthMath.calculateDailyNutrition(user))
             }
-    }
-
-    fun calculateDailyTargets(user: com.capstone.smartbite.UserModel) {
-        if (user.height > 0 && user.weight > 0) {
-            _dailyNutrition.value = com.capstone.smartbite.utils.HealthMath.calculateDailyNutrition(user)
         }
     }
 
     fun loadActiveEvents(){
+        // Off kan sementara untuk menghindari network timeout/lag (ConnectException)
+        /*
         _isLoading.value = true
         val clinet = ApiConfig.getApiService().getcalorie(calorie = 50)
         clinet.enqueue(object : Callback<RecomenResponse> {
@@ -77,5 +82,7 @@ class DashboardViewModel : ViewModel() {
             }
 
         })
+        */
+        _isLoading.value = false
     }
 }
