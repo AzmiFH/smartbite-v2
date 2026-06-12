@@ -218,8 +218,7 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
         mUserPreference = UserPreference(requireContext(), mAuth.currentUser?.email)
-
-
+        refreshData()
 
         binding.ivEditProfile.setOnClickListener(this)
         binding.cardNutritionStrategy.setOnClickListener(this)
@@ -243,6 +242,19 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         // Set logout button click listener
         binding.logoutButton.setOnClickListener {
             signOutAndNavigateToSignIn()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshData()
+    }
+
+    private fun refreshData() {
+        if (::mUserPreference.isInitialized) {
+            userModel = mUserPreference.getUser()
+            populateView(userModel)
+            checkForm(userModel)
         }
     }
 
@@ -303,6 +315,27 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         binding.tvWeightValue.text = if (userModel.weight > 0) "${userModel.weight} ${getString(R.string.kg)}" else "64 ${getString(R.string.kg)}"
         binding.tvHeightValue.text = if (userModel.height > 0) "${userModel.height} ${getString(R.string.cm)}" else "165 ${getString(R.string.cm)}"
 
+        // Tampilkan BMI
+        if (userModel.weight > 0 && userModel.height > 0) {
+            val bmi = HealthMath.calculateBMI(userModel.weight.toDouble(), userModel.height)
+            val category = HealthMath.getBMICategory(bmi)
+            binding.tvBmiValue.text = String.format(java.util.Locale.getDefault(), "%.1f (%s)", bmi, category)
+
+            // Update warna berdasarkan status BMI
+            val (colorRes, bgColor) = when (category) {
+                "Underweight" -> Pair(R.color.progress_carbs, "#FFF9C4")
+                "Normal" -> Pair(R.color.brand_green, "#E8F5E9")
+                "Overweight" -> Pair(R.color.progress_cal, "#FFF3E0")
+                "Obese" -> Pair(R.color.progress_cal, "#FFEBEE")
+                else -> Pair(R.color.brand_green, "#E8F5E9")
+            }
+            val color = ContextCompat.getColor(requireContext(), colorRes)
+            binding.ivBmiIcon.imageTintList = android.content.res.ColorStateList.valueOf(color)
+            binding.vBmiIconBg.backgroundTintList = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor(bgColor))
+            binding.tvBmiValue.setTextColor(color)
+        } else {
+            binding.tvBmiValue.text = getString(R.string.not_set)
+        }
 
         // Tampilkan gambar profil jika tersedia
         val photoUrl = userModel.profileImage ?: firebaseUser?.photoUrl
@@ -324,10 +357,8 @@ class ProfilFragment : Fragment(), View.OnClickListener {
             }
 
             R.id.card_nutrition_strategy -> {
-                // TODO: Implement UpdateBodyMetricsActivity or link to FormUserPreferenceActivity
-                // val intent = Intent(requireContext(), UpdateBodyMetricsActivity::class.java)
-                // startActivity(intent)
-                Toast.makeText(requireContext(), "Fitur Update Metrics akan segera hadir", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireContext(), UpdateBodyMetricsActivity::class.java)
+                startActivity(intent)
             }
 
             R.id.item_language -> {
