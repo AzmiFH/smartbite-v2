@@ -90,6 +90,22 @@ class LaporanFragment : Fragment() {
         binding.pbLaporanFat.progress = 60
         binding.tvFatVal.text = "40"
         binding.tvFatTarget.text = "/ 65g"
+
+        // Weekly Calories Chart
+        binding.tvAverageCalVal.text = "Rata-rata harian: 49 kkal"
+        
+        // Setting bar heights (Slicing)
+        binding.barMin.layoutParams.height = dpToPx(20)
+        binding.barSen.layoutParams.height = dpToPx(70)
+        binding.barSel.layoutParams.height = dpToPx(15)
+        binding.barRab.layoutParams.height = dpToPx(100)
+        binding.barKam.layoutParams.height = dpToPx(0)
+        binding.barJum.layoutParams.height = dpToPx(0)
+        binding.barSab.layoutParams.height = dpToPx(0)
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        return (dp * resources.displayMetrics.density).toInt()
     }
 
     override fun onDestroyView() {

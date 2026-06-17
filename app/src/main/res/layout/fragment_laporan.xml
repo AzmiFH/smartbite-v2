@@ -79,7 +79,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginHorizontal="16dp"
             app:cardCornerRadius="24dp"
-            app:cardElevation="0dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="@color/white"
             app:layout_constraintTop_toBottomOf="@id/ll_weekly_calendar">
 
@@ -453,6 +453,264 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Weekly Calories Chart Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_calories_chart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="16dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/cv_main_report">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tv_chart_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kalori"
+                    android:textColor="@color/text_black_bold"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:id="@+id/ll_average_cal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_average_cal_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rata-rata harian: 49 kkal"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:gravity="end" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="4dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/text_secondary" />
+                </LinearLayout>
+
+                <!-- Chart Area -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_chart_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_chart_title">
+
+                    <!-- Y-Axis Lines and Labels -->
+                    <!-- 200 -->
+                    <View
+                        android:id="@+id/line_200"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="200"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        app:layout_constraintBottom_toBottomOf="@id/line_200"
+                        app:layout_constraintTop_toTopOf="@id/line_200"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- 160 -->
+                    <View
+                        android:id="@+id/line_160"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line_200"
+                        app:layout_constraintBottom_toTopOf="@id/line_120" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="160"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        app:layout_constraintBottom_toBottomOf="@id/line_160"
+                        app:layout_constraintTop_toTopOf="@id/line_160"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- 120 -->
+                    <View
+                        android:id="@+id/line_120"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line_160"
+                        app:layout_constraintBottom_toTopOf="@id/line_80" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="120"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        app:layout_constraintBottom_toBottomOf="@id/line_120"
+                        app:layout_constraintTop_toTopOf="@id/line_120"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- 80 -->
+                    <View
+                        android:id="@+id/line_80"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line_120"
+                        app:layout_constraintBottom_toTopOf="@id/line_40" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="80"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        app:layout_constraintBottom_toBottomOf="@id/line_80"
+                        app:layout_constraintTop_toTopOf="@id/line_80"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- 40 -->
+                    <View
+                        android:id="@+id/line_40"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="#F0F0F0"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line_80"
+                        app:layout_constraintBottom_toTopOf="@id/line_0" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="40"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        app:layout_constraintBottom_toBottomOf="@id/line_40"
+                        app:layout_constraintTop_toTopOf="@id/line_40"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- 0 -->
+                    <View
+                        android:id="@+id/line_0"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="#CCCCCC"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/ll_days_labels" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        app:layout_constraintBottom_toBottomOf="@id/line_0"
+                        app:layout_constraintTop_toTopOf="@id/line_0"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <!-- Bars Container -->
+                    <LinearLayout
+                        android:id="@+id/ll_bars_container"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="32dp"
+                        android:gravity="bottom"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/line_0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <!-- Min -->
+                        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+                            <View android:id="@+id/bar_min" android:layout_width="16dp" android:layout_height="20dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/bg_bar_chart" android:backgroundTint="@color/ring_green" />
+                        </FrameLayout>
+                        <!-- Sen -->
+                        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+                            <View android:id="@+id/bar_sen" android:layout_width="16dp" android:layout_height="70dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/bg_bar_chart" android:backgroundTint="@color/ring_green" />
+                        </FrameLayout>
+                        <!-- Sel -->
+                        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+                            <View android:id="@+id/bar_sel" android:layout_width="16dp" android:layout_height="15dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/bg_bar_chart" android:backgroundTint="@color/ring_green" />
+                        </FrameLayout>
+                        <!-- Rab -->
+                        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+                            <View android:id="@+id/bar_rab" android:layout_width="16dp" android:layout_height="100dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/bg_bar_chart" android:backgroundTint="@color/ring_green" />
+                        </FrameLayout>
+                        <!-- Kam -->
+                        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+                            <View android:id="@+id/bar_kam" android:layout_width="16dp" android:layout_height="0dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/bg_bar_chart" android:backgroundTint="@color/ring_green" />
+                        </FrameLayout>
+                        <!-- Jum -->
+                        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+                            <View android:id="@+id/bar_jum" android:layout_width="16dp" android:layout_height="0dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/bg_bar_chart" android:backgroundTint="@color/ring_green" />
+                        </FrameLayout>
+                        <!-- Sab -->
+                        <FrameLayout android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1">
+                            <View android:id="@+id/bar_sab" android:layout_width="16dp" android:layout_height="0dp" android:layout_gravity="bottom|center_horizontal" android:background="@drawable/bg_bar_chart" android:backgroundTint="@color/ring_green" />
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                    <!-- Days Labels -->
+                    <LinearLayout
+                        android:id="@+id/ll_days_labels"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Min" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Sen" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Sel" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Rab" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Kam" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Jum" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Sab" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
