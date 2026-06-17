@@ -2,6 +2,7 @@
     <string name="app_name">SmartBite</string>
     <string name="title_home">Camera</string>
     <string name="title_dashboard">Dashboard</string>
+    <string name="title_laporan">Laporan</string>
     <string name="title_notifications">Profile</string>
     <string name="gallery">Galeri</string>
     <string name="analyze">analis</string>
@@ -49,6 +50,8 @@
     <string name="language_desc">English (US)</string>
     <string name="help_center">Help Center</string>
     <string name="help_center_desc">FAQs &amp; Support</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_desc">Toggle app theme</string>
     <string name="sign_out">Sign Out</string>
     <string name="delete_account">Hapus Akun</string>
     <string name="delete_account_desc">Hapus semua data dan setel ulang profil</string>

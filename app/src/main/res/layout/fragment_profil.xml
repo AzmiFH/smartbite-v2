@@ -536,8 +536,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:thumbTint="@color/brand_green"
-                        app:trackTint="@color/badge_goal_bg" />
+                        app:thumbTint="@color/switch_thumb_selector"
+                        app:trackTint="@color/switch_track_selector" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
@@ -613,15 +613,15 @@
                     android:layout_marginHorizontal="48dp"
                     android:background="#F0F0F0" />
 
-                <!-- Help Center -->
+                <!-- Dark Mode -->
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/item_help"
+                    android:id="@+id/item_dark_mode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="8dp">
 
                     <View
-                        android:id="@+id/v_help_bg"
+                        android:id="@+id/v_dark_mode_bg"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:background="@drawable/bg_icon_circle_green"
@@ -630,48 +630,49 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
+                        android:id="@+id/iv_dark_mode_icon"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
-                        android:src="@drawable/ic_help"
-                        app:layout_constraintBottom_toBottomOf="@id/v_help_bg"
-                        app:layout_constraintEnd_toEndOf="@id/v_help_bg"
-                        app:layout_constraintStart_toStartOf="@id/v_help_bg"
-                        app:layout_constraintTop_toTopOf="@id/v_help_bg"
+                        android:src="@drawable/ic_dark_mode"
+                        app:layout_constraintBottom_toBottomOf="@id/v_dark_mode_bg"
+                        app:layout_constraintEnd_toEndOf="@id/v_dark_mode_bg"
+                        app:layout_constraintStart_toStartOf="@id/v_dark_mode_bg"
+                        app:layout_constraintTop_toTopOf="@id/v_dark_mode_bg"
                         app:tint="@color/badge_goal_text" />
 
                     <TextView
-                        android:id="@+id/tv_help_title"
+                        android:id="@+id/tv_dark_mode_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="@string/help_center"
+                        android:text="@string/dark_mode"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_chevron_help"
-                        app:layout_constraintStart_toEndOf="@id/v_help_bg"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_dark_mode"
+                        app:layout_constraintStart_toEndOf="@id/v_dark_mode_bg"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_help_desc"
+                        android:id="@+id/tv_dark_mode_desc"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/help_center_desc"
+                        android:text="@string/dark_mode_desc"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="@id/tv_help_title"
-                        app:layout_constraintStart_toStartOf="@id/tv_help_title"
-                        app:layout_constraintTop_toBottomOf="@id/tv_help_title" />
+                        app:layout_constraintEnd_toEndOf="@id/tv_dark_mode_title"
+                        app:layout_constraintStart_toStartOf="@id/tv_dark_mode_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_dark_mode_title" />
 
-                    <ImageView
-                        android:id="@+id/iv_chevron_help"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_chevron_right"
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switch_dark_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/icon_metric_gray" />
+                        app:thumbTint="@color/switch_thumb_selector"
+                        app:trackTint="@color/switch_track_selector" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View

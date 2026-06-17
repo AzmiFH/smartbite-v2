@@ -46,11 +46,13 @@
     <color name="meal_cal_text">#00796B</color>
     <color name="meal_add_btn">#34A853</color>
 
-    <!-- Profile Slicing Colors -->
-    <color name="profile_header_bg">#F8F9FD</color>
+    <!-- Slicing Colors (Semantic for DayNight) -->
+    <color name="background_main">#F8F9FD</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="profile_header_bg">@color/background_main</color>
     <color name="badge_goal_bg">#E0F2F1</color>
     <color name="badge_goal_text">#00796B</color>
-    <color name="card_metric_bg">#FFFFFF</color>
+    <color name="card_metric_bg">@color/card_bg</color>
     <color name="card_metric_border">#F0F0F0</color>
     <color name="icon_metric_gray">#9E9E9E</color>
 
@@ -59,4 +61,19 @@
     <color name="ruler_text_custom">#1D9E75</color>
     <color name="ruler_border_custom">#9FE1CB</color>
     <color name="progress_bar_bg">#E0E0E0</color>
+
+    <!-- Activity Rings Colors (New Design) -->
+    <color name="ring_orange">#FF8C00</color>
+    <color name="ring_green">#76FF03</color>
+    <color name="ring_blue">#00B0FF</color>
+    <color name="ring_bg_orange">#FFF3E0</color>
+    <color name="ring_bg_green">#F1F8E9</color>
+    <color name="ring_bg_blue">#E1F5FE</color>
+    <color name="calendar_selected">#FF8C00</color>
+    <color name="calendar_text_inactive">#212121</color>
+    <color name="calendar_date_inactive">#212121</color>
+    <color name="ring_steps">@color/ring_orange</color>
+    <color name="ring_calories">@color/ring_green</color>
+    <color name="ring_duration">@color/ring_blue</color>
+    <color name="ring_bg">#F5F5F5</color>
 </resources>

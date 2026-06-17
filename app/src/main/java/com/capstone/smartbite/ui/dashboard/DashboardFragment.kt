@@ -148,6 +148,9 @@ class DashboardFragment : Fragment() {
                 progressPagerAdapter.setConsumedNutrition(log)
             }
         }
+        dashboardViewModel.weeklyNutrition.observe(viewLifecycleOwner) {
+            progressPagerAdapter.setWeeklyNutrition(it)
+        }
     }
 
     private fun setupBMIStatus(user: com.capstone.smartbite.UserModel) {
@@ -155,24 +158,31 @@ class DashboardFragment : Fragment() {
             val bmi = com.capstone.smartbite.utils.HealthMath.calculateBMI(user.weight.toDouble(), user.height)
             val category = com.capstone.smartbite.utils.HealthMath.getBMICategory(bmi)
 
-            binding.tvInsightTitle.text = "BMI Status"
-            binding.tvInsightDesc.text = "BMI Anda saat ini adalah ${String.format("%.1f", bmi)} ($category). Terus jaga pola makanmu!"
+            binding.tvBmiWeightVal.text = user.weight.toString()
+            binding.tvBmiValLabel.text = String.format("BMI: %.1f", bmi)
+            binding.tvBmiCategory.text = category
 
-            val (colorRes, bgColor) = when (category) {
-                "Underweight" -> Pair(R.color.progress_carbs, "#FFF9C4")
-                "Normal" -> Pair(R.color.brand_green, "#E8F5E9")
-                "Overweight" -> Pair(R.color.progress_cal, "#FFF3E0")
-                "Obese" -> Pair(R.color.progress_cal, "#FFEBEE")
-                else -> Pair(R.color.brand_green, "#E8F5E9")
+            // Map BMI range (15 - 35) to 0.0 - 1.0 bias
+            val minBMI = 15f
+            val maxBMI = 35f
+            val bias = ((bmi.toFloat() - minBMI) / (maxBMI - minBMI)).coerceIn(0f, 1f)
+            
+            val params = binding.ivBmiThumb.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            params.horizontalBias = bias
+            binding.ivBmiThumb.layoutParams = params
+
+            val categoryColor = when (category) {
+                "Underweight" -> android.graphics.Color.parseColor("#4FC3F7") // Blue
+                "Normal" -> android.graphics.Color.parseColor("#66BB6A") // Green
+                "Overweight" -> android.graphics.Color.parseColor("#FFA726") // Orange
+                "Obese" -> android.graphics.Color.parseColor("#EF5350") // Red
+                else -> android.graphics.Color.parseColor("#66BB6A")
             }
-
-            val color = ContextCompat.getColor(requireContext(), colorRes)
-            binding.tvInsightTitle.setTextColor(color)
-            binding.ivInsightIcon.backgroundTintList = ColorStateList.valueOf(Color.parseColor(bgColor))
-            binding.ivInsightIcon.imageTintList = ColorStateList.valueOf(color)
+            binding.tvBmiCategory.setTextColor(categoryColor)
         } else {
-            binding.tvInsightTitle.text = "BMI Status"
-            binding.tvInsightDesc.text = "Lengkapi data profilmu untuk melihat status BMI."
+            binding.tvBmiWeightVal.text = "--"
+            binding.tvBmiValLabel.text = "BMI: --"
+            binding.tvBmiCategory.text = "Data belum lengkap"
         }
     }
 

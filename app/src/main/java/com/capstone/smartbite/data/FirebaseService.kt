@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -36,8 +37,6 @@ class FirebaseService {
 
         val registration = logRef.addSnapshotListener { snapshot, error ->
             if (error != null) {
-                // Jangan panggil close(error) jika Anda ingin aplikasi tetap berjalan
-                // Cukup kirim null atau data kosong, dan log error-nya
                 android.util.Log.e("FirebaseService", "Firestore Error: ${error.message}")
                 trySend(null)
                 return@addSnapshotListener
@@ -53,6 +52,38 @@ class FirebaseService {
                 trySend(log)
             } else {
                 trySend(null)
+            }
+        }
+        awaitClose { registration.remove() }
+    }
+
+    fun getWeeklyLog(email: String): Flow<List<DayLog>> = callbackFlow {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, -6) // Mulai dari 6 hari yang lalu
+        val startDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+
+        val query = usersCollection.document(email)
+            .collection("daily_logs")
+            .whereGreaterThanOrEqualTo("__name__", startDate)
+            .limit(7)
+
+        val registration = query.addSnapshotListener { snapshots, error ->
+            if (error != null) {
+                android.util.Log.e("FirebaseService", "Weekly Firestore Error: ${error.message}")
+                trySend(emptyList())
+                return@addSnapshotListener
+            }
+
+            if (snapshots != null) {
+                val logs = snapshots.documents.map { doc ->
+                    DayLog(
+                        date = doc.id,
+                        calories = doc.getDouble("totalCalories")?.toInt() ?: 0
+                    )
+                }.sortedBy { it.date }
+                trySend(logs)
+            } else {
+                trySend(emptyList())
             }
         }
         awaitClose { registration.remove() }
@@ -78,6 +109,11 @@ class FirebaseService {
         val protein: Int,
         val carbs: Int,
         val fat: Int
+    )
+
+    data class DayLog(
+        val date: String,
+        val calories: Int
     )
 
     suspend fun saveUserProfile(user: UserModel) {

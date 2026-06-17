@@ -19,12 +19,23 @@ internal class UserPreference(context: Context, email: String? = null) {
         private const val GOAL = "goal"
         private const val ACTIVITY_LEVEL = "activity_level"
         private const val IS_ONBOARDING_FINISHED = "is_onboarding_finished"
+        private const val IS_DARK_MODE = "is_dark_mode"
     }
 
     private val preferences = context.getSharedPreferences(
         if (email != null) "${PREFS_NAME}_${email.replace(".", "_")}" else PREFS_NAME,
         Context.MODE_PRIVATE
     )
+
+    fun setDarkMode(isEnabled: Boolean) {
+        val editor = preferences.edit()
+        editor.putBoolean(IS_DARK_MODE, isEnabled)
+        editor.apply()
+    }
+
+    fun isDarkMode(): Boolean {
+        return preferences.getBoolean(IS_DARK_MODE, false)
+    }
 
     fun setUser(value: UserModel) {
         val editor = preferences.edit()

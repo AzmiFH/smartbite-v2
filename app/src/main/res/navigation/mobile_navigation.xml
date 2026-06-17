@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
+        android:id="@+id/navigation_laporan"
+        android:name="com.capstone.smartbite.ui.laporan.LaporanFragment"
+        android:label="@string/title_laporan"
+        tools:layout="@layout/fragment_laporan" />
+
+    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.capstone.smartbite.ui.profil.ProfilFragment"
         android:label="@string/title_notifications"

@@ -52,9 +52,10 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_total_weekly_cal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="12,950"
+                android:text="0"
                 android:textColor="@color/text_black_bold"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -67,11 +68,11 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Simple Bar Chart Dummy -->
         <LinearLayout
+            android:id="@+id/chart_container"
             android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="8dp"
             android:gravity="bottom"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/weekly_info_container"
@@ -79,7 +80,7 @@
             app:layout_constraintStart_toEndOf="@+id/weekly_info_container"
             app:layout_constraintTop_toTopOf="@+id/weekly_info_container">
 
-            <!-- Bar chart items with rounded corners for 3D feel -->
+            <!-- Senin -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -87,113 +88,21 @@
                 android:gravity="center_horizontal|bottom"
                 android:orientation="vertical">
                 <View
-                    android:layout_width="12dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/bg_bar_chart"
-                    android:backgroundTint="@color/brand_green" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="S"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|bottom"
-                android:orientation="vertical">
-                <View
-                    android:layout_width="12dp"
-                    android:layout_height="70dp"
-                    android:background="@drawable/bg_bar_chart"
-                    android:backgroundTint="@color/brand_green" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="S"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|bottom"
-                android:orientation="vertical">
-                <View
-                    android:layout_width="12dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/bg_bar_chart"
-                    android:backgroundTint="@color/brand_green" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="R"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|bottom"
-                android:orientation="vertical">
-                <View
-                    android:layout_width="12dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/bg_bar_chart"
-                    android:backgroundTint="@color/brand_green" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="K"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|bottom"
-                android:orientation="vertical">
-                <View
-                    android:layout_width="12dp"
-                    android:layout_height="60dp"
-                    android:background="@drawable/bg_bar_chart"
-                    android:backgroundTint="@color/brand_green" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="J"
-                    android:textSize="10sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|bottom"
-                android:orientation="vertical">
-                <View
-                    android:layout_width="12dp"
+                    android:id="@+id/bar_mon"
+                    android:layout_width="10dp"
                     android:layout_height="0dp"
                     android:background="@drawable/bg_bar_chart"
-                    android:backgroundTint="#E0E0E0" />
+                    android:backgroundTint="@color/brand_green" />
                 <TextView
+                    android:id="@+id/tv_label_mon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="S"
-                    android:textSize="10sp" />
+                    android:text="Sen"
+                    android:textSize="8sp" />
             </LinearLayout>
 
+            <!-- Selasa -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -201,16 +110,128 @@
                 android:gravity="center_horizontal|bottom"
                 android:orientation="vertical">
                 <View
-                    android:layout_width="12dp"
-                    android:layout_height="30dp"
+                    android:id="@+id/bar_tue"
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"
                     android:background="@drawable/bg_bar_chart"
-                    android:backgroundTint="#E0E0E0" />
+                    android:backgroundTint="@color/brand_green" />
                 <TextView
+                    android:id="@+id/tv_label_tue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="M"
-                    android:textSize="10sp" />
+                    android:text="Sel"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <!-- Rabu -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|bottom"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/bar_wed"
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_bar_chart"
+                    android:backgroundTint="@color/brand_green" />
+                <TextView
+                    android:id="@+id/tv_label_wed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Rab"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <!-- Kamis -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|bottom"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/bar_thu"
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_bar_chart"
+                    android:backgroundTint="@color/brand_green" />
+                <TextView
+                    android:id="@+id/tv_label_thu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Kam"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <!-- Jumat -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|bottom"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/bar_fri"
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_bar_chart"
+                    android:backgroundTint="@color/brand_green" />
+                <TextView
+                    android:id="@+id/tv_label_fri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Jum"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <!-- Sabtu -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|bottom"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/bar_sat"
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_bar_chart"
+                    android:backgroundTint="@color/brand_green" />
+                <TextView
+                    android:id="@+id/tv_label_sat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Sab"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <!-- Minggu -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|bottom"
+                android:orientation="vertical">
+                <View
+                    android:id="@+id/bar_sun"
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/bg_bar_chart"
+                    android:backgroundTint="@color/brand_green" />
+                <TextView
+                    android:id="@+id/tv_label_sun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Min"
+                    android:textSize="8sp" />
             </LinearLayout>
 
         </LinearLayout>

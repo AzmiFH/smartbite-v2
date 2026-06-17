@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingVertical="8dp">
+
+    <TextView
+        android:id="@+id/tv_day_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Min"
+        android:textColor="@color/calendar_text_inactive"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_day_date"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginVertical="4dp"
+        android:gravity="center"
+        android:text="14"
+        android:textColor="@color/calendar_date_inactive"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:layout_width="26dp"
+        android:layout_height="26dp">
+
+        <!-- Track Arcs (90% progress to create gap at top) -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:progress="90"
+            android:rotation="-72"
+            app:indicatorColor="#F5F5F5"
+            app:indicatorSize="24dp"
+            app:trackColor="@android:color/transparent"
+            app:trackThickness="2dp"
+            app:trackCornerRadius="1dp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cp_mini_outer"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:progress="60"
+            android:rotation="-72"
+            app:indicatorColor="@color/ring_orange"
+            app:indicatorSize="24dp"
+            app:trackColor="@android:color/transparent"
+            app:trackThickness="2dp"
+            app:trackCornerRadius="1dp" />
+
+        <!-- Middle Ring -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:progress="90"
+            android:rotation="-72"
+            app:indicatorColor="#F5F5F5"
+            app:indicatorSize="16dp"
+            app:trackColor="@android:color/transparent"
+            app:trackThickness="2dp"
+            app:trackCornerRadius="1dp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cp_mini_middle"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:progress="40"
+            android:rotation="-72"
+            app:indicatorColor="@color/ring_green"
+            app:indicatorSize="16dp"
+            app:trackColor="@android:color/transparent"
+            app:trackThickness="2dp"
+            app:trackCornerRadius="1dp" />
+
+        <!-- Inner Ring -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_gravity="center"
+            android:progress="90"
+            android:rotation="-72"
+            app:indicatorColor="#F5F5F5"
+            app:indicatorSize="8dp"
+            app:trackColor="@android:color/transparent"
+            app:trackThickness="2dp"
+            app:trackCornerRadius="1dp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cp_mini_inner"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_gravity="center"
+            android:progress="80"
+            android:rotation="-72"
+            app:indicatorColor="@color/ring_blue"
+            app:indicatorSize="8dp"
+            app:trackColor="@android:color/transparent"
+            app:trackThickness="2dp"
+            app:trackCornerRadius="1dp" />
+    </FrameLayout>
+
+</LinearLayout>

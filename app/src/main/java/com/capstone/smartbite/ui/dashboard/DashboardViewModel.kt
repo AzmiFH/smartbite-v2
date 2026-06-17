@@ -38,6 +38,15 @@ class DashboardViewModel : ViewModel() {
             }
         }.asLiveData()
 
+    val weeklyNutrition: LiveData<List<FirebaseService.DayLog>> = 
+        userEmailFlow.flatMapLatest { email ->
+            if (email != null) {
+                FirebaseService().getWeeklyLog(email)
+            } else {
+                kotlinx.coroutines.flow.flowOf(emptyList())
+            }
+        }.asLiveData()
+
     private val _error = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> = _error
 

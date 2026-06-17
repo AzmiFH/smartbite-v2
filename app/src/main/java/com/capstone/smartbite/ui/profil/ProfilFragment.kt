@@ -19,6 +19,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
 import com.capstone.smartbite.FormUserPreferenceActivity
 import com.capstone.smartbite.Login.LoginActivity
@@ -223,18 +224,30 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         binding.ivEditProfile.setOnClickListener(this)
         binding.cardNutritionStrategy.setOnClickListener(this)
         binding.itemLanguage.setOnClickListener(this)
-        binding.itemHelp.setOnClickListener(this)
         binding.itemDeleteAccount.setOnClickListener(this)
+
+        // Initial Dark Mode state
+        binding.switchDarkMode.isChecked = mUserPreference.isDarkMode()
+
+        // Dark Mode switch listener
+        binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            mUserPreference.setDarkMode(isChecked)
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
+        // Initial state for icons/bg based on switch
+        updateNotifIcon(binding.switchNotifications.isChecked)
 
         // Switch listener
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            updateNotifIcon(isChecked)
             if (isChecked) {
-                binding.vNotifBg.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.badge_goal_bg)
-                binding.ivNotifIcon.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.badge_goal_text)
                 Toast.makeText(requireContext(), "Notifications Enabled", Toast.LENGTH_SHORT).show()
             } else {
-                binding.vNotifBg.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.nav_inactive_gray)
-                binding.ivNotifIcon.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
                 Toast.makeText(requireContext(), "Notifications Disabled", Toast.LENGTH_SHORT).show()
             }
         }
@@ -346,6 +359,16 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun updateNotifIcon(isChecked: Boolean) {
+        if (isChecked) {
+            binding.vNotifBg.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.badge_goal_bg)
+            binding.ivNotifIcon.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.badge_goal_text)
+        } else {
+            binding.vNotifBg.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.nav_inactive_gray)
+            binding.ivNotifIcon.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+        }
+    }
+
     private fun checkForm(userModel: UserModel) {
         isPreferenceEmpty = userModel.name.isNullOrEmpty()
     }
@@ -363,9 +386,6 @@ class ProfilFragment : Fragment(), View.OnClickListener {
 
             R.id.item_language -> {
                 Toast.makeText(requireContext(), "Language Settings", Toast.LENGTH_SHORT).show()
-            }
-            R.id.item_help -> {
-                Toast.makeText(requireContext(), "Help Center", Toast.LENGTH_SHORT).show()
             }
             R.id.item_delete_account -> {
                 showDeleteAccountConfirmation()
