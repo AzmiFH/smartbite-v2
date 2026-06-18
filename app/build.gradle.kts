@@ -62,6 +62,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+
     // Firebase
     implementation(libs.firebase.bom)
     implementation(libs.firebase.auth)

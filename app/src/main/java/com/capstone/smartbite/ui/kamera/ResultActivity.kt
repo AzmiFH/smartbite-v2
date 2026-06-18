@@ -4,28 +4,40 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.capstone.smartbite.R
 import com.capstone.smartbite.data.FileUploadResponse
+import com.capstone.smartbite.data.FoodRepository
 import com.capstone.smartbite.databinding.ActivityResultBinding
-import com.dewakoding.androidchartjs.util.ChartType
+import com.capstone.smartbite.utils.FoodMeasurementHelper
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
+    private lateinit var foodRepository: FoodRepository
+    
+    private var quantity = 1.0
+    private var baseCalories = 0
+    private var baseProtein = 0.0
+    private var baseFat = 0.0
+    private var baseCarbs = 0.0
+    private var foodName = ""
+    private var unit = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        foodRepository = FoodRepository(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -36,67 +48,102 @@ class ResultActivity : AppCompatActivity() {
         val result = intent.getSerializableExtra("result") as? FileUploadResponse
         val imageUri = intent.getStringExtra("imageUri")?.toUri()
 
-        // Tampilkan gambar
         imageUri?.let {
             binding.previewImageView.setImageURI(it)
         }
 
-        // Tampilkan data jika result tersedia
         result?.let {
+            foodName = it.food
             val nutrition = it.nutrition
-
-            binding.tvFoodName.text = it.food
-            binding.tvTagCategory.text = "FOOD" // Default or dynamic if available
-            binding.tvCalories.text = "Total ${nutrition.calories} kcal"
+            baseCalories = nutrition.calories
+            baseProtein = nutrition.proteins
+            baseFat = nutrition.fat
+            baseCarbs = nutrition.carbohydrate
             
-            val protein = nutrition.proteins.toString().toFloatOrNull() ?: 0f
-            val fat = nutrition.fat.toString().toFloatOrNull() ?: 0f
-            val carbs = nutrition.carbohydrate.toString().toFloatOrNull() ?: 0f
-
-            binding.tvProteinVal.text = String.format("%.1fg", protein)
-            binding.tvFatVal.text = String.format("%.1fg", fat)
-            binding.tvCarbsVal.text = String.format("%.1fg", carbs)
-
-            // Hitung progress (Sederhana: 100g sebagai 100%)
-            binding.progressProtein.progress = (protein * 2).toInt().coerceAtMost(100)
-            binding.progressFat.progress = (fat * 2).toInt().coerceAtMost(100)
-            binding.progressCarbs.progress = (carbs * 2).toInt().coerceAtMost(100)
-
+            unit = FoodMeasurementHelper.getUnitForFood(foodName)
+            
+            updateUI()
         } ?: Log.e("ResultActivity", "No result received!")
+
+        setupListeners(result, imageUri)
+    }
+
+    private fun updateUI() {
+        binding.tvFoodName.text = foodName
+        binding.tvTagCategory.text = "FOOD"
+        
+        val displayQty = if (quantity % 1.0 == 0.0) quantity.toInt().toString() else String.format("%.1f", quantity)
+        binding.tvQuantity.text = displayQty
+        binding.tvTagPortion.text = "$displayQty ${unit.uppercase(Locale.getDefault())}"
+
+        val totalCalories = FoodMeasurementHelper.calculateNutrient(baseCalories, quantity)
+        val totalProtein = FoodMeasurementHelper.calculateNutrient(baseProtein, quantity)
+        val totalFat = FoodMeasurementHelper.calculateNutrient(baseFat, quantity)
+        val totalCarbs = FoodMeasurementHelper.calculateNutrient(baseCarbs, quantity)
+
+        binding.tvCalories.text = "Total $totalCalories kcal"
+        binding.tvProteinVal.text = String.format("%.1fg", totalProtein)
+        binding.tvFatVal.text = String.format("%.1fg", totalFat)
+        binding.tvCarbsVal.text = String.format("%.1fg", totalCarbs)
+
+        binding.progressProtein.progress = (totalProtein * 2).toInt().coerceAtMost(100)
+        binding.progressFat.progress = (totalFat * 2).toInt().coerceAtMost(100)
+        binding.progressCarbs.progress = (totalCarbs * 2).toInt().coerceAtMost(100)
+    }
+
+    private fun setupListeners(result: FileUploadResponse?, imageUri: Uri?) {
+        binding.btnMinus.setOnClickListener {
+            if (quantity > 0.5) {
+                quantity -= 0.5
+                updateUI()
+            }
+        }
+
+        binding.btnPlus.setOnClickListener {
+            quantity += 0.5
+            updateUI()
+        }
 
         binding.btnBack.setOnClickListener { finish() }
         binding.btnClose.setOnClickListener {
-            // Sinyal untuk pindah ke dashboard
             setResult(RESULT_GO_TO_DASHBOARD)
             finish()
         }
         binding.btnRetake.setOnClickListener {
-            // Kirim balik data lama agar bisa dibuka kembali jika kamera di-cancel
             val intent = Intent()
             intent.putExtra("last_result", result)
             intent.putExtra("last_imageUri", imageUri.toString())
             setResult(RESULT_RETAKE, intent)
             finish()
         }
+        
         binding.btnAddMeal.setOnClickListener {
-            val email = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email
+            val email = FirebaseAuth.getInstance().currentUser?.email
             if (email != null && result != null) {
-                val nutrition = result.nutrition
-                val calories = nutrition.calories.toString().toDoubleOrNull() ?: 0.0
-                val protein = nutrition.proteins.toString().toDoubleOrNull() ?: 0.0
-                val fat = nutrition.fat.toString().toDoubleOrNull() ?: 0.0
-                val carbs = nutrition.carbohydrate.toString().toDoubleOrNull() ?: 0.0
-
                 lifecycleScope.launch {
                     try {
-                        com.capstone.smartbite.data.FirebaseService().addMealLog(
-                            email, calories, protein, carbs, fat
+                        val totalCalories = FoodMeasurementHelper.calculateNutrient(baseCalories, quantity)
+                        val totalProtein = FoodMeasurementHelper.calculateNutrient(baseProtein, quantity)
+                        val totalFat = FoodMeasurementHelper.calculateNutrient(baseFat, quantity)
+                        val totalCarbs = FoodMeasurementHelper.calculateNutrient(baseCarbs, quantity)
+
+                        foodRepository.addMeal(
+                            email = email,
+                            foodName = foodName,
+                            calories = totalCalories.toDouble(),
+                            protein = totalProtein,
+                            fat = totalFat,
+                            carbs = totalCarbs,
+                            quantity = quantity,
+                            unit = unit,
+                            imageUrl = imageUri?.toString()
                         )
-                        android.widget.Toast.makeText(this@ResultActivity, "Berhasil menambahkan makanan", android.widget.Toast.LENGTH_SHORT).show()
+                        
+                        Toast.makeText(this@ResultActivity, "Berhasil menambahkan makanan", Toast.LENGTH_SHORT).show()
                         setResult(RESULT_GO_TO_DASHBOARD)
                         finish()
                     } catch (e: Exception) {
-                        android.widget.Toast.makeText(this@ResultActivity, "Gagal menyimpan: ${e.message}", android.widget.Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ResultActivity, "Gagal menyimpan: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {

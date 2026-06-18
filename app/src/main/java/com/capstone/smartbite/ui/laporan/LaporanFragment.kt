@@ -10,11 +10,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.smartbite.R
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.databinding.FragmentLaporanBinding
 import com.capstone.smartbite.databinding.ItemCalendarDayBinding
+import com.capstone.smartbite.ui.history.adapter.HistoryAdapter
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -25,6 +27,7 @@ class LaporanFragment : Fragment() {
     private var _binding: FragmentLaporanBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: LaporanViewModel
+    private lateinit var historyAdapter: HistoryAdapter
 
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
@@ -41,6 +44,7 @@ class LaporanFragment : Fragment() {
         viewModel = ViewModelProvider(this)[LaporanViewModel::class.java]
 
         clearUI()
+        setupRecyclerView()
         setupListeners()
         setupObservers()
         
@@ -49,6 +53,15 @@ class LaporanFragment : Fragment() {
             viewModel.userEmail.value = email
             val userPref = UserPreference(requireContext(), email)
             viewModel.setDailyTargets(userPref.getUser())
+        }
+    }
+
+    private fun setupRecyclerView() {
+        historyAdapter = HistoryAdapter()
+        binding.rvHistory.apply {
+            adapter = historyAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+            isNestedScrollingEnabled = false // Prevent scroll conflicts with parent ScrollView
         }
     }
 
@@ -69,6 +82,18 @@ class LaporanFragment : Fragment() {
         // Observe Selected Day Log for Main UI
         viewModel.selectedDayLog.observe(viewLifecycleOwner) { log ->
             updateMainUI(log)
+        }
+
+        // Observe Food History from Room
+        viewModel.foodHistory.observe(viewLifecycleOwner) { history ->
+            if (history.isNullOrEmpty()) {
+                binding.rvHistory.visibility = View.GONE
+                binding.tvHistoryEmpty.visibility = View.VISIBLE
+            } else {
+                binding.rvHistory.visibility = View.VISIBLE
+                binding.tvHistoryEmpty.visibility = View.GONE
+                historyAdapter.submitList(history)
+            }
         }
         
         // Observe Targets
@@ -201,7 +226,6 @@ class LaporanFragment : Fragment() {
         )
 
         var totalCal = 0
-        var daysWithData = 0
 
         for (i in 0..6) {
             val dateStr = dateFormatter.format(weekStart.time)
@@ -210,7 +234,6 @@ class LaporanFragment : Fragment() {
             
             val cal = log?.calories ?: 0
             totalCal += cal
-            if (cal > 0) daysWithData++
 
             val params = bar.layoutParams
             val ratio = if (chartMax > 0) cal.toFloat() / chartMax else 0f
@@ -227,7 +250,6 @@ class LaporanFragment : Fragment() {
         }
 
         // Precise average calculation
-        // If it's the current week, divide by days passed so far to be more "accurate"
         val today = Calendar.getInstance()
         val weekStartForCompare = viewModel.currentWeekStart.value
         
@@ -236,7 +258,7 @@ class LaporanFragment : Fragment() {
             val days = (diff / (1000 * 60 * 60 * 24)).toInt() + 1
             if (days < 7) days else 7
         } else {
-            1 // Future week or start of week
+            1
         }
 
         val avgCal = if (divisor > 0) Math.round(totalCal.toFloat() / divisor) else 0

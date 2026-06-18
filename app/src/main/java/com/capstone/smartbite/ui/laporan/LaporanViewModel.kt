@@ -1,9 +1,11 @@
 package com.capstone.smartbite.ui.laporan
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import com.capstone.smartbite.UserModel
 import com.capstone.smartbite.data.FirebaseService
+import com.capstone.smartbite.data.FoodRepository
 import com.capstone.smartbite.utils.HealthMath
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +16,9 @@ import java.util.Calendar
 import java.util.Locale
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class LaporanViewModel : ViewModel() {
+class LaporanViewModel(application: Application) : AndroidViewModel(application) {
     private val firebaseService = FirebaseService()
+    private val foodRepository = FoodRepository(application)
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     val userEmail = MutableStateFlow<String?>(null)
@@ -63,6 +66,18 @@ class LaporanViewModel : ViewModel() {
             firebaseService.getDailyLogForDate(email, dateStr)
         } else {
             kotlinx.coroutines.flow.flowOf(null)
+        }
+    }.asLiveData()
+
+    // Flow untuk daftar riwayat makanan harian dari Room
+    val foodHistory = combine(userEmail, selectedDate) { email, date ->
+        email to date
+    }.flatMapLatest { (email, date) ->
+        if (email != null) {
+            val dateStr = dateFormatter.format(date.time)
+            foodRepository.getDailyHistory(email, dateStr)
+        } else {
+            kotlinx.coroutines.flow.flowOf(emptyList())
         }
     }.asLiveData()
 

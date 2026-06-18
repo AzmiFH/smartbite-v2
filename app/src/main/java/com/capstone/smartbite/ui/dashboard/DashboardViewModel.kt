@@ -1,28 +1,23 @@
 package com.capstone.smartbite.ui.dashboard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.capstone.smartbite.UserModel
 import com.capstone.smartbite.data.FirebaseService
+import com.capstone.smartbite.data.FoodRepository
 import com.capstone.smartbite.data.ListFoodItem
-import com.capstone.smartbite.data.RecomenResponse
 import com.capstone.smartbite.utils.HealthMath
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel(application: Application) : AndroidViewModel(application) {
+    private val foodRepository = FoodRepository(application)
+    private val firebaseService = FirebaseService()
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -34,10 +29,28 @@ class DashboardViewModel : ViewModel() {
 
     private val userEmailFlow = MutableStateFlow<String?>(null)
 
+    /**
+     * Consumed nutrition now comes from Room (Offline-first).
+     * We map the List<FoodHistoryEntity> to DailyNutritionLog.
+     */
     val consumedNutrition: LiveData<FirebaseService.DailyNutritionLog?> = 
         userEmailFlow.flatMapLatest { email ->
             if (email != null) {
-                FirebaseService().getDailyLog(email)
+                val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                foodRepository.getDailyHistory(email, dateString).map { list ->
+                    if (list.isEmpty()) {
+                        // If Room is empty, we could fallback to Firebase or just return zeroed log
+                        // For now, let's return a zeroed log or null
+                        FirebaseService.DailyNutritionLog(0, 0, 0, 0)
+                    } else {
+                        FirebaseService.DailyNutritionLog(
+                            calories = list.sumOf { it.calories }.toInt(),
+                            protein = list.sumOf { it.protein }.toInt(),
+                            carbs = list.sumOf { it.carbs }.toInt(),
+                            fat = list.sumOf { it.fat }.toInt()
+                        )
+                    }
+                }
             } else {
                 kotlinx.coroutines.flow.flowOf(null)
             }
@@ -51,7 +64,18 @@ class DashboardViewModel : ViewModel() {
                 val endDate = dateFormat.format(calendar.time)
                 calendar.add(Calendar.DAY_OF_YEAR, -6)
                 val startDate = dateFormat.format(calendar.time)
-                FirebaseService().getWeeklyLog(email, startDate, endDate)
+                
+                foodRepository.getWeeklyHistory(email, startDate, endDate).map { entities ->
+                    entities.groupBy { it.date }.map { (date, list) ->
+                        FirebaseService.DayLog(
+                            date = date,
+                            calories = list.sumOf { it.calories }.toInt(),
+                            protein = list.sumOf { it.protein }.toInt(),
+                            carbs = list.sumOf { it.carbs }.toInt(),
+                            fat = list.sumOf { it.fat }.toInt()
+                        )
+                    }.sortedBy { it.date }
+                }
             } else {
                 kotlinx.coroutines.flow.flowOf(emptyList())
             }
@@ -76,32 +100,6 @@ class DashboardViewModel : ViewModel() {
     }
 
     fun loadActiveEvents(){
-        // Off kan sementara untuk menghindari network timeout/lag (ConnectException)
-        /*
-        _isLoading.value = true
-        val clinet = ApiConfig.getApiService().getcalorie(calorie = 50)
-        clinet.enqueue(object : Callback<RecomenResponse> {
-            override fun onResponse(
-                call: Call<RecomenResponse>,
-                response: Response<RecomenResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _food.value = response.body()?.listFood
-                }else {
-                    _error.value = true
-                    _message.value = "Failed to load data"
-                }
-            }
-
-            override fun onFailure(call: Call<RecomenResponse>, t: Throwable) {
-                _isLoading.value = false
-                _error.value = true
-                _message.value = t.message ?: "Unknown error"
-            }
-
-        })
-        */
         _isLoading.value = false
     }
 }
