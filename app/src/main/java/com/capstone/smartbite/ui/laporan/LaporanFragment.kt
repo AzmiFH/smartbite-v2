@@ -1,21 +1,32 @@
 package com.capstone.smartbite.ui.laporan
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.capstone.smartbite.R
+import com.capstone.smartbite.UserPreference
+import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.databinding.FragmentLaporanBinding
 import com.capstone.smartbite.databinding.ItemCalendarDayBinding
+import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class LaporanFragment : Fragment() {
 
     private var _binding: FragmentLaporanBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: LaporanViewModel
+
+    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,81 +38,234 @@ class LaporanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this)[LaporanViewModel::class.java]
+
+        clearUI()
+        setupListeners()
+        setupObservers()
         
-        setupCalendar()
-        setupDummyData()
+        val email = FirebaseAuth.getInstance().currentUser?.email
+        if (email != null) {
+            viewModel.userEmail.value = email
+            val userPref = UserPreference(requireContext(), email)
+            viewModel.setDailyTargets(userPref.getUser())
+        }
     }
 
-    private fun setupCalendar() {
-        val days = listOf("Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab")
-        val dates = listOf("14", "15", "16", "17", "18", "19", "20")
-        val dayViews = listOf(
-            binding.day1, binding.day2, binding.day3, 
-            binding.day4, binding.day5, binding.day6, binding.day7
-        )
-
-        for (i in dayViews.indices) {
-            val dayBinding = ItemCalendarDayBinding.bind(dayViews[i].root)
-            dayBinding.tvDayName.text = days[i]
-            dayBinding.tvDayDate.text = dates[i]
-
-            // Highlight Wednesday (17) as selected
-            if (dates[i] == "17") {
-                dayBinding.tvDayDate.setBackgroundResource(R.drawable.bg_circle_primary)
-                dayBinding.tvDayDate.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.ring_orange)
-                dayBinding.tvDayDate.setTextColor(Color.WHITE)
+    private fun setupObservers() {
+        // Observe Current Week Start for Calendar Header
+        lifecycleScope.launchWhenStarted {
+            viewModel.currentWeekStart.collect { weekStart ->
+                updateCalendarHeader(weekStart)
             }
+        }
 
-            // Dummy progress for mini rings
-            dayBinding.cpMiniOuter.progress = (40..90).random()
-            dayBinding.cpMiniMiddle.progress = (30..80).random()
-            dayBinding.cpMiniInner.progress = (20..70).random()
-            
-            // Grey out future days (after 17)
-            if (dates[i].toInt() > 17) {
-                dayBinding.cpMiniOuter.setIndicatorColor(Color.LTGRAY)
-                dayBinding.cpMiniMiddle.setIndicatorColor(Color.LTGRAY)
-                dayBinding.cpMiniInner.setIndicatorColor(Color.LTGRAY)
-                dayBinding.cpMiniOuter.trackColor = Color.parseColor("#F5F5F5")
-                dayBinding.cpMiniMiddle.trackColor = Color.parseColor("#F5F5F5")
-                dayBinding.cpMiniInner.trackColor = Color.parseColor("#F5F5F5")
+        // Observe Weekly Logs for Calendar Items & Chart
+        viewModel.weeklyLogs.observe(viewLifecycleOwner) { logs ->
+            updateCalendarDays(logs)
+            updateCharts(logs)
+        }
+
+        // Observe Selected Day Log for Main UI
+        viewModel.selectedDayLog.observe(viewLifecycleOwner) { log ->
+            updateMainUI(log)
+        }
+        
+        // Observe Targets
+        lifecycleScope.launchWhenStarted {
+            viewModel.dailyTargets.collect { _ ->
+                // Refresh UI with targets
+                updateMainUI(viewModel.selectedDayLog.value)
+                updateCharts(viewModel.weeklyLogs.value ?: emptyList())
+            }
+        }
+        
+        // Observe Selection
+        lifecycleScope.launchWhenStarted {
+            viewModel.selectedDate.collect {
+                // Trigger calendar day refresh for selection UI
+                updateCalendarDays(viewModel.weeklyLogs.value ?: emptyList())
             }
         }
     }
 
-    private fun setupDummyData() {
-        // Main Rings
-        binding.cpRingOuter.progress = 75
-        binding.cpRingMiddle.progress = 60
-        binding.cpRingInner.progress = 45
+    private fun updateCalendarHeader(weekStart: Calendar) {
+        val endCalendar = weekStart.clone() as Calendar
+        endCalendar.add(Calendar.DAY_OF_YEAR, 6)
+        val monthFormatter = SimpleDateFormat("d MMM", Locale.getDefault())
+        binding.tvCurrentMonthRange.text = "${monthFormatter.format(weekStart.time)} - ${monthFormatter.format(endCalendar.time)}"
+    }
+
+    private fun updateCalendarDays(logs: List<FirebaseService.DayLog>) {
+        val logMap = logs.associateBy { it.date }
+        val weekStart = viewModel.currentWeekStart.value.clone() as Calendar
+        val selectedDateStr = dateFormatter.format(viewModel.selectedDate.value.time)
+        val targets = viewModel.dailyTargets.value
+
+        val dayViews = listOf(
+            binding.day1, binding.day2, binding.day3,
+            binding.day4, binding.day5, binding.day6, binding.day7
+        )
+
+        for (i in 0..6) {
+            val dateStr = dateFormatter.format(weekStart.time)
+            val dayBinding = ItemCalendarDayBinding.bind(dayViews[i].root)
+            
+            dayBinding.tvDayName.text = SimpleDateFormat("EEE", Locale.getDefault()).format(weekStart.time)
+            dayBinding.tvDayDate.text = weekStart.get(Calendar.DAY_OF_MONTH).toString()
+
+            // Selection UI
+            if (dateStr == selectedDateStr) {
+                dayBinding.tvDayDate.setBackgroundResource(R.drawable.bg_circle_primary)
+                dayBinding.tvDayDate.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.ring_orange)
+                dayBinding.tvDayDate.setTextColor(Color.WHITE)
+            } else {
+                dayBinding.tvDayDate.background = null
+                dayBinding.tvDayDate.setTextColor(Color.BLACK)
+            }
+
+            // Mini Rings Progress
+            val log = logMap[dateStr]
+            if (log != null && targets != null) {
+                dayBinding.cpMiniOuter.progress = (log.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100)
+                dayBinding.cpMiniMiddle.progress = (log.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100)
+                dayBinding.cpMiniInner.progress = (log.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100)
+            } else {
+                dayBinding.cpMiniOuter.progress = 0
+                dayBinding.cpMiniMiddle.progress = 0
+                dayBinding.cpMiniInner.progress = 0
+            }
+
+            val dateToSelect = weekStart.clone() as Calendar
+            dayViews[i].root.setOnClickListener {
+                viewModel.selectDate(dateToSelect)
+            }
+
+            weekStart.add(Calendar.DAY_OF_YEAR, 1)
+        }
+    }
+
+    private fun clearUI() {
+        binding.tvConsumedCalBig.text = "0"
+        binding.tvTargetCalLabel.text = ""
+        binding.tvCarbVal.text = "0"
+        binding.tvCarbTarget.text = ""
+        binding.tvProteinVal.text = "0"
+        binding.tvProteinTarget.text = ""
+        binding.tvFatVal.text = "0"
+        binding.tvFatTarget.text = ""
         
-        binding.tvConsumedCalBig.text = "1500"
-        binding.tvTargetCalLabel.text = "/ 2000 kcal"
+        binding.cpRingOuter.progress = 0
+        binding.cpRingMiddle.progress = 0
+        binding.cpRingInner.progress = 0
+        binding.pbLaporanCarbs.progress = 0
+        binding.pbLaporanProtein.progress = 0
+        binding.pbLaporanFat.progress = 0
+    }
 
-        // Macro Circles
-        binding.pbLaporanCarbs.progress = 80
-        binding.tvCarbVal.text = "95"
-        binding.tvCarbTarget.text = "/ 120g"
+    private fun setupListeners() {
+        binding.cvCaloriesChart.setOnClickListener {
+            val intent = Intent(requireContext(), CalorieDetailActivity::class.java)
+            startActivity(intent)
+        }
 
-        binding.pbLaporanProtein.progress = 80
-        binding.tvProteinVal.text = "200"
-        binding.tvProteinTarget.text = "/ 250g"
+        binding.ivPrevWeek.setOnClickListener {
+            viewModel.setWeek(-1)
+        }
 
-        binding.pbLaporanFat.progress = 60
-        binding.tvFatVal.text = "40"
-        binding.tvFatTarget.text = "/ 65g"
+        binding.ivNextWeek.setOnClickListener {
+            viewModel.setWeek(1)
+        }
+    }
 
-        // Weekly Calories Chart
-        binding.tvAverageCalVal.text = "Rata-rata harian: 49 kkal"
+    private fun updateCharts(logs: List<FirebaseService.DayLog>) {
+        val logMap = logs.associateBy { it.date }
+        val weekStart = viewModel.currentWeekStart.value.clone() as Calendar
+        val dailyTarget = viewModel.dailyTargets.value?.calories ?: 2000
         
-        // Setting bar heights (Slicing)
-        binding.barMin.layoutParams.height = dpToPx(20)
-        binding.barSen.layoutParams.height = dpToPx(70)
-        binding.barSel.layoutParams.height = dpToPx(15)
-        binding.barRab.layoutParams.height = dpToPx(100)
-        binding.barKam.layoutParams.height = dpToPx(0)
-        binding.barJum.layoutParams.height = dpToPx(0)
-        binding.barSab.layoutParams.height = dpToPx(0)
+        // Find max in current logs to scale Y axis if any day exceeds target
+        val maxActual = logs.maxOfOrNull { it.calories } ?: 0
+        val chartMax = maxOf(dailyTarget, maxActual).toFloat()
+
+        // Update Y Axis Labels
+        binding.tvY200.text = chartMax.toInt().toString()
+        binding.tvY160.text = (chartMax * 0.8).toInt().toString()
+        binding.tvY120.text = (chartMax * 0.6).toInt().toString()
+        binding.tvY80.text = (chartMax * 0.4).toInt().toString()
+        binding.tvY40.text = (chartMax * 0.2).toInt().toString()
+        binding.tvY0.text = "0"
+
+        val barViews = listOf(
+            binding.barSen, binding.barSel, binding.barRab,
+            binding.barKam, binding.barJum, binding.barSab, binding.barMin
+        )
+
+        var totalCal = 0
+        var daysWithData = 0
+
+        for (i in 0..6) {
+            val dateStr = dateFormatter.format(weekStart.time)
+            val log = logMap[dateStr]
+            val bar = barViews[i]
+            
+            val cal = log?.calories ?: 0
+            totalCal += cal
+            if (cal > 0) daysWithData++
+
+            val params = bar.layoutParams
+            val ratio = if (chartMax > 0) cal.toFloat() / chartMax else 0f
+            val maxHeightPx = dpToPx(180)
+            params.height = (ratio * maxHeightPx).toInt()
+            
+            if (cal > 0 && params.height < dpToPx(4)) {
+                params.height = dpToPx(4)
+            }
+            
+            bar.layoutParams = params
+
+            weekStart.add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        // Precise average calculation
+        // If it's the current week, divide by days passed so far to be more "accurate"
+        val today = Calendar.getInstance()
+        val weekStartForCompare = viewModel.currentWeekStart.value
+        
+        val divisor: Int = if (today.after(weekStartForCompare)) {
+            val diff = today.timeInMillis - weekStartForCompare.timeInMillis
+            val days = (diff / (1000 * 60 * 60 * 24)).toInt() + 1
+            if (days < 7) days else 7
+        } else {
+            1 // Future week or start of week
+        }
+
+        val avgCal = if (divisor > 0) Math.round(totalCal.toFloat() / divisor) else 0
+        binding.tvAverageCalVal.text = "Rata-rata harian: $avgCal kkal"
+    }
+
+    private fun updateMainUI(log: FirebaseService.DailyNutritionLog?) {
+        val targets = viewModel.dailyTargets.value ?: return
+        
+        // Progress Rings
+        binding.cpRingOuter.progress = log?.let { (it.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100) } ?: 0
+        binding.cpRingMiddle.progress = log?.let { (it.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100) } ?: 0
+        binding.cpRingInner.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
+
+        binding.tvConsumedCalBig.text = log?.calories?.toString() ?: "0"
+        binding.tvTargetCalLabel.text = "/ ${targets.calories} kcal"
+
+        // Macros
+        binding.pbLaporanCarbs.progress = log?.let { (it.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100) } ?: 0
+        binding.tvCarbVal.text = log?.carbs?.toString() ?: "0"
+        binding.tvCarbTarget.text = ""
+
+        binding.pbLaporanProtein.progress = log?.let { (it.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100) } ?: 0
+        binding.tvProteinVal.text = log?.protein?.toString() ?: "0"
+        binding.tvProteinTarget.text = ""
+
+        binding.pbLaporanFat.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
+        binding.tvFatVal.text = log?.fat?.toString() ?: "0"
+        binding.tvFatTarget.text = ""
     }
 
     private fun dpToPx(dp: Int): Int {

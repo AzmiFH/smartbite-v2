@@ -1,6 +1,7 @@
 package com.capstone.smartbite.data
 
 import com.capstone.smartbite.UserModel
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
@@ -20,6 +21,7 @@ class FirebaseService {
         val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         val logRef = usersCollection.document(email).collection("daily_logs").document(dateString)
 
+        // 1. Update Daily Totals
         val updates = hashMapOf(
             "totalCalories" to FieldValue.increment(calories),
             "totalProtein" to FieldValue.increment(protein),
@@ -27,8 +29,17 @@ class FirebaseService {
             "totalFat" to FieldValue.increment(fat),
             "lastUpdated" to FieldValue.serverTimestamp()
         )
-
         logRef.set(updates, com.google.firebase.firestore.SetOptions.merge()).await()
+
+        // 2. Save Individual Meal Entry for Hourly Chart
+        val mealEntry = hashMapOf(
+            "calories" to calories,
+            "protein" to protein,
+            "carbs" to carbs,
+            "fat" to fat,
+            "timestamp" to FieldValue.serverTimestamp()
+        )
+        logRef.collection("meal_entries").add(mealEntry).await()
     }
 
     fun getDailyLog(email: String): Flow<DailyNutritionLog?> = callbackFlow {
@@ -57,15 +68,11 @@ class FirebaseService {
         awaitClose { registration.remove() }
     }
 
-    fun getWeeklyLog(email: String): Flow<List<DayLog>> = callbackFlow {
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_YEAR, -6) // Mulai dari 6 hari yang lalu
-        val startDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-
+    fun getWeeklyLog(email: String, startDate: String, endDate: String): Flow<List<DayLog>> = callbackFlow {
         val query = usersCollection.document(email)
             .collection("daily_logs")
             .whereGreaterThanOrEqualTo("__name__", startDate)
-            .limit(7)
+            .whereLessThanOrEqualTo("__name__", endDate)
 
         val registration = query.addSnapshotListener { snapshots, error ->
             if (error != null) {
@@ -78,10 +85,64 @@ class FirebaseService {
                 val logs = snapshots.documents.map { doc ->
                     DayLog(
                         date = doc.id,
-                        calories = doc.getDouble("totalCalories")?.toInt() ?: 0
+                        calories = doc.getDouble("totalCalories")?.toInt() ?: 0,
+                        protein = doc.getDouble("totalProtein")?.toInt() ?: 0,
+                        carbs = doc.getDouble("totalCarbs")?.toInt() ?: 0,
+                        fat = doc.getDouble("totalFat")?.toInt() ?: 0
                     )
                 }.sortedBy { it.date }
                 trySend(logs)
+            } else {
+                trySend(emptyList())
+            }
+        }
+        awaitClose { registration.remove() }
+    }
+
+    fun getDailyLogForDate(email: String, dateString: String): Flow<DailyNutritionLog?> = callbackFlow {
+        val logRef = usersCollection.document(email).collection("daily_logs").document(dateString)
+
+        val registration = logRef.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                trySend(null)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                val log = DailyNutritionLog(
+                    calories = snapshot.getDouble("totalCalories")?.toInt() ?: 0,
+                    protein = snapshot.getDouble("totalProtein")?.toInt() ?: 0,
+                    carbs = snapshot.getDouble("totalCarbs")?.toInt() ?: 0,
+                    fat = snapshot.getDouble("totalFat")?.toInt() ?: 0
+                )
+                trySend(log)
+            } else {
+                trySend(null)
+            }
+        }
+        awaitClose { registration.remove() }
+    }
+
+    fun getHourlyLogs(email: String, dateString: String): Flow<List<MealEntry>> = callbackFlow {
+        val entriesRef = usersCollection.document(email)
+            .collection("daily_logs").document(dateString)
+            .collection("meal_entries")
+
+        val registration = entriesRef.orderBy("timestamp").addSnapshotListener { snapshots, error ->
+            if (error != null) {
+                android.util.Log.e("FirebaseService", "Hourly Logs Error: ${error.message}")
+                trySend(emptyList())
+                return@addSnapshotListener
+            }
+
+            if (snapshots != null) {
+                val entries = snapshots.documents.map { doc ->
+                    MealEntry(
+                        calories = doc.getDouble("calories") ?: 0.0,
+                        timestamp = doc.getTimestamp("timestamp") ?: Timestamp.now()
+                    )
+                }
+                trySend(entries)
             } else {
                 trySend(emptyList())
             }
@@ -113,7 +174,15 @@ class FirebaseService {
 
     data class DayLog(
         val date: String,
-        val calories: Int
+        val calories: Int,
+        val protein: Int = 0,
+        val carbs: Int = 0,
+        val fat: Int = 0
+    )
+
+    data class MealEntry(
+        val calories: Double,
+        val timestamp: Timestamp
     )
 
     suspend fun saveUserProfile(user: UserModel) {

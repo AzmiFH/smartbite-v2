@@ -16,7 +16,12 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DashboardViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -41,7 +46,12 @@ class DashboardViewModel : ViewModel() {
     val weeklyNutrition: LiveData<List<FirebaseService.DayLog>> = 
         userEmailFlow.flatMapLatest { email ->
             if (email != null) {
-                FirebaseService().getWeeklyLog(email)
+                val calendar = Calendar.getInstance()
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val endDate = dateFormat.format(calendar.time)
+                calendar.add(Calendar.DAY_OF_YEAR, -6)
+                val startDate = dateFormat.format(calendar.time)
+                FirebaseService().getWeeklyLog(email, startDate, endDate)
             } else {
                 kotlinx.coroutines.flow.flowOf(emptyList())
             }
