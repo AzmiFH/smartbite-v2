@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.capstone.smartbite.R
 import com.capstone.smartbite.data.local.FoodHistoryEntity
 import com.capstone.smartbite.databinding.ItemMealHistoryBinding
 import java.text.SimpleDateFormat
@@ -25,14 +27,22 @@ class HistoryAdapter : ListAdapter<FoodHistoryEntity, HistoryAdapter.HistoryView
         fun bind(item: FoodHistoryEntity) {
             binding.tvFoodName.text = item.foodName
             binding.tvCalories.text = "${item.calories.toInt()} kcal"
-            binding.tvQuantity.text = "${if (item.quantity % 1.0 == 0.0) item.quantity.toInt() else item.quantity} ${item.unit}"
+            
+            val displayQty = if (item.quantity % 1.0 == 0.0) item.quantity.toInt().toString() else item.quantity.toString()
+            binding.tvQuantity.text = "$displayQty ${item.unit}"
             
             val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
             binding.tvTime.text = timeFormat.format(Date(item.timestamp))
             
-            binding.tvProteinVal.text = "${item.protein.toInt()}g"
-            binding.tvCarbsVal.text = "${item.carbs.toInt()}g"
-            binding.tvFatVal.text = "${item.fat.toInt()}g"
+            binding.tvProteinVal.text = "${item.protein.toInt()}g P"
+            binding.tvCarbsVal.text = "${item.carbs.toInt()}g C"
+            binding.tvFatVal.text = "${item.fat.toInt()}g F"
+
+            Glide.with(binding.root.context)
+                .load(item.imageUrl)
+                .placeholder(R.drawable.th)
+                .error(R.drawable.th)
+                .into(binding.ivFoodHistory)
         }
     }
 

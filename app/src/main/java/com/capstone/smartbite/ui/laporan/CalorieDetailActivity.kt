@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import com.capstone.smartbite.R
 import com.capstone.smartbite.databinding.ActivityCalorieDetailBinding
 import com.capstone.smartbite.data.FirebaseService
+import com.capstone.smartbite.data.FoodRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.capstone.smartbite.utils.HealthMath
 import com.capstone.smartbite.UserPreference
@@ -38,7 +39,7 @@ class CalorieDetailActivity : AppCompatActivity() {
     }
     private var calendarMonth = Calendar.getInstance()
     private var selectedTab = "Hari" // Hari, Minggu, Bulan
-    private val firebaseService = FirebaseService()
+    private lateinit var foodRepository: FoodRepository
     private val auth = FirebaseAuth.getInstance()
     private var dataJob: Job? = null
     private var targetCalories: Int = 2000
@@ -48,6 +49,8 @@ class CalorieDetailActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityCalorieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        foodRepository = FoodRepository(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -174,22 +177,22 @@ class CalorieDetailActivity : AppCompatActivity() {
         val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendarDay.time)
 
         dataJob = lifecycleScope.launch {
-            firebaseService.getHourlyLogs(email, dateString).collectLatest { entries ->
+            foodRepository.getDailyHistory(email, dateString).collectLatest { entries ->
                 val hourlyCalories = DoubleArray(24) { 0.0 }
                 val cal = Calendar.getInstance()
+                var totalCalories = 0.0
+                
                 entries.forEach { entry ->
-                    cal.time = entry.timestamp.toDate()
+                    cal.timeInMillis = entry.timestamp
                     val hour = cal.get(Calendar.HOUR_OF_DAY)
                     if (hour in 0..23) {
                         hourlyCalories[hour] += entry.calories
                     }
+                    totalCalories += entry.calories
                 }
                 
-                // Fetch daily total for summary
-                firebaseService.getDailyLogForDate(email, dateString).collectLatest { dailyLog ->
-                    binding.tvStatVal.text = dailyLog?.calories?.toString() ?: "0"
-                    setupHourlyChart(hourlyCalories)
-                }
+                binding.tvStatVal.text = totalCalories.toInt().toString()
+                setupHourlyChart(hourlyCalories)
             }
         }
     }
@@ -207,8 +210,8 @@ class CalorieDetailActivity : AppCompatActivity() {
         val endStr = sdf.format(end.time)
 
         dataJob = lifecycleScope.launch {
-            firebaseService.getWeeklyLog(email, startStr, endStr).collectLatest { logs ->
-                val logMap = logs.associateBy { it.date }
+            foodRepository.getWeeklyHistory(email, startStr, endStr).collectLatest { entries ->
+                val logMap = entries.groupBy { it.date }
                 val weeklyCalories = IntArray(7) { 0 }
                 val currentWeekStart = start.clone() as Calendar
                 
@@ -217,8 +220,8 @@ class CalorieDetailActivity : AppCompatActivity() {
                 
                 for (i in 0..6) {
                     val dateStr = sdf.format(currentWeekStart.time)
-                    val log = logMap[dateStr]
-                    weeklyCalories[i] = log?.calories ?: 0
+                    val dayEntries = logMap[dateStr]
+                    weeklyCalories[i] = dayEntries?.sumOf { it.calories }?.toInt() ?: 0
                     totalCalories += weeklyCalories[i]
                     if (weeklyCalories[i] > 0) daysWithData++
                     currentWeekStart.add(Calendar.DAY_OF_YEAR, 1)
@@ -242,8 +245,8 @@ class CalorieDetailActivity : AppCompatActivity() {
         val endStr = sdf.format(end.time)
 
         dataJob = lifecycleScope.launch {
-            firebaseService.getWeeklyLog(email, startStr, endStr).collectLatest { logs ->
-                val logMap = logs.associateBy { it.date }
+            foodRepository.getWeeklyHistory(email, startStr, endStr).collectLatest { entries ->
+                val logMap = entries.groupBy { it.date }
                 val monthlyCalories = IntArray(30) { 0 }
                 val currentStart = start.clone() as Calendar
                 
@@ -252,8 +255,8 @@ class CalorieDetailActivity : AppCompatActivity() {
                 
                 for (i in 0..29) {
                     val dateStr = sdf.format(currentStart.time)
-                    val log = logMap[dateStr]
-                    monthlyCalories[i] = log?.calories ?: 0
+                    val dayEntries = logMap[dateStr]
+                    monthlyCalories[i] = dayEntries?.sumOf { it.calories }?.toInt() ?: 0
                     totalCalories += monthlyCalories[i]
                     if (monthlyCalories[i] > 0) daysWithData++
                     currentStart.add(Calendar.DAY_OF_YEAR, 1)
@@ -404,12 +407,16 @@ class CalorieDetailActivity : AppCompatActivity() {
             background = ContextCompat.getDrawable(context, R.drawable.bg_bar_chart)
             
             // Accuracy-based Color Coding
-            val ratioToTarget = if (targetCalories > 0) heightValue.toFloat() / targetCalories else 0f
-            val color = when {
-                heightValue == 0 -> R.color.brand_green // Default
-                ratioToTarget < 0.8f -> R.color.progress_carbs // Yellow
-                ratioToTarget <= 1.1f -> R.color.brand_green // Green
-                else -> R.color.progress_cal // Red
+            val color = if (selectedTab == "Hari") {
+                R.color.brand_green // Consistent color for hourly bars
+            } else {
+                val ratioToTarget = if (targetCalories > 0) heightValue.toFloat() / targetCalories else 0f
+                when {
+                    heightValue == 0 -> R.color.brand_green
+                    ratioToTarget < 0.8f -> R.color.progress_carbs // Yellow (Too low)
+                    ratioToTarget <= 1.1f -> R.color.brand_green // Green (Target met)
+                    else -> R.color.progress_cal // Red (Exceeded)
+                }
             }
             backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, color))
         }
