@@ -1,13 +1,14 @@
 package com.capstone.smartbite.data
 
 import android.content.Context
+import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.data.local.FoodDatabase
 import com.capstone.smartbite.data.local.FoodHistoryEntity
 import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FoodRepository(context: Context) {
+class FoodRepository(private val context: Context) {
     private val foodDatabase = FoodDatabase.getDatabase(context)
     private val foodHistoryDao = foodDatabase.foodHistoryDao()
     private val firebaseService = FirebaseService()
@@ -44,6 +45,9 @@ class FoodRepository(context: Context) {
             userEmail = email
         )
         foodHistoryDao.insert(entity)
+        
+        // If there was a goal reset today, clear it when a new meal is added
+        UserPreference(context, email).setLastGoalResetDate("")
 
         // 2. Save to Firebase (Remote)
         try {
@@ -64,5 +68,9 @@ class FoodRepository(context: Context) {
 
     fun getAllHistory(email: String): Flow<List<FoodHistoryEntity>> {
         return foodHistoryDao.getAllHistory(email)
+    }
+
+    suspend fun deleteAllByUser(email: String) {
+        foodHistoryDao.deleteAllByUser(email)
     }
 }

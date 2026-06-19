@@ -34,6 +34,14 @@ class  MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
+        // Apply saved Language preference
+        val langCode = mUserPreference.getLanguage()
+        val locale = java.util.Locale(langCode)
+        java.util.Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

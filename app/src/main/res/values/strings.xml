@@ -60,4 +60,58 @@
     <string name="delete">Hapus</string>
     <string name="cancel">Batal</string>
     <string name="not_set">Belum Diatur</string>
+
+    <!-- Dashboard Strings -->
+    <string name="greeting_halo">Halo, %s!</string>
+    <string name="greeting_sub">Here is your daily nutritional insight.</string>
+    <string name="bmi_label">BMI: %.1f</string>
+    <string name="bmi_data_incomplete">Data belum lengkap</string>
+    <string name="bmi_underweight">Underweight</string>
+    <string name="bmi_normal">Normal</string>
+    <string name="bmi_overweight">Overweight</string>
+    <string name="bmi_obese">Obese</string>
+
+    <string name="daily_progress_title">Your Daily Progress</string>
+    <string name="calories_unit">Cal</string>
+    <string name="proteins">Proteins</string>
+    <string name="carbs_label">Carbs</string>
+    <string name="fat_label">Fat</string>
+
+    <string name="weekly_progress_title">Your Weekly Progress</string>
+    <string name="weekly_calories_label">WEEKLY CALORIES</string>
+    <string name="total_this_week">Total this week</string>
+
+    <string name="personalized_meals_title">Personalized Meals</string>
+    <string name="see_all">See all</string>
+    <string name="high_protein">High Protein</string>
+    <string name="balanced">Balanced</string>
+
+    <!-- Laporan Strings -->
+    <string name="target_cal_format">/ %d kcal</string>
+    <string name="target_macro_format">/ %d g</string>
+    <string name="calories_title">Calories</string>
+    <string name="daily_average_format">Daily average: %d kcal</string>
+    <string name="food_history_title">Food History</string>
+    <string name="empty_history_today">No food history for today yet</string>
+
+    <!-- Calorie Detail Strings -->
+    <string name="tab_day">Day</string>
+    <string name="tab_week">Week</string>
+    <string name="tab_month">Month</string>
+    <string name="daily_average_label">Daily average: </string>
+    <string name="total_calories_label">Total calories: </string>
+    <string name="today_label">Today: </string>
+
+    <!-- Camera Strings -->
+    <string name="camera_title">Scan Your Food</string>
+    <string name="camera_subtitle">Take a clear photo to instantly analyze nutritional information and track your meal.</string>
+    <string name="scan_food">Scan Food</string>
+    <string name="security_footer">Your photo is processed securely and never shared.</string>
+
+    <!-- Result Strings -->
+    <string name="food_label">Food</string>
+    <string name="total_calories_format">Total %d kcal</string>
+    <string name="retake_photo">Retake Photo</string>
+    <string name="add_meal">Add Meal</string>
+    <string name="success_add_meal">Meal added successfully!</string>
 </resources>

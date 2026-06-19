@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">SmartBite</string>
+    <string name="title_home">Kamera</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_laporan">Laporan</string>
+    <string name="title_notifications">Profil</string>
+    <string name="gallery">Galeri</string>
+
+    <string name="age">Usia</string>
+    <string name="gender">Jenis Kelamin</string>
+    <string name="weight">Berat Badan</string>
+    <string name="height">Tinggi Badan</string>
+    <string name="years">Tahun</string>
+    <string name="kg">kg</string>
+    <string name="cm">cm</string>
+
+    <string name="profile_title">Profil</string>
+    <string name="nutrition_strategy_title">STRATEGI NUTRISI</string>
+    <string name="update_metrics_title">Perbarui Metrik &amp; Target Tubuh</string>
+    <string name="update_metrics_desc">Hitung ulang BMR &amp; target kalori harian</string>
+    <string name="preferences_title">PENGATURAN</string>
+    <string name="smart_notifications">Notifikasi Pintar</string>
+    <string name="smart_notifications_desc">Pengingat makan &amp; tips AI</string>
+    <string name="language">Bahasa</string>
+    <string name="language_desc">Indonesia</string>
+    <string name="dark_mode">Mode Gelap</string>
+    <string name="dark_mode_desc">Ganti tema aplikasi</string>
+    <string name="sign_out">Keluar</string>
+    <string name="delete_account">Hapus Akun</string>
+    <string name="delete_account_desc">Hapus semua data dan setel ulang profil</string>
+    <string name="cancel">Batal</string>
+    <string name="delete">Hapus</string>
+
+    <!-- Dashboard Strings -->
+    <string name="greeting_halo">Halo, %s!</string>
+    <string name="greeting_sub">Inilah wawasan nutrisi harian Anda.</string>
+    <string name="bmi_label">BMI: %.1f</string>
+    <string name="bmi_data_incomplete">Data belum lengkap</string>
+    <string name="bmi_underweight">Kekurangan berat badan</string>
+    <string name="bmi_normal">Normal</string>
+    <string name="bmi_overweight">Kelebihan berat badan</string>
+    <string name="bmi_obese">Obesitas</string>
+
+    <string name="daily_progress_title">Progres Harian Anda</string>
+    <string name="calories_unit">Kal</string>
+    <string name="proteins">Protein</string>
+    <string name="carbs_label">Karbohidrat</string>
+    <string name="fat_label">Lemak</string>
+
+    <string name="weekly_progress_title">Progres Mingguan Anda</string>
+    <string name="weekly_calories_label">KALORI MINGGUAN</string>
+    <string name="total_this_week">Total minggu ini</string>
+
+    <string name="personalized_meals_title">Rekomendasi Makanan</string>
+    <string name="see_all">Lihat semua</string>
+    <string name="high_protein">Tinggi Protein</string>
+    <string name="balanced">Seimbang</string>
+
+    <!-- Laporan Strings -->
+    <string name="target_cal_format">/ %d kkal</string>
+    <string name="target_macro_format">/ %d g</string>
+    <string name="calories_title">Kalori</string>
+    <string name="daily_average_format">Rata-rata harian: %d kkal</string>
+    <string name="food_history_title">Riwayat Makanan</string>
+    <string name="empty_history_today">Belum ada riwayat makanan hari ini</string>
+
+    <!-- Calorie Detail Strings -->
+    <string name="tab_day">Hari</string>
+    <string name="tab_week">Minggu</string>
+    <string name="tab_month">Bulan</string>
+    <string name="daily_average_label">Rata-rata harian: </string>
+    <string name="total_calories_label">Total kalori: </string>
+    <string name="today_label">Hari Ini: </string>
+
+    <!-- Camera Strings -->
+    <string name="camera_title">Pindai Makanan Anda</string>
+    <string name="camera_subtitle">Ambil foto yang jelas untuk menganalisis informasi nutrisi dan melacak makanan Anda secara instan.</string>
+    <string name="scan_food">Pindai Makanan</string>
+    <string name="security_footer">Foto Anda diproses dengan aman dan tidak pernah dibagikan.</string>
+
+    <!-- Result Strings -->
+    <string name="food_label">Makanan</string>
+    <string name="total_calories_format">Total %d kkal</string>
+    <string name="retake_photo">Ambil Ulang Foto</string>
+    <string name="add_meal">Tambah Makanan</string>
+    <string name="success_add_meal">Makanan berhasil ditambahkan!</string>
+</resources>

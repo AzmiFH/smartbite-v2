@@ -20,12 +20,34 @@ internal class UserPreference(context: Context, email: String? = null) {
         private const val ACTIVITY_LEVEL = "activity_level"
         private const val IS_ONBOARDING_FINISHED = "is_onboarding_finished"
         private const val IS_DARK_MODE = "is_dark_mode"
+        private const val LAST_GOAL_RESET_DATE = "last_goal_reset_date"
+        private const val LANGUAGE_CODE = "language_code"
     }
 
     private val preferences = context.getSharedPreferences(
         if (email != null) "${PREFS_NAME}_${email.replace(".", "_")}" else PREFS_NAME,
         Context.MODE_PRIVATE
     )
+
+    fun setLanguage(langCode: String) {
+        val editor = preferences?.edit()
+        editor?.putString(LANGUAGE_CODE, langCode)
+        editor?.apply()
+    }
+
+    fun getLanguage(): String {
+        return preferences?.getString(LANGUAGE_CODE, "en") ?: "en"
+    }
+
+    fun setLastGoalResetDate(date: String) {
+        val editor = preferences?.edit()
+        editor?.putString(LAST_GOAL_RESET_DATE, date)
+        editor?.apply()
+    }
+
+    fun getLastGoalResetDate(): String? {
+        return preferences?.getString(LAST_GOAL_RESET_DATE, null)
+    }
 
     fun setDarkMode(isEnabled: Boolean) {
         val editor = preferences.edit()

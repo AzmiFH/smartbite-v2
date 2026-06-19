@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.capstone.smartbite.data.FileUploadResponse
 import com.capstone.smartbite.data.FoodRepository
+import com.capstone.smartbite.R
 import com.capstone.smartbite.databinding.ActivityResultBinding
 import com.capstone.smartbite.utils.FoodMeasurementHelper
 import com.google.firebase.auth.FirebaseAuth
@@ -70,7 +71,7 @@ class ResultActivity : AppCompatActivity() {
 
     private fun updateUI() {
         binding.tvFoodName.text = foodName
-        binding.tvTagCategory.text = "FOOD"
+        binding.tvTagCategory.text = getString(R.string.food_label)
         
         val displayQty = if (quantity % 1.0 == 0.0) quantity.toInt().toString() else String.format("%.1f", quantity)
         binding.tvQuantity.text = displayQty
@@ -81,7 +82,7 @@ class ResultActivity : AppCompatActivity() {
         val totalFat = FoodMeasurementHelper.calculateNutrient(baseFat, quantity)
         val totalCarbs = FoodMeasurementHelper.calculateNutrient(baseCarbs, quantity)
 
-        binding.tvCalories.text = "Total $totalCalories kcal"
+        binding.tvCalories.text = getString(R.string.total_calories_format, totalCalories)
         binding.tvProteinVal.text = String.format("%.1fg", totalProtein)
         binding.tvFatVal.text = String.format("%.1fg", totalFat)
         binding.tvCarbsVal.text = String.format("%.1fg", totalCarbs)
@@ -139,7 +140,7 @@ class ResultActivity : AppCompatActivity() {
                             imageUrl = imageUri?.toString()
                         )
                         
-                        Toast.makeText(this@ResultActivity, "Berhasil menambahkan makanan", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ResultActivity, getString(R.string.success_add_meal), Toast.LENGTH_SHORT).show()
                         setResult(RESULT_GO_TO_DASHBOARD)
                         finish()
                     } catch (e: Exception) {

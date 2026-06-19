@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -117,7 +118,8 @@ class LaporanFragment : Fragment() {
     private fun updateCalendarHeader(weekStart: Calendar) {
         val endCalendar = weekStart.clone() as Calendar
         endCalendar.add(Calendar.DAY_OF_YEAR, 6)
-        val monthFormatter = SimpleDateFormat("d MMM", Locale.getDefault())
+        val langCode = com.capstone.smartbite.UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email).getLanguage()
+        val monthFormatter = SimpleDateFormat("d MMM", Locale(langCode))
         binding.tvCurrentMonthRange.text = "${monthFormatter.format(weekStart.time)} - ${monthFormatter.format(endCalendar.time)}"
     }
 
@@ -131,12 +133,15 @@ class LaporanFragment : Fragment() {
             binding.day1, binding.day2, binding.day3,
             binding.day4, binding.day5, binding.day6, binding.day7
         )
+        
+        val langCode = com.capstone.smartbite.UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email).getLanguage()
+        val dayNameFormatter = SimpleDateFormat("EEE", Locale(langCode))
 
         for (i in 0..6) {
             val dateStr = dateFormatter.format(weekStart.time)
             val dayBinding = ItemCalendarDayBinding.bind(dayViews[i].root)
             
-            dayBinding.tvDayName.text = SimpleDateFormat("EEE", Locale.getDefault()).format(weekStart.time)
+            dayBinding.tvDayName.text = dayNameFormatter.format(weekStart.time)
             dayBinding.tvDayDate.text = weekStart.get(Calendar.DAY_OF_MONTH).toString()
 
             // Selection UI
@@ -224,6 +229,10 @@ class LaporanFragment : Fragment() {
             binding.barSen, binding.barSel, binding.barRab,
             binding.barKam, binding.barJum, binding.barSab, binding.barMin
         )
+        
+        val langCode = com.capstone.smartbite.UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email).getLanguage()
+        val dayNameFormatter = SimpleDateFormat("EEE", Locale(langCode))
+        val labelViews = (binding.llDaysLabels as ViewGroup)
 
         var totalCal = 0
 
@@ -231,6 +240,9 @@ class LaporanFragment : Fragment() {
             val dateStr = dateFormatter.format(weekStart.time)
             val log = logMap[dateStr]
             val bar = barViews[i]
+            val label = labelViews.getChildAt(i) as TextView
+
+            label.text = dayNameFormatter.format(weekStart.time)
             
             val cal = log?.calories ?: 0
             totalCal += cal
@@ -262,7 +274,7 @@ class LaporanFragment : Fragment() {
         }
 
         val avgCal = if (divisor > 0) Math.round(totalCal.toFloat() / divisor) else 0
-        binding.tvAverageCalVal.text = "Rata-rata harian: $avgCal kkal"
+        binding.tvAverageCalVal.text = getString(R.string.daily_average_format, avgCal)
     }
 
     private fun updateMainUI(log: FirebaseService.DailyNutritionLog?) {
@@ -274,20 +286,20 @@ class LaporanFragment : Fragment() {
         binding.cpRingInner.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
 
         binding.tvConsumedCalBig.text = log?.calories?.toString() ?: "0"
-        binding.tvTargetCalLabel.text = "/ ${targets.calories} kcal"
+        binding.tvTargetCalLabel.text = getString(R.string.target_cal_format, targets.calories)
 
         // Macros
         binding.pbLaporanCarbs.progress = log?.let { (it.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100) } ?: 0
         binding.tvCarbVal.text = log?.carbs?.toString() ?: "0"
-        binding.tvCarbTarget.text = ""
+        binding.tvCarbTarget.text = getString(R.string.target_macro_format, targets.carbs)
 
         binding.pbLaporanProtein.progress = log?.let { (it.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100) } ?: 0
         binding.tvProteinVal.text = log?.protein?.toString() ?: "0"
-        binding.tvProteinTarget.text = ""
+        binding.tvProteinTarget.text = getString(R.string.target_macro_format, targets.protein)
 
         binding.pbLaporanFat.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
         binding.tvFatVal.text = log?.fat?.toString() ?: "0"
-        binding.tvFatTarget.text = ""
+        binding.tvFatTarget.text = getString(R.string.target_macro_format, targets.fat)
     }
 
     private fun dpToPx(dp: Int): Int {

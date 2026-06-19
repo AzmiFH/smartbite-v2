@@ -3,6 +3,7 @@ package com.capstone.smartbite.ui.dashboard
 import android.app.Application
 import androidx.lifecycle.*
 import com.capstone.smartbite.UserModel
+import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.data.FoodRepository
 import com.capstone.smartbite.data.ListFoodItem
@@ -32,15 +33,20 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     /**
      * Consumed nutrition now comes from Room (Offline-first).
      * We map the List<FoodHistoryEntity> to DailyNutritionLog.
+     * IF a goal reset happened today, we show 0 until new meals are added.
      */
     val consumedNutrition: LiveData<FirebaseService.DailyNutritionLog?> = 
         userEmailFlow.flatMapLatest { email ->
             if (email != null) {
                 val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                val userPreference = UserPreference(getApplication(), email)
+                val lastResetDate = userPreference.getLastGoalResetDate()
+                
                 foodRepository.getDailyHistory(email, dateString).map { list ->
-                    if (list.isEmpty()) {
-                        // If Room is empty, we could fallback to Firebase or just return zeroed log
-                        // For now, let's return a zeroed log or null
+                    if (lastResetDate == dateString) {
+                        // If user updated profile today, reset dashboard view to 0
+                        FirebaseService.DailyNutritionLog(0, 0, 0, 0)
+                    } else if (list.isEmpty()) {
                         FirebaseService.DailyNutritionLog(0, 0, 0, 0)
                     } else {
                         FirebaseService.DailyNutritionLog(

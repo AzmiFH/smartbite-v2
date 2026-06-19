@@ -18,7 +18,7 @@
             android:id="@+id/tv_weekly_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Weekly Progress"
+            android:text="@string/weekly_progress_title"
             android:textColor="@color/text_black_bold"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="WEEKLY CALORIES"
+                android:text="@string/weekly_calories_label"
                 android:textColor="@color/text_subtitle"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total this week"
+                android:text="@string/total_this_week"
                 android:textColor="@color/text_subtitle"
                 android:textSize="12sp" />
         </LinearLayout>

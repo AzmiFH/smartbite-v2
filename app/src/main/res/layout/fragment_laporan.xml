@@ -479,7 +479,7 @@
                     android:id="@+id/tv_chart_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Kalori"
+                    android:text="@string/calories_title"
                     android:textColor="@color/text_black_bold"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -499,10 +499,10 @@
                         android:id="@+id/tv_average_cal_val"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rata-rata harian: 49 kkal"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp"
-                        android:gravity="end" />
+                        android:gravity="end"
+                        tools:text="Rata-rata harian: 49 kkal" />
 
                     <ImageView
                         android:layout_width="16dp"
@@ -736,7 +736,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Riwayat Makanan"
+                android:text="@string/food_history_title"
                 android:textColor="#0B1A30"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -756,7 +756,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="Belum ada riwayat makanan hari ini"
+                android:text="@string/empty_history_today"
                 android:textColor="@color/text_secondary"
                 android:visibility="gone" />
 

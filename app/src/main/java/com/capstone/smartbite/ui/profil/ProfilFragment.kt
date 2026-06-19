@@ -297,19 +297,54 @@ class ProfilFragment : Fragment(), View.OnClickListener {
 
     private fun deleteAccount() {
         val email = mAuth.currentUser?.email
-        mUserPreference.clearUser()
         
         lifecycleScope.launch {
             if (email != null) {
                 try {
+                    com.capstone.smartbite.data.FoodRepository(requireContext()).deleteAllByUser(email)
                     FirebaseService().deleteUserProfile(email)
                 } catch (e: Exception) {
                     // Handle error
                 }
             }
+            mUserPreference.clearUser()
             signOutAndNavigateToSignIn()
             Toast.makeText(requireContext(), "Akun berhasil dihapus", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun showLanguageDialog() {
+        val languages = arrayOf("Indonesia", "English")
+        val codes = arrayOf("in", "en")
+        val currentLang = mUserPreference.getLanguage()
+        val checkedItem = if (currentLang == "in") 0 else 1
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.language))
+            .setSingleChoiceItems(languages, checkedItem) { dialog, which ->
+                val selectedCode = codes[which]
+                if (selectedCode != currentLang) {
+                    mUserPreference.setLanguage(selectedCode)
+                    applyLanguage(selectedCode)
+                }
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun applyLanguage(langCode: String) {
+        val locale = java.util.Locale(langCode)
+        java.util.Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        
+        // This is necessary for some older Android versions
+        resources.updateConfiguration(config, resources.displayMetrics)
+        
+        // Restart activity to apply changes app-wide
+        val intent = requireActivity().intent
+        requireActivity().finish()
+        startActivity(intent)
     }
 
     private fun populateView(userModel: UserModel) {
@@ -357,6 +392,10 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         } else {
             binding.profileImage.setImageResource(R.drawable.th)
         }
+
+        // Update Language description
+        val currentLang = mUserPreference.getLanguage()
+        binding.tvLangDesc.text = if (currentLang == "in") "Indonesia" else "English (US)"
     }
 
     private fun updateNotifIcon(isChecked: Boolean) {
@@ -385,7 +424,7 @@ class ProfilFragment : Fragment(), View.OnClickListener {
             }
 
             R.id.item_language -> {
-                Toast.makeText(requireContext(), "Language Settings", Toast.LENGTH_SHORT).show()
+                showLanguageDialog()
             }
             R.id.item_delete_account -> {
                 showDeleteAccountConfirmation()

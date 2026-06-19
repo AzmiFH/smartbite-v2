@@ -70,17 +70,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Halo, Budi!"
                 android:textColor="@color/text_black_bold"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Halo, Budi!" />
 
             <TextView
                 android:id="@+id/tv_greeting_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Here is your daily nutritional insight."
+                android:text="@string/greeting_sub"
                 android:textColor="@color/text_subtitle"
                 android:textSize="16sp" />
 
@@ -253,7 +253,7 @@
                     android:id="@+id/tv_meal_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Personalized Meals"
+                    android:text="@string/personalized_meals_title"
                     android:textColor="@color/text_black_bold"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -264,7 +264,7 @@
                     android:id="@+id/tv_see_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="See all"
+                    android:text="@string/see_all"
                     android:textColor="@color/brand_green"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -315,7 +315,7 @@
                                     android:layout_marginStart="12dp"
                                     android:layout_marginTop="12dp"
                                     android:background="@drawable/bg_meal_tag"
-                                    android:text="High Protein"
+                                    android:text="@string/high_protein"
                                     android:textColor="@color/text_black_bold"
                                     android:textSize="10sp"
                                     android:textStyle="bold"
@@ -433,7 +433,7 @@
                                     android:layout_marginStart="12dp"
                                     android:layout_marginTop="12dp"
                                     android:background="@drawable/bg_meal_tag"
-                                    android:text="Balanced"
+                                    android:text="@string/balanced"
                                     android:textColor="@color/text_black_bold"
                                     android:textSize="10sp"
                                     android:textStyle="bold"

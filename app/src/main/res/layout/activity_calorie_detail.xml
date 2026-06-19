@@ -16,9 +16,10 @@
         app:navigationIcon="@drawable/ic_chevron_left">
 
         <TextView
+            android:id="@+id/tv_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kalori"
+            android:text="@string/calories_title"
             android:textColor="@color/text_black_bold"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -55,7 +56,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_tab_selected"
                     android:gravity="center"
-                    android:text="Hari"
+                    android:text="@string/tab_day"
                     android:textColor="@color/text_black_bold"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -66,7 +67,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Minggu"
+                    android:text="@string/tab_week"
                     android:textColor="@color/text_secondary"
                     android:textSize="16sp" />
 
@@ -76,7 +77,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Bulan"
+                    android:text="@string/tab_month"
                     android:textColor="@color/text_secondary"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -140,9 +141,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Rata-rata harian: "
                     android:textColor="@color/text_secondary"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Rata-rata harian: " />
 
                 <TextView
                     android:id="@+id/tv_stat_val"
@@ -158,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="kkal"
+                    android:text="@string/calories_unit"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
             </LinearLayout>

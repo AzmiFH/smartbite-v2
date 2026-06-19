@@ -102,7 +102,7 @@ class DashboardFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     if (_binding == null) return@withContext
                     val userName = userModel.name ?: user.displayName ?: "User"
-                    binding.tvGreeting.text = "Halo, $userName!"
+                    binding.tvGreeting.text = getString(R.string.greeting_halo, userName)
                     
                     // Trigger data flow
                     dashboardViewModel.setUserEmail(user.email!!)
@@ -159,8 +159,15 @@ class DashboardFragment : Fragment() {
             val category = com.capstone.smartbite.utils.HealthMath.getBMICategory(bmi)
 
             binding.tvBmiWeightVal.text = user.weight.toString()
-            binding.tvBmiValLabel.text = String.format("BMI: %.1f", bmi)
-            binding.tvBmiCategory.text = category
+            binding.tvBmiValLabel.text = getString(R.string.bmi_label, bmi)
+            
+            binding.tvBmiCategory.text = when (category) {
+                "Underweight" -> getString(R.string.bmi_underweight)
+                "Normal" -> getString(R.string.bmi_normal)
+                "Overweight" -> getString(R.string.bmi_overweight)
+                "Obese" -> getString(R.string.bmi_obese)
+                else -> category
+            }
 
             // Map BMI range (15 - 35) to 0.0 - 1.0 bias
             val minBMI = 15f
@@ -181,14 +188,20 @@ class DashboardFragment : Fragment() {
             binding.tvBmiCategory.setTextColor(categoryColor)
         } else {
             binding.tvBmiWeightVal.text = "--"
-            binding.tvBmiValLabel.text = "BMI: --"
-            binding.tvBmiCategory.text = "Data belum lengkap"
+            binding.tvBmiValLabel.text = getString(R.string.bmi_label, 0.0)
+            binding.tvBmiCategory.text = getString(R.string.bmi_data_incomplete)
+            
+            val params = binding.ivBmiThumb.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            params.horizontalBias = 0.5f
+            binding.ivBmiThumb.layoutParams = params
+            binding.tvBmiCategory.setTextColor(android.graphics.Color.GRAY)
         }
     }
 
     private fun setupCurrentDate() {
         val calendar = Calendar.getInstance().time
-        val dateFormat = SimpleDateFormat("EEEE, d MMM yyyy", Locale("id", "ID"))
+        val langCode = com.capstone.smartbite.UserPreference(requireContext(), mAuth.currentUser?.email).getLanguage()
+        val dateFormat = SimpleDateFormat("EEEE, d MMM yyyy", Locale(langCode))
         val formattedDate = dateFormat.format(calendar)
         binding.tvCurrentDate.text = formattedDate
     }

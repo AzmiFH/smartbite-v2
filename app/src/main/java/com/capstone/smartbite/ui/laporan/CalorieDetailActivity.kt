@@ -51,6 +51,7 @@ class CalorieDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         foodRepository = FoodRepository(this)
+        selectedTab = getString(R.string.tab_day)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -84,21 +85,21 @@ class CalorieDetailActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.ivPrev.setOnClickListener {
             val cal = getActiveCalendar()
-            val offset = if (selectedTab == "Hari") -1 else if (selectedTab == "Minggu") -7 else -30
+            val offset = if (selectedTab == getString(R.string.tab_day)) -1 else if (selectedTab == getString(R.string.tab_week)) -7 else -30
             cal.add(Calendar.DAY_OF_YEAR, offset)
             updateUI()
         }
 
         binding.ivNext.setOnClickListener {
             val cal = getActiveCalendar()
-            val offset = if (selectedTab == "Hari") 1 else if (selectedTab == "Minggu") 7 else 30
+            val offset = if (selectedTab == getString(R.string.tab_day)) 1 else if (selectedTab == getString(R.string.tab_week)) 7 else 30
             cal.add(Calendar.DAY_OF_YEAR, offset)
             updateUI()
         }
 
-        binding.tvTabHari.setOnClickListener { selectTab("Hari") }
-        binding.tvTabMinggu.setOnClickListener { selectTab("Minggu") }
-        binding.tvTabBulan.setOnClickListener { selectTab("Bulan") }
+        binding.tvTabHari.setOnClickListener { selectTab(getString(R.string.tab_day)) }
+        binding.tvTabMinggu.setOnClickListener { selectTab(getString(R.string.tab_week)) }
+        binding.tvTabBulan.setOnClickListener { selectTab(getString(R.string.tab_month)) }
     }
 
     private fun selectTab(tab: String) {
@@ -114,8 +115,8 @@ class CalorieDetailActivity : AppCompatActivity() {
 
         // Aktifkan Tab Terpilih
         val activeTab = when(tab) {
-            "Hari" -> binding.tvTabHari
-            "Minggu" -> binding.tvTabMinggu
+            getString(R.string.tab_day) -> binding.tvTabHari
+            getString(R.string.tab_week) -> binding.tvTabMinggu
             else -> binding.tvTabBulan
         }
         activeTab.setBackgroundResource(R.drawable.bg_tab_selected)
@@ -129,23 +130,24 @@ class CalorieDetailActivity : AppCompatActivity() {
         updateDateDisplay()
         updateChart()
         
-        if (selectedTab == "Hari") {
-            binding.tvLabelStat.text = "Hari Ini: "
-            binding.tvUnitStat.text = "kcal"
+        if (selectedTab == getString(R.string.tab_day)) {
+            binding.tvLabelStat.text = getString(R.string.today_label)
         } else {
-            binding.tvLabelStat.text = "Rata-rata harian: "
-            binding.tvUnitStat.text = "kkal"
-            binding.tvStatVal.text = "50" // Default/Placeholder for Minggu/Bulan
+            binding.tvLabelStat.text = getString(R.string.daily_average_label)
         }
+        binding.tvUnitStat.text = getString(R.string.calories_unit)
     }
 
     private fun updateDateDisplay() {
-        if (selectedTab == "Hari") {
-            val sdf = SimpleDateFormat("MMM d", Locale.getDefault())
+        val langCode = com.capstone.smartbite.UserPreference(this, auth.currentUser?.email).getLanguage()
+        val locale = Locale(langCode)
+        
+        if (selectedTab == getString(R.string.tab_day)) {
+            val sdf = SimpleDateFormat("MMM d", locale)
             binding.tvSelectedRange.text = sdf.format(calendarDay.time)
-        } else if (selectedTab == "Minggu") {
+        } else if (selectedTab == getString(R.string.tab_week)) {
             val start = calendarWeek.clone() as Calendar
-            val fmt = SimpleDateFormat("MMM d", Locale.getDefault())
+            val fmt = SimpleDateFormat("MMM d", locale)
             val end = start.clone() as Calendar
             end.add(Calendar.DAY_OF_YEAR, 6)
             binding.tvSelectedRange.text = "${fmt.format(start.time)} - ${fmt.format(end.time)}"
@@ -153,7 +155,7 @@ class CalorieDetailActivity : AppCompatActivity() {
             val end = calendarMonth.clone() as Calendar
             val start = end.clone() as Calendar
             start.add(Calendar.DAY_OF_YEAR, -29)
-            val fmt = SimpleDateFormat("MMM d", Locale.getDefault())
+            val fmt = SimpleDateFormat("MMM d", locale)
             binding.tvSelectedRange.text = "${fmt.format(start.time)} - ${fmt.format(end.time)}"
         }
     }
@@ -175,6 +177,8 @@ class CalorieDetailActivity : AppCompatActivity() {
     private fun observeHourlyData() {
         val email = auth.currentUser?.email ?: return
         val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendarDay.time)
+        
+        binding.tvLabelStat.text = getString(R.string.total_calories_label)
 
         dataJob = lifecycleScope.launch {
             foodRepository.getDailyHistory(email, dateString).collectLatest { entries ->
@@ -228,6 +232,7 @@ class CalorieDetailActivity : AppCompatActivity() {
                 }
 
                 val avgCal = if (daysWithData > 0) totalCalories / daysWithData else 0
+                binding.tvLabelStat.text = getString(R.string.daily_average_label)
                 binding.tvStatVal.text = avgCal.toString()
                 setupWeeklyChart(weeklyCalories)
             }
@@ -236,6 +241,8 @@ class CalorieDetailActivity : AppCompatActivity() {
 
     private fun observeMonthlyData() {
         val email = auth.currentUser?.email ?: return
+        
+        binding.tvLabelStat.text = getString(R.string.daily_average_label)
         
         val start = calendarMonth.clone() as Calendar
         start.add(Calendar.DAY_OF_YEAR, -29)

@@ -53,6 +53,9 @@ class OnboardingFinishFragment : Fragment() {
                     // IF we are in UpdateBodyMetricsActivity, reset the daily log as requested
                     if (activity is com.capstone.smartbite.ui.profil.UpdateBodyMetricsActivity && email != null) {
                         FirebaseService().resetDailyLog(email)
+                        // Mark today as the day of goal reset to show 0 on dashboard
+                        val dateString = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+                        userPreference.setLastGoalResetDate(dateString)
                     }
                 } catch (e: Exception) {
                     // Log error or show toast if needed
