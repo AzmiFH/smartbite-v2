@@ -186,7 +186,7 @@
                         android:layout_height="14dp"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginTop="5dp"
-                        android:src="@drawable/ic_food_fork_knife"
+                        android:src="@drawable/ic_macro_protein"
                         android:translationZ="10dp"
                         app:tint="@color/ring_orange" />
 
@@ -196,7 +196,7 @@
                         android:layout_height="14dp"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginTop="26dp"
-                        android:src="@drawable/ic_fruit_apple"
+                        android:src="@drawable/ic_macro_carbs"
                         android:translationZ="10dp"
                         app:tint="@color/ring_green" />
 
@@ -206,7 +206,7 @@
                         android:layout_height="14dp"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginTop="47dp"
-                        android:src="@drawable/ic_fruit_avocado"
+                        android:src="@drawable/ic_macro_fat"
                         android:translationZ="10dp"
                         app:tint="@color/ring_blue" />
 
@@ -289,7 +289,7 @@
                                 android:layout_height="10dp"
                                 android:layout_gravity="top|center_horizontal"
                                 android:layout_marginTop="2dp"
-                                android:src="@drawable/ic_fruit_apple"
+                                android:src="@drawable/ic_macro_carbs"
                                 android:translationZ="10dp"
                                 app:tint="@color/ring_green" />
 
@@ -358,7 +358,7 @@
                                 android:layout_height="10dp"
                                 android:layout_gravity="top|center_horizontal"
                                 android:layout_marginTop="2dp"
-                                android:src="@drawable/ic_food_fork_knife"
+                                android:src="@drawable/ic_macro_protein"
                                 android:translationZ="10dp"
                                 app:tint="@color/ring_orange" />
 
@@ -427,7 +427,7 @@
                                 android:layout_height="10dp"
                                 android:layout_gravity="top|center_horizontal"
                                 android:layout_marginTop="2dp"
-                                android:src="@drawable/ic_fruit_avocado"
+                                android:src="@drawable/ic_macro_fat"
                                 android:translationZ="10dp"
                                 app:tint="@color/ring_blue" />
 

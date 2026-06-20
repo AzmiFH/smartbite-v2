@@ -26,14 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_more"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_grid_custom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_progress_title"
-            app:tint="@color/text_subtitle" />
+
 
         <!-- Left: Circular Calorie Progress -->
         <androidx.constraintlayout.widget.ConstraintLayout

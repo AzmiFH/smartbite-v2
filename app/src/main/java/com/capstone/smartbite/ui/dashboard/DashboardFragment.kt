@@ -178,13 +178,19 @@ class DashboardFragment : Fragment() {
             params.horizontalBias = bias
             binding.ivBmiThumb.layoutParams = params
 
-            val categoryColor = when (category) {
-                "Underweight" -> android.graphics.Color.parseColor("#4FC3F7") // Blue
-                "Normal" -> android.graphics.Color.parseColor("#66BB6A") // Green
-                "Overweight" -> android.graphics.Color.parseColor("#FFA726") // Orange
-                "Obese" -> android.graphics.Color.parseColor("#EF5350") // Red
-                else -> android.graphics.Color.parseColor("#66BB6A")
+            // Truly dynamic color based on gradient position (#80FF80 -> #8080FF -> #FF4040)
+            val colorStart = android.graphics.Color.parseColor("#80FF80")
+            val colorCenter = android.graphics.Color.parseColor("#8080FF")
+            val colorEnd = android.graphics.Color.parseColor("#FF4040")
+
+            val categoryColor = if (bias < 0.5f) {
+                val t = bias / 0.5f
+                interpolateColor(colorStart, colorCenter, t)
+            } else {
+                val t = (bias - 0.5f) / 0.5f
+                interpolateColor(colorCenter, colorEnd, t)
             }
+            
             binding.tvBmiCategory.setTextColor(categoryColor)
         } else {
             binding.tvBmiWeightVal.text = "--"
@@ -196,6 +202,25 @@ class DashboardFragment : Fragment() {
             binding.ivBmiThumb.layoutParams = params
             binding.tvBmiCategory.setTextColor(android.graphics.Color.GRAY)
         }
+    }
+
+    private fun interpolateColor(colorStart: Int, colorEnd: Int, fraction: Float): Int {
+        val startA = Color.alpha(colorStart)
+        val startR = Color.red(colorStart)
+        val startG = Color.green(colorStart)
+        val startB = Color.blue(colorStart)
+
+        val endA = Color.alpha(colorEnd)
+        val endR = Color.red(colorEnd)
+        val endG = Color.green(colorEnd)
+        val endB = Color.blue(colorEnd)
+
+        return Color.argb(
+            (startA + (endA - startA) * fraction).toInt(),
+            (startR + (endR - startR) * fraction).toInt(),
+            (startG + (endG - startG) * fraction).toInt(),
+            (startB + (endB - startB) * fraction).toInt()
+        )
     }
 
     private fun setupCurrentDate() {

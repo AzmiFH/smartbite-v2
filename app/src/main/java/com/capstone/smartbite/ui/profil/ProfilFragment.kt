@@ -382,15 +382,14 @@ class ProfilFragment : Fragment(), View.OnClickListener {
             }
             binding.tvBmiValue.text = String.format(java.util.Locale.getDefault(), "%.1f (%s)", bmi, localizedCategory)
 
-            // Update warna berdasarkan status BMI
-            val (colorRes, bgColor) = when (category) {
-                "Underweight" -> Pair(R.color.progress_carbs, "#FFF9C4")
-                "Normal" -> Pair(R.color.brand_green, "#E8F5E9")
-                "Overweight" -> Pair(R.color.progress_cal, "#FFF3E0")
-                "Obese" -> Pair(R.color.progress_cal, "#FFEBEE")
-                else -> Pair(R.color.brand_green, "#E8F5E9")
+            // Update warna berdasarkan status BMI (disamakan dengan gradient bar)
+            val (colorStr, bgColor) = when (category) {
+                "Underweight" -> Pair("#80FF80", "#E8F5E9") // Light Green
+                "Normal" -> Pair("#8080FF", "#E8EAF6") // Light Blue
+                "Overweight", "Obese" -> Pair("#FF4040", "#FFEBEE") // Light Red
+                else -> Pair("#8080FF", "#E8EAF6")
             }
-            val color = ContextCompat.getColor(requireContext(), colorRes)
+            val color = android.graphics.Color.parseColor(colorStr)
             binding.ivBmiIcon.imageTintList = android.content.res.ColorStateList.valueOf(color)
             binding.vBmiIconBg.backgroundTintList = android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor(bgColor))
             binding.tvBmiValue.setTextColor(color)

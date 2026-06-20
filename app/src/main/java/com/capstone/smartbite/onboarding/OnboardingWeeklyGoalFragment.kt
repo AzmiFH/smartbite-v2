@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.capstone.smartbite.R
+import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.databinding.FragmentOnboardingWeeklyGoalBinding
 
 class OnboardingWeeklyGoalFragment : Fragment() {
@@ -13,6 +14,7 @@ class OnboardingWeeklyGoalFragment : Fragment() {
     private var _binding: FragmentOnboardingWeeklyGoalBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var userPreference: UserPreference
     private var selectedRate: Double = 0.5
 
     override fun onCreateView(
@@ -25,6 +27,8 @@ class OnboardingWeeklyGoalFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        userPreference = UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
 
         binding.btnModerate.setOnClickListener {
             updateUI(0.5)
@@ -39,8 +43,12 @@ class OnboardingWeeklyGoalFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateUI(selectedRate)
+    }
+
     private fun updateUI(rate: Double) {
-        val userPreference = com.capstone.smartbite.UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email)
         val user = userPreference.getUser()
         val weightDiff = if (user.goal == "Weight Loss Focus") {
             user.weight - user.targetWeight

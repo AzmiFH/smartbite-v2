@@ -138,7 +138,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/bmi_overweight"
-                    android:textColor="#E91E63"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_bmi_val_label"
                     app:layout_constraintEnd_toEndOf="parent"

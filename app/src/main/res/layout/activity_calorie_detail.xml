@@ -131,9 +131,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/bg_circle_primary"
-                    android:backgroundTint="@color/brand_green"
+                    android:backgroundTint="@color/progress_cal"
                     android:padding="8dp"
-                    android:src="@drawable/ic_fire_24dp"
+                    android:src="@drawable/calories_14dp"
                     app:tint="@color/white" />
 
                 <TextView
@@ -143,13 +143,13 @@
                     android:layout_marginStart="12dp"
                     android:textColor="@color/text_secondary"
                     android:textSize="16sp"
-                    tools:text="Rata-rata harian: " />
+                    tools:text="Rata-rata harian :  " />
 
                 <TextView
                     android:id="@+id/tv_stat_val"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50"
+                    android:text=" 50"
                     android:textColor="@color/text_black_bold"
                     android:textSize="32sp"
                     android:textStyle="bold" />
