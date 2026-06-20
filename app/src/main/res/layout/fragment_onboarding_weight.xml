@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="Berapa Berat Badan Anda?"
+        android:text="@string/onboarding_weight_title"
         android:textColor="@color/text_primary"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Berat dalam kg membantu kami menghitung kebutuhan kalori Anda dengan akurat."
+        android:text="@string/onboarding_weight_subtitle"
         android:textColor="@color/text_secondary"
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -108,7 +108,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lanjut"
+            android:text="@string/onboarding_next"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.capstone.smartbite.R
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.databinding.FragmentOnboardingNameBinding
 
@@ -42,7 +43,7 @@ class OnboardingNameFragment : Fragment() {
                 userPreference.setUser(currentUser)
                 (activity as? OnboardingNavigator)?.nextStep()
             } else {
-                binding.tilName.error = "Nama tidak boleh kosong"
+                binding.tilName.error = getString(R.string.onboarding_name_empty)
             }
         }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.capstone.smartbite.R
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.databinding.FragmentOnboardingWeightBinding
 
@@ -70,11 +71,11 @@ class OnboardingWeightFragment : Fragment() {
 
         binding.tvWarning.visibility = when {
             value < 30 -> {
-                binding.tvWarning.text = "Nilai ini sangat rendah, pastikan sudah akurat."
+                binding.tvWarning.text = getString(R.string.onboarding_weight_low_warning)
                 View.VISIBLE
             }
             value > 200 -> {
-                binding.tvWarning.text = "Nilai ini sangat tinggi, pastikan sudah akurat."
+                binding.tvWarning.text = getString(R.string.onboarding_weight_high_warning)
                 View.VISIBLE
             }
             else -> View.GONE
@@ -91,7 +92,7 @@ class OnboardingWeightFragment : Fragment() {
             } else {
                 android.widget.Toast.makeText(
                     requireContext(),
-                    "Berat badan harus antara $WEIGHT_MIN - $WEIGHT_MAX kg",
+                    getString(R.string.onboarding_weight_range_error, WEIGHT_MIN, WEIGHT_MAX),
                     android.widget.Toast.LENGTH_SHORT
                 ).show()
             }

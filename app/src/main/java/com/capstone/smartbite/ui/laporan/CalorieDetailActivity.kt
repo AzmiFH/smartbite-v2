@@ -139,7 +139,9 @@ class CalorieDetailActivity : AppCompatActivity() {
     }
 
     private fun updateDateDisplay() {
-        val langCode = com.capstone.smartbite.UserPreference(this, auth.currentUser?.email).getLanguage()
+        val email = auth.currentUser?.email
+        val userPreference = com.capstone.smartbite.UserPreference(this, email)
+        val langCode = userPreference.getLanguage()
         val locale = Locale(langCode)
         
         if (selectedTab == getString(R.string.tab_day)) {
@@ -165,9 +167,9 @@ class CalorieDetailActivity : AppCompatActivity() {
         binding.llLabelsContainer.removeAllViews()
         dataJob?.cancel()
 
-        if (selectedTab == "Hari") {
+        if (selectedTab == getString(R.string.tab_day)) {
             observeHourlyData()
-        } else if (selectedTab == "Minggu") {
+        } else if (selectedTab == getString(R.string.tab_week)) {
             observeWeeklyData()
         } else {
             observeMonthlyData()
@@ -330,7 +332,10 @@ class CalorieDetailActivity : AppCompatActivity() {
         binding.tvY2.text = (maxInWeek * 0.4).toInt().toString()
         binding.tvY1.text = (maxInWeek * 0.2).toInt().toString()
 
-        val days = listOf("Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min")
+        val days = listOf(
+            getString(R.string.mon), getString(R.string.tue), getString(R.string.wed),
+            getString(R.string.thu), getString(R.string.fri), getString(R.string.sat), getString(R.string.sun)
+        )
         days.forEach { label ->
             val tv = TextView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(0, -2, 1f)
@@ -414,7 +419,7 @@ class CalorieDetailActivity : AppCompatActivity() {
             background = ContextCompat.getDrawable(context, R.drawable.bg_bar_chart)
             
             // Accuracy-based Color Coding
-            val color = if (selectedTab == "Hari") {
+            val color = if (selectedTab == getString(R.string.tab_day)) {
                 R.color.brand_green // Consistent color for hourly bars
             } else {
                 val ratioToTarget = if (targetCalories > 0) heightValue.toFloat() / targetCalories else 0f
@@ -438,8 +443,8 @@ class CalorieDetailActivity : AppCompatActivity() {
 
     private fun getActiveCalendar(): Calendar {
         return when (selectedTab) {
-            "Hari" -> calendarDay
-            "Minggu" -> calendarWeek
+            getString(R.string.tab_day) -> calendarDay
+            getString(R.string.tab_week) -> calendarWeek
             else -> calendarMonth
         }
     }

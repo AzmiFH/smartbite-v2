@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Siapa nama Anda?"
+        android:text="@string/onboarding_name_title"
         android:textColor="@color/text_primary"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:lineSpacingExtra="4sp"
-        android:text="Mari mulai dengan perkenalan singkat. Kami akan mempersonalisasi pengalaman SmartBite Anda."
+        android:text="@string/onboarding_name_subtitle"
         android:textColor="@color/text_primary"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:hint="Nama Lengkap"
+        android:hint="@string/name"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text="Contoh: Budi Santoso" />
+            android:hint="@string/onboarding_example_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:padding="8dp"
-        android:text="Lewati"
+        android:text="@string/onboarding_skip"
         android:textColor="@color/brand_green"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lanjut"
+            android:text="@string/onboarding_next"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"

@@ -306,10 +306,10 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tv_carb_target"
+                            android:id="@+id/tv_carb_unit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
+                            android:text="g"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -375,10 +375,10 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tv_protein_target"
+                            android:id="@+id/tv_protein_unit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
+                            android:text="g"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -444,10 +444,10 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tv_fat_target"
+                            android:id="@+id/tv_fat_unit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
+                            android:text="g"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -707,13 +707,13 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
 
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Sen" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Sel" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Rab" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Kam" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Jum" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Sab" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Min" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/mon" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/tue" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/wed" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/thu" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/fri" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/sat" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/sun" android:gravity="center" android:textSize="12sp" android:textColor="@color/text_secondary" />
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

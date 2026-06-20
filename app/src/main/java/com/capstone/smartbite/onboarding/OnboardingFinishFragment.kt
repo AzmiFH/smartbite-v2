@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.capstone.smartbite.MainActivity
+import com.capstone.smartbite.R
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.data.FirebaseService
 import com.capstone.smartbite.databinding.FragmentOnboardingFinishBinding
@@ -85,10 +86,10 @@ class OnboardingFinishFragment : Fragment() {
         val user = userPreference.getUser()
 
         binding.tvFinalGoal.text = when (user.goal) {
-            "Weight Loss Focus" -> "Menurunkan Berat Badan"
-            "Muscle Building" -> "Meningkatkan Massa Otot"
-            "Maintain Weight" -> "Menjaga Berat Badan"
-            else -> "Target Berat Badan"
+            "Weight Loss Focus" -> getString(R.string.goal_weight_loss)
+            "Muscle Building" -> getString(R.string.goal_muscle_building)
+            "Maintain Weight" -> getString(R.string.goal_maintain_weight)
+            else -> user.goal ?: getString(R.string.goal_target_weight)
         }
     }
 

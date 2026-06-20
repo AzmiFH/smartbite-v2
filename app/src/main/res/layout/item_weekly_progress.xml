@@ -98,7 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Sen"
+                    android:text="@string/mon"
                     android:textSize="8sp" />
             </LinearLayout>
 
@@ -120,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Sel"
+                    android:text="@string/tue"
                     android:textSize="8sp" />
             </LinearLayout>
 
@@ -142,7 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Rab"
+                    android:text="@string/wed"
                     android:textSize="8sp" />
             </LinearLayout>
 
@@ -164,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Kam"
+                    android:text="@string/thu"
                     android:textSize="8sp" />
             </LinearLayout>
 
@@ -186,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Jum"
+                    android:text="@string/fri"
                     android:textSize="8sp" />
             </LinearLayout>
 
@@ -208,7 +208,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Sab"
+                    android:text="@string/sat"
                     android:textSize="8sp" />
             </LinearLayout>
 
@@ -230,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Min"
+                    android:text="@string/sun"
                     android:textSize="8sp" />
             </LinearLayout>
 

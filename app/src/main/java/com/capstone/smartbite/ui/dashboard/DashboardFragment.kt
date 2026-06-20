@@ -200,9 +200,48 @@ class DashboardFragment : Fragment() {
 
     private fun setupCurrentDate() {
         val calendar = Calendar.getInstance().time
-        val langCode = com.capstone.smartbite.UserPreference(requireContext(), mAuth.currentUser?.email).getLanguage()
-        val dateFormat = SimpleDateFormat("EEEE, d MMM yyyy", Locale(langCode))
-        val formattedDate = dateFormat.format(calendar)
+        val email = mAuth.currentUser?.email
+        val userPreference = com.capstone.smartbite.UserPreference(requireContext(), email)
+        val langCode = userPreference.getLanguage()
+        val locale = Locale(langCode)
+        
+        // Manual formatting to ensure resource-based day and month names
+        val dayName = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
+            Calendar.MONDAY -> getString(R.string.monday)
+            Calendar.TUESDAY -> getString(R.string.tuesday)
+            Calendar.WEDNESDAY -> getString(R.string.wednesday)
+            Calendar.THURSDAY -> getString(R.string.thursday)
+            Calendar.FRIDAY -> getString(R.string.friday)
+            Calendar.SATURDAY -> getString(R.string.saturday)
+            Calendar.SUNDAY -> getString(R.string.sunday)
+            else -> ""
+        }
+        
+        val monthName = when (Calendar.getInstance().get(Calendar.MONTH)) {
+            Calendar.JANUARY -> getString(R.string.january)
+            Calendar.FEBRUARY -> getString(R.string.february)
+            Calendar.MARCH -> getString(R.string.march)
+            Calendar.APRIL -> getString(R.string.april)
+            Calendar.MAY -> getString(R.string.may)
+            Calendar.JUNE -> getString(R.string.june)
+            Calendar.JULY -> getString(R.string.july)
+            Calendar.AUGUST -> getString(R.string.august)
+            Calendar.SEPTEMBER -> getString(R.string.september)
+            Calendar.OCTOBER -> getString(R.string.october)
+            Calendar.NOVEMBER -> getString(R.string.november)
+            Calendar.DECEMBER -> getString(R.string.december)
+            else -> ""
+        }
+        
+        val dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        
+        val formattedDate = if (langCode == "in") {
+            "$dayName, $dayOfMonth $monthName $year"
+        } else {
+            "$dayName, $monthName $dayOfMonth, $year"
+        }
+
         binding.tvCurrentDate.text = formattedDate
     }
 }

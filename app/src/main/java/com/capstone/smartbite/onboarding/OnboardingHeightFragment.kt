@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.capstone.smartbite.R
 import com.capstone.smartbite.UserPreference
 import com.capstone.smartbite.databinding.FragmentOnboardingHeightBinding
 
@@ -52,7 +53,7 @@ class OnboardingHeightFragment : Fragment() {
             } else {
                 android.widget.Toast.makeText(
                     requireContext(),
-                    "Tinggi badan harus antara $HEIGHT_MIN - $HEIGHT_MAX cm",
+                    getString(R.string.onboarding_height_range_error, HEIGHT_MIN, HEIGHT_MAX),
                     android.widget.Toast.LENGTH_SHORT
                 ).show()
             }

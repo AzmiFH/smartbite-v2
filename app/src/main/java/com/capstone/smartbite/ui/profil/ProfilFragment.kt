@@ -351,14 +351,19 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         val firebaseUser = mAuth.currentUser
         
         binding.tvName.text = userModel.name?.takeIf { it.isNotEmpty() } 
-            ?: firebaseUser?.displayName ?: "Tidak Ada"
+            ?: firebaseUser?.displayName ?: getString(R.string.none)
         
         binding.tvEmail.text = userModel.email?.takeIf { it.isNotEmpty() } 
-            ?: firebaseUser?.email ?: "Tidak Ada"
+            ?: firebaseUser?.email ?: getString(R.string.none)
             
-        binding.tvGoal.text = userModel.goal ?: "Weight Loss Focus"
+        binding.tvGoal.text = when (userModel.goal) {
+            "Weight Loss Focus" -> getString(R.string.goal_weight_loss)
+            "Muscle Building" -> getString(R.string.goal_muscle_building)
+            "Maintain Weight" -> getString(R.string.goal_maintain_weight)
+            else -> userModel.goal ?: getString(R.string.goal_target_weight)
+        }
         
-        binding.tvGenderValue.text = userModel.gender?.takeIf { it.isNotEmpty() } ?: "Belum Diatur"
+        binding.tvGenderValue.text = userModel.gender?.takeIf { it.isNotEmpty() } ?: getString(R.string.not_set)
         binding.tvAgeValue.text = if (userModel.age > 0) "${userModel.age} ${getString(R.string.years)}" else "28 ${getString(R.string.years)}"
         binding.tvWeightValue.text = if (userModel.weight > 0) "${userModel.weight} ${getString(R.string.kg)}" else "64 ${getString(R.string.kg)}"
         binding.tvHeightValue.text = if (userModel.height > 0) "${userModel.height} ${getString(R.string.cm)}" else "165 ${getString(R.string.cm)}"
@@ -367,7 +372,15 @@ class ProfilFragment : Fragment(), View.OnClickListener {
         if (userModel.weight > 0 && userModel.height > 0) {
             val bmi = HealthMath.calculateBMI(userModel.weight.toDouble(), userModel.height)
             val category = HealthMath.getBMICategory(bmi)
-            binding.tvBmiValue.text = String.format(java.util.Locale.getDefault(), "%.1f (%s)", bmi, category)
+            
+            val localizedCategory = when (category) {
+                "Underweight" -> getString(R.string.bmi_underweight)
+                "Normal" -> getString(R.string.bmi_normal)
+                "Overweight" -> getString(R.string.bmi_overweight)
+                "Obese" -> getString(R.string.bmi_obese)
+                else -> category
+            }
+            binding.tvBmiValue.text = String.format(java.util.Locale.getDefault(), "%.1f (%s)", bmi, localizedCategory)
 
             // Update warna berdasarkan status BMI
             val (colorRes, bgColor) = when (category) {

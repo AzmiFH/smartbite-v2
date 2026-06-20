@@ -118,8 +118,12 @@ class LaporanFragment : Fragment() {
     private fun updateCalendarHeader(weekStart: Calendar) {
         val endCalendar = weekStart.clone() as Calendar
         endCalendar.add(Calendar.DAY_OF_YEAR, 6)
+        
         val langCode = com.capstone.smartbite.UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email).getLanguage()
-        val monthFormatter = SimpleDateFormat("d MMM", Locale(langCode))
+        val locale = Locale(langCode)
+        
+        // Use SimpleDateFormat but ensure it respects the selected locale from preferences
+        val monthFormatter = SimpleDateFormat("d MMM", locale)
         binding.tvCurrentMonthRange.text = "${monthFormatter.format(weekStart.time)} - ${monthFormatter.format(endCalendar.time)}"
     }
 
@@ -135,7 +139,9 @@ class LaporanFragment : Fragment() {
         )
         
         val langCode = com.capstone.smartbite.UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email).getLanguage()
-        val dayNameFormatter = SimpleDateFormat("EEE", Locale(langCode))
+        val locale = Locale(langCode)
+        
+        val dayNameFormatter = SimpleDateFormat("EEE", locale)
 
         for (i in 0..6) {
             val dateStr = dateFormatter.format(weekStart.time)
@@ -179,11 +185,8 @@ class LaporanFragment : Fragment() {
         binding.tvConsumedCalBig.text = "0"
         binding.tvTargetCalLabel.text = ""
         binding.tvCarbVal.text = "0"
-        binding.tvCarbTarget.text = ""
         binding.tvProteinVal.text = "0"
-        binding.tvProteinTarget.text = ""
         binding.tvFatVal.text = "0"
-        binding.tvFatTarget.text = ""
         
         binding.cpRingOuter.progress = 0
         binding.cpRingMiddle.progress = 0
@@ -231,7 +234,9 @@ class LaporanFragment : Fragment() {
         )
         
         val langCode = com.capstone.smartbite.UserPreference(requireContext(), com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email).getLanguage()
-        val dayNameFormatter = SimpleDateFormat("EEE", Locale(langCode))
+        val locale = Locale(langCode)
+        
+        val dayNameFormatter = SimpleDateFormat("EEE", locale)
         val labelViews = (binding.llDaysLabels as ViewGroup)
 
         var totalCal = 0
@@ -288,18 +293,15 @@ class LaporanFragment : Fragment() {
         binding.tvConsumedCalBig.text = log?.calories?.toString() ?: "0"
         binding.tvTargetCalLabel.text = getString(R.string.target_cal_format, targets.calories)
 
-        // Macros
+        // Macros (No Target)
         binding.pbLaporanCarbs.progress = log?.let { (it.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100) } ?: 0
         binding.tvCarbVal.text = log?.carbs?.toString() ?: "0"
-        binding.tvCarbTarget.text = getString(R.string.target_macro_format, targets.carbs)
 
         binding.pbLaporanProtein.progress = log?.let { (it.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100) } ?: 0
         binding.tvProteinVal.text = log?.protein?.toString() ?: "0"
-        binding.tvProteinTarget.text = getString(R.string.target_macro_format, targets.protein)
 
         binding.pbLaporanFat.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
         binding.tvFatVal.text = log?.fat?.toString() ?: "0"
-        binding.tvFatTarget.text = getString(R.string.target_macro_format, targets.fat)
     }
 
     private fun dpToPx(dp: Int): Int {

@@ -52,7 +52,7 @@ class OnboardingGenderFragment : Fragment() {
                 userPreference.setUser(currentUser)
                 (activity as? OnboardingNavigator)?.nextStep()
             } else {
-                Toast.makeText(requireContext(), "Silakan pilih jenis kelamin", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.onboarding_gender_empty), Toast.LENGTH_SHORT).show()
             }
         }
     }

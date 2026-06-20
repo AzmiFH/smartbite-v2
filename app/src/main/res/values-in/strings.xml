@@ -28,12 +28,23 @@
     <string name="sign_out">Keluar</string>
     <string name="delete_account">Hapus Akun</string>
     <string name="delete_account_desc">Hapus semua data dan setel ulang profil</string>
+    <string name="delete_account_confirmation">Apakah Anda yakin ingin menghapus akun? Semua data profil akan dihapus permanen.</string>
+    <string name="delete_account_title">Konfirmasi Hapus Akun</string>
     <string name="cancel">Batal</string>
     <string name="delete">Hapus</string>
+    <string name="not_set">Belum Diatur</string>
+    <string name="none">Tidak Ada</string>
+    <string name="bmi_status">Status BMI</string>
+
+    <!-- Goals -->
+    <string name="goal_weight_loss">Fokus Turun Berat Badan</string>
+    <string name="goal_muscle_building">Meningkatkan Massa Otot</string>
+    <string name="goal_maintain_weight">Menjaga Berat Badan</string>
+    <string name="goal_target_weight">Target Berat Badan</string>
 
     <!-- Dashboard Strings -->
     <string name="greeting_halo">Halo, %s!</string>
-    <string name="greeting_sub">Inilah wawasan nutrisi harian Anda.</string>
+    <string name="greeting_sub">Inilah asupan nutrisi harian Anda.</string>
     <string name="bmi_label">BMI: %.1f</string>
     <string name="bmi_data_incomplete">Data belum lengkap</string>
     <string name="bmi_underweight">Kekurangan berat badan</string>
@@ -44,7 +55,7 @@
     <string name="daily_progress_title">Progres Harian Anda</string>
     <string name="calories_unit">Kal</string>
     <string name="proteins">Protein</string>
-    <string name="carbs_label">Karbohidrat</string>
+    <string name="carbs_label">Karbo</string>
     <string name="fat_label">Lemak</string>
 
     <string name="weekly_progress_title">Progres Mingguan Anda</string>
@@ -84,4 +95,103 @@
     <string name="retake_photo">Ambil Ulang Foto</string>
     <string name="add_meal">Tambah Makanan</string>
     <string name="success_add_meal">Makanan berhasil ditambahkan!</string>
+
+    <!-- Onboarding Strings -->
+    <string name="onboarding_next">Lanjut</string>
+    <string name="onboarding_skip">Lewati</string>
+    <string name="onboarding_example_name">Contoh: Budi Santoso</string>
+    <string name="onboarding_name_empty">Nama tidak boleh kosong</string>
+    <string name="onboarding_gender_empty">Silakan pilih jenis kelamin</string>
+    <string name="onboarding_height_range_error">Tinggi badan harus antara %1$d - %2$d cm</string>
+    <string name="onboarding_weight_range_error">Berat badan harus antara %1$d - %2$d kg</string>
+    <string name="onboarding_weight_low_warning">Nilai ini sangat rendah, pastikan sudah akurat.</string>
+    <string name="onboarding_weight_high_warning">Nilai ini sangat tinggi, pastikan sudah akurat.</string>
+
+    <string name="onboarding_weekly_rate_format">%1$.1f kg / minggu</string>
+    <string name="onboarding_weekly_recommended">Direkomendasikan</string>
+    <string name="onboarding_weekly_moderate_title">Kecepatan Sedang</string>
+    <string name="onboarding_weekly_moderate_desc">Kecepatan berkelanjutan untuk kesuksesan jangka panjang. Terbaik untuk menjaga energi.</string>
+    <string name="onboarding_weekly_challenging_title">Menantang</string>
+    <string name="onboarding_weekly_challenging_desc">Membutuhkan komitmen dan disiplin yang lebih tinggi. Mungkin terasa lapar di awal.</string>
+    <string name="onboarding_weekly_target_weeks">Target tercapai dalam kira-kira %1$d minggu</string>
+    <string name="logout">Keluar</string>
+    <string name="mon">Sen</string>
+    <string name="tue">Sel</string>
+    <string name="wed">Rab</string>
+    <string name="thu">Kam</string>
+    <string name="fri">Jum</string>
+    <string name="sat">Sab</string>
+    <string name="sun">Min</string>
+    <string name="monday">Senin</string>
+    <string name="tuesday">Selasa</string>
+    <string name="wednesday">Rabu</string>
+    <string name="thursday">Kamis</string>
+    <string name="friday">Jumat</string>
+    <string name="saturday">Sabtu</string>
+    <string name="sunday">Minggu</string>
+    <string name="january">Januari</string>
+    <string name="february">Februari</string>
+    <string name="march">Maret</string>
+    <string name="april">April</string>
+    <string name="may">Mei</string>
+    <string name="june">Juni</string>
+    <string name="july">Juli</string>
+    <string name="august">Agustus</string>
+    <string name="september">September</string>
+    <string name="october">Oktober</string>
+    <string name="november">November</string>
+    <string name="december">Desember</string>
+
+    <string name="onboarding_name_title">Siapa nama Anda?</string>
+    <string name="onboarding_name_subtitle">Mari mulai dengan perkenalan singkat. Kami akan mempersonalisasi pengalaman SmartBite Anda.</string>
+
+    <string name="onboarding_gender_title">Pilih Jenis Kelamin</string>
+    <string name="onboarding_gender_subtitle">Untuk memberikan pengalaman dan hasil yang lebih baik, kami perlu mengetahui jenis kelamin Anda.</string>
+    <string name="gender_male">Pria</string>
+    <string name="gender_female">Wanita</string>
+
+    <string name="onboarding_age_title">Berapa usia Anda?</string>
+    <string name="onboarding_age_subtitle">Usia membantu kami menghitung metabolisme dan kebutuhan energi Anda dengan lebih akurat.</string>
+
+    <string name="onboarding_height_title">Berapa tinggi badan Anda?</string>
+    <string name="onboarding_height_subtitle">Tinggi badan adalah faktor kunci dalam menentukan Indeks Massa Tubuh (BMI) Anda.</string>
+
+    <string name="onboarding_weight_title">Berapa berat badan Anda saat ini?</string>
+    <string name="onboarding_weight_subtitle">Kami menggunakan berat badan Anda untuk memperkirakan kebutuhan kalori dan melacak progres Anda.</string>
+
+    <string name="onboarding_activity_title">Aktivitas Harian</string>
+    <string name="onboarding_activity_subtitle">Bantu kami menyesuaikan kebutuhan kalori dan nutrisi harianmu berdasarkan seberapa aktif kamu bergerak.</string>
+    <string name="activity_low_title">Rendah</string>
+    <string name="activity_low_desc">Sedikit bergerak, pekerjaan kantor</string>
+    <string name="activity_medium_title">Sedang</string>
+    <string name="activity_medium_desc">Olahraga 1–3 hari/minggu, aktif bergerak</string>
+    <string name="activity_high_title">Tinggi</string>
+    <string name="activity_high_desc">Olahraga 4–7 hari/minggu, pekerjaan fisik</string>
+
+    <string name="onboarding_goal_title">Apa target Anda?</string>
+    <string name="onboarding_goal_subtitle">Pilih satu target utama untuk membantu kami menyusun rekomendasi nutrisi terbaik.</string>
+    <string name="goal_maintain_desc">Pertahankan gaya hidup sehat saat ini.</string>
+    <string name="goal_loss_desc">Fokus pada defisit kalori yang sehat.</string>
+    <string name="goal_gain_desc">Surplus kalori dengan tinggi protein.</string>
+    <string name="goal_maintain_title">Menjaga Berat Badan</string>
+    <string name="goal_loss_title">Fokus Turun Berat Badan</string>
+    <string name="goal_gain_title">Meningkatkan Massa Otot</string>
+    <string name="target_weight_recommendation_start">Rekomendasi target mulai dari: %d kg</string>
+    <string name="target_weight_recommendation">Rekomendasi: %d - %d kg</string>
+    <string name="target_weight_warning">Target ini tidak aman bagi metabolisme Anda</string>
+    <string name="onboarding_goal_lower_warning">Target harus lebih rendah dari berat saat ini</string>
+    <string name="onboarding_goal_higher_warning">Target harus lebih tinggi untuk menambah massa</string>
+    <string name="onboarding_goal_bmi_low_warning">Target terlalu rendah (BMI Underweight: &lt;18.5)</string>
+    <string name="onboarding_goal_bmi_obese_warning">Target terlalu tinggi (BMI Obesitas: &gt;30.0)</string>
+    <string name="onboarding_goal_overweight_warning">Target masuk kategori Overweight. Konsultasikan dengan ahli untuk bulking yang sehat.</string>
+
+    <string name="onboarding_weekly_title">Target Mingguan</string>
+    <string name="onboarding_weekly_subtitle">Pilih kecepatan yang Anda inginkan untuk mencapai target Anda.</string>
+    <string name="onboarding_weekly_loss_format">Turun %.1f kg per minggu</string>
+    <string name="onboarding_weekly_gain_format">Naik %.1f kg per minggu</string>
+    <string name="onboarding_weekly_recommendation">Rekomendasi: %.1f - %.1f kg/minggu</string>
+
+    <string name="onboarding_finish_title">Semua Siap!</string>
+    <string name="onboarding_finish_subtitle">Rencana nutrisi pribadi Anda sudah siap. Mari mulai perjalanan sehat Anda!</string>
+    <string name="onboarding_finish_button">Mulai Sekarang</string>
 </resources>

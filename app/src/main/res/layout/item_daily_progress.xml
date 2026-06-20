@@ -118,7 +118,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/progress_protein" />
+                        app:tint="@color/ring_orange" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -147,8 +147,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:progress="100"
-                    app:indicatorColor="@color/progress_protein"
-                    app:trackColor="#FFEBEE"
+                    app:indicatorColor="@color/ring_orange"
+                    app:trackColor="@color/ring_bg_orange"
                     app:trackThickness="6dp"
                     app:trackCornerRadius="4dp" />
             </LinearLayout>
@@ -170,7 +170,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/progress_carbs" />
+                        app:tint="@color/ring_green" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -199,8 +199,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:progress="100"
-                    app:indicatorColor="@color/progress_carbs"
-                    app:trackColor="#FFF9C4"
+                    app:indicatorColor="@color/ring_green"
+                    app:trackColor="@color/ring_bg_green"
                     app:trackThickness="6dp"
                     app:trackCornerRadius="4dp" />
             </LinearLayout>

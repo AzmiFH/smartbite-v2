@@ -116,10 +116,10 @@ class OnboardingGoalFragment : Fragment() {
 
         // 1. Cek Logika Target vs Berat Sekarang
         if (selectedGoal == "Weight Loss Focus" && targetWeight >= user.weight && targetWeight > 0) {
-            warningMessage = "Target harus lebih rendah dari berat saat ini"
+            warningMessage = getString(R.string.onboarding_goal_lower_warning)
             shouldBlock = true
         } else if (selectedGoal == "Muscle Building" && targetWeight <= user.weight && targetWeight > 0) {
-            warningMessage = "Target harus lebih tinggi untuk menambah massa"
+            warningMessage = getString(R.string.onboarding_goal_higher_warning)
             shouldBlock = true
         }
 
@@ -130,22 +130,22 @@ class OnboardingGoalFragment : Fragment() {
             if (selectedGoal == "Weight Loss Focus") {
                 when {
                     targetBMI < 18.5 -> {
-                        warningMessage = "Target terlalu rendah (BMI Underweight: <18.5)"
+                        warningMessage = getString(R.string.onboarding_goal_bmi_low_warning)
                         shouldBlock = true
                     }
                     targetBMI > 30.0 -> {
-                        warningMessage = "Target terlalu tinggi (BMI Obesitas: >30.0)"
+                        warningMessage = getString(R.string.onboarding_goal_bmi_obese_warning)
                         shouldBlock = true
                     }
                 }
             } else if (selectedGoal == "Muscle Building") {
                 when {
                     targetBMI > 30.0 -> {
-                        warningMessage = "Target terlalu tinggi (BMI Obesitas: >30.0)"
+                        warningMessage = getString(R.string.onboarding_goal_bmi_obese_warning)
                         shouldBlock = true
                     }
                     targetBMI > 25.0 -> {
-                        warningMessage = "Target masuk kategori Overweight. Konsultasikan dengan ahli untuk bulking yang sehat."
+                        warningMessage = getString(R.string.onboarding_goal_overweight_warning)
                         // Warning only, don't block
                     }
                 }
@@ -197,7 +197,7 @@ class OnboardingGoalFragment : Fragment() {
                 
                 val minSafeWeight = HealthMath.calculateWeightForBMI(18.5, user.height).toInt()
                 val maxSafeWeight = user.weight - 1
-                binding.tvGoalInfoLose.text = "Rekomendasi target: $minSafeWeight - $maxSafeWeight kg"
+                binding.tvGoalInfoLose.text = getString(R.string.target_weight_recommendation, minSafeWeight, maxSafeWeight)
                 binding.tvGoalInfoLose.visibility = View.VISIBLE
             }
             "Muscle Building" -> {
@@ -208,9 +208,9 @@ class OnboardingGoalFragment : Fragment() {
                 val maxSafeWeight = HealthMath.calculateWeightForBMI(25.0, user.height).toInt()
                 
                 if (maxSafeWeight > minSafeWeight) {
-                    binding.tvGoalInfoGain.text = "Rekomendasi target: $minSafeWeight - $maxSafeWeight kg"
+                    binding.tvGoalInfoGain.text = getString(R.string.target_weight_recommendation, minSafeWeight, maxSafeWeight)
                 } else {
-                    binding.tvGoalInfoGain.text = "Rekomendasi target mulai dari: $minSafeWeight kg"
+                    binding.tvGoalInfoGain.text = getString(R.string.target_weight_recommendation_start, minSafeWeight)
                 }
                 binding.tvGoalInfoGain.visibility = View.VISIBLE
             }

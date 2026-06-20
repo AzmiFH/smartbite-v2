@@ -2,36 +2,48 @@
     <string name="app_name">SmartBite</string>
     <string name="title_home">Camera</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_laporan">Laporan</string>
+    <string name="title_laporan">Report</string>
     <string name="title_notifications">Profile</string>
-    <string name="gallery">Galeri</string>
-    <string name="analyze">analis</string>
-    <string name="result">result</string>
-    <string name="title_user">Nama Lengkap</string>
-    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="gallery">Gallery</string>
+    <string name="analyze">Analyze</string>
+    <string name="result">Result</string>
+    <string name="title_user">Full Name</string>
+    <string name="empty_image_warning">Please insert an image file first.</string>
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
     <string name="default_web_client_id">787055846570-ief3s0bsg1mlh382eak5defq47f233nf.apps.googleusercontent.com</string>
     <!-- TODO: Remove or change this placeholder text -->
 
-    <string name="name">Nama \n</string>
-    <string name="dummy_name">Masukan Nama</string>
+    <string name="name">Name \n</string>
+    <string name="dummy_name">Enter Name</string>
     <string name="email">Email</string>
-    <string name="dummy_email">Masukan Email</string>
-    <string name="phone_number">Nomor HP</string>
-    <string name="dummynumber">Masukan Nomor HP</string>
-    <string name="age">Usia</string>
-    <string name="dummyage">Masukan Usia</string>
-    <string name="Alamat">Alamat Anda</string>
-    <string name="dummyisalamat">Masukan Alamat</string>
+    <string name="dummy_email">Enter Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="dummynumber">Enter Phone Number</string>
+    <string name="age">Age</string>
+    <string name="dummyage">Enter Age</string>
+    <string name="Alamat">Your Address</string>
+    <string name="dummyisalamat">Enter Address</string>
     <string name="save">Save</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="alamat">Alamat</string>
+    <string name="alamat">Address</string>
     <string name="ubah">Update</string>
-    <string name="add">Alamat</string>
-    <string name="dummyadd">"Masukan Alamat "</string>
-    <string name="profile_picture">Foto Profil</string>
-    <string name="select_photo">Ubah Foto</string>
-    <string name="change">Ubah</string>
+    <string name="add">Address</string>
+    <string name="dummyadd">"Enter Address "</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="select_photo">Change Photo</string>
+    <string name="change">Change</string>
     <string name="terms_and_privacy_text">By signing in, you agree to our Terms of Service and Privacy Policy</string>
     <string name="gender">Gender</string>
     <string name="weight">Weight</string>
@@ -53,19 +65,27 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="dark_mode_desc">Toggle app theme</string>
     <string name="sign_out">Sign Out</string>
-    <string name="delete_account">Hapus Akun</string>
-    <string name="delete_account_desc">Hapus semua data dan setel ulang profil</string>
-    <string name="delete_account_confirmation">Apakah Anda yakin ingin menghapus akun? Semua data profil akan dihapus permanen.</string>
-    <string name="delete_account_title">Konfirmasi Hapus Akun</string>
-    <string name="delete">Hapus</string>
-    <string name="cancel">Batal</string>
-    <string name="not_set">Belum Diatur</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_desc">Wipe all data and reset profile</string>
+    <string name="delete_account_confirmation">Are you sure you want to delete your account? All profile data will be permanently removed.</string>
+    <string name="delete_account_title">Confirm Account Deletion</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="not_set">Not Set</string>
+    <string name="none">None</string>
+    <string name="bmi_status">BMI Status</string>
+
+    <!-- Goals -->
+    <string name="goal_weight_loss">Weight Loss Focus</string>
+    <string name="goal_muscle_building">Muscle Building</string>
+    <string name="goal_maintain_weight">Maintain Weight</string>
+    <string name="goal_target_weight">Weight Target</string>
 
     <!-- Dashboard Strings -->
-    <string name="greeting_halo">Halo, %s!</string>
+    <string name="greeting_halo">Hello, %s!</string>
     <string name="greeting_sub">Here is your daily nutritional insight.</string>
     <string name="bmi_label">BMI: %.1f</string>
-    <string name="bmi_data_incomplete">Data belum lengkap</string>
+    <string name="bmi_data_incomplete">Incomplete data</string>
     <string name="bmi_underweight">Underweight</string>
     <string name="bmi_normal">Normal</string>
     <string name="bmi_overweight">Overweight</string>
@@ -114,4 +134,91 @@
     <string name="retake_photo">Retake Photo</string>
     <string name="add_meal">Add Meal</string>
     <string name="success_add_meal">Meal added successfully!</string>
+
+    <!-- Onboarding Strings -->
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_example_name">Example: Budi Santoso</string>
+    <string name="onboarding_name_empty">Name cannot be empty</string>
+    <string name="onboarding_gender_empty">Please select a gender</string>
+    <string name="onboarding_height_range_error">Height must be between %1$d - %2$d cm</string>
+    <string name="onboarding_weight_range_error">Weight must be between %1$d - %2$d kg</string>
+    <string name="onboarding_weight_low_warning">This value is very low, make sure it is accurate.</string>
+    <string name="onboarding_weight_high_warning">This value is very high, make sure it is accurate.</string>
+
+    <string name="onboarding_weekly_rate_format">%1$.1f kg / week</string>
+    <string name="onboarding_weekly_recommended">Recommended</string>
+    <string name="onboarding_weekly_moderate_title">Moderate Pace</string>
+    <string name="onboarding_weekly_moderate_desc">Sustainable pace for long-term success. Best for maintaining energy.</string>
+    <string name="onboarding_weekly_challenging_title">Challenging</string>
+    <string name="onboarding_weekly_challenging_desc">Requires higher commitment and discipline. May feel hungry at first.</string>
+    <string name="onboarding_weekly_target_weeks">Target reached in approximately %1$d weeks</string>
+    <string name="logout">Logout</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string name="onboarding_name_title">What is your name?</string>
+    <string name="onboarding_name_subtitle">Let\'s start with a brief introduction. We will personalize your SmartBite experience.</string>
+
+    <string name="onboarding_gender_title">Select Gender</string>
+    <string name="onboarding_gender_subtitle">To provide better experience and results, we need to know your gender.</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+
+    <string name="onboarding_age_title">How old are you?</string>
+    <string name="onboarding_age_subtitle">Age helps us calculate your metabolism and energy needs more accurately.</string>
+
+    <string name="onboarding_height_title">How tall are you?</string>
+    <string name="onboarding_height_subtitle">Height is a key factor in determining your Body Mass Index (BMI).</string>
+
+    <string name="onboarding_weight_title">What is your current weight?</string>
+    <string name="onboarding_weight_subtitle">We use your weight to estimate your calorie needs and track your progress.</string>
+
+    <string name="onboarding_activity_title">Daily Activity</string>
+    <string name="onboarding_activity_subtitle">Help us adjust your daily calorie and nutrition needs based on how active you are.</string>
+    <string name="activity_low_title">Low</string>
+    <string name="activity_low_desc">Little movement, office job</string>
+    <string name="activity_medium_title">Medium</string>
+    <string name="activity_medium_desc">Exercise 1–3 days/week, active movement</string>
+    <string name="activity_high_title">High</string>
+    <string name="activity_high_desc">Exercise 4–7 days/week, physical job</string>
+
+    <string name="onboarding_goal_title">What is your goal?</string>
+    <string name="onboarding_goal_subtitle">Choose one primary goal to help us build the best nutrition recommendations.</string>
+    <string name="goal_maintain_desc">Maintain your current healthy lifestyle.</string>
+    <string name="goal_loss_desc">Focus on a healthy calorie deficit.</string>
+    <string name="goal_gain_desc">Calorie surplus with high protein.</string>
+    <string name="goal_maintain_title">Maintain Weight</string>
+    <string name="goal_loss_title">Weight Loss Focus</string>
+    <string name="goal_gain_title">Muscle Building</string>
+    <string name="target_weight_recommendation_start">Recommendation: from %d kg</string>
+    <string name="target_weight_recommendation">Recommendation: %d - %d kg</string>
+    <string name="target_weight_warning">This target is not safe for your metabolism</string>
+    <string name="onboarding_goal_lower_warning">Target must be lower than current weight</string>
+    <string name="onboarding_goal_higher_warning">Target must be higher to gain mass</string>
+    <string name="onboarding_goal_bmi_low_warning">Target too low (BMI Underweight: &lt;18.5)</string>
+    <string name="onboarding_goal_bmi_obese_warning">Target too high (BMI Obese: &gt;30.0)</string>
+    <string name="onboarding_goal_overweight_warning">Target is in Overweight category. Consult an expert for healthy bulking.</string>
+
+    <string name="onboarding_weekly_title">Weekly Goal</string>
+    <string name="onboarding_weekly_subtitle">Choose the pace at which you want to achieve your goal.</string>
+    <string name="onboarding_weekly_loss_format">Lose %.1f kg per week</string>
+    <string name="onboarding_weekly_gain_format">Gain %.1f kg per week</string>
+    <string name="onboarding_weekly_recommendation">Recommendation: %.1f - %.1f kg/week</string>
+
+    <string name="onboarding_finish_title">All Set!</string>
+    <string name="onboarding_finish_subtitle">Your personalized nutrition plan is ready. Let\'s start your healthy journey!</string>
+    <string name="onboarding_finish_button">Get Started</string>
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp">
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:text="Apa target mingguan Anda?"
+        android:text="@string/onboarding_weekly_title"
         android:textColor="@color/text_primary"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -24,7 +25,7 @@
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:lineSpacingExtra="4sp"
-        android:text="Ini membantu kami menghitung target kalori harian Anda."
+        android:text="@string/onboarding_weekly_subtitle"
         android:textColor="@color/text_secondary"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -59,7 +60,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="0.5 kg / minggu"
+                    android:text="@string/onboarding_weekly_rate_format"
+                    tools:text="0.5 kg / minggu"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -90,7 +92,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="Direkomendasikan"
+                        android:text="@string/onboarding_weekly_recommended"
+                        tools:text="Direkomendasikan"
                         android:textColor="@color/brand_green"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -110,7 +113,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="Kecepatan Sedang"
+                    android:text="@string/onboarding_weekly_moderate_title"
+                    tools:text="Kecepatan Sedang"
                     android:textColor="@color/brand_green"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -122,7 +126,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Kecepatan berkelanjutan untuk kesuksesan jangka panjang. Terbaik untuk menjaga energi."
+                    android:text="@string/onboarding_weekly_moderate_desc"
+                    tools:text="Kecepatan berkelanjutan untuk kesuksesan jangka panjang. Terbaik untuk menjaga energi."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     app:layout_constraintTop_toBottomOf="@id/tv_moderate_label" />
@@ -145,10 +150,12 @@
                         app:tint="@color/text_secondary" />
 
                     <TextView
+                        android:id="@+id/tv_date_moderate_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Target tercapai dalam kira-kira 12 minggu"
+                        android:text="@string/onboarding_weekly_target_weeks"
+                        tools:text="Target tercapai dalam kira-kira 12 minggu"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -170,7 +177,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="1.0 kg / minggu"
+                    android:text="@string/onboarding_weekly_rate_format"
+                    tools:text="1.0 kg / minggu"
                     android:textColor="@color/text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -192,7 +200,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Menantang"
+                    android:text="@string/onboarding_weekly_challenging_title"
+                    tools:text="Menantang"
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -204,7 +213,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Membutuhkan komitmen dan disiplin yang lebih tinggi. Mungkin terasa lapar di awal."
+                    android:text="@string/onboarding_weekly_challenging_desc"
+                    tools:text="Membutuhkan komitmen dan disiplin yang lebih tinggi. Mungkin terasa lapar di awal."
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     app:layout_constraintTop_toBottomOf="@id/tv_challenging_label" />
@@ -227,10 +237,12 @@
                         app:tint="@color/text_secondary" />
 
                     <TextView
+                        android:id="@+id/tv_date_challenging_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Target tercapai dalam kira-kira 6 minggu"
+                        android:text="@string/onboarding_weekly_target_weeks"
+                        tools:text="Target tercapai dalam kira-kira 6 minggu"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -252,7 +264,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lanjut"
+            android:text="@string/onboarding_next"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
