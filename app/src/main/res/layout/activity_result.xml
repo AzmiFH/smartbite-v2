@@ -181,11 +181,11 @@
                     android:background="@drawable/bg_circle_primary"
                     android:backgroundTint="#FFFFFF"
                     android:padding="6dp"
-                    android:src="@drawable/ic_dashboard_black_24dp"
+                    android:src="@drawable/calories_24saja"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="#FF9800" />
+                    app:tint="@color/progress_cal" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Macros Row -->

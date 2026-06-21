@@ -123,7 +123,7 @@ class OnboardingGoalFragment : Fragment() {
             shouldBlock = true
         }
 
-        // 2. Cek Kesehatan (BMI Categories)
+        // 2. Cek Kesehatan (BMI Categories - Kemenkes RI)
         if (targetWeight > 0) {
             val targetBMI = HealthMath.calculateBMI(targetWeight.toDouble(), user.height)
             
@@ -133,14 +133,14 @@ class OnboardingGoalFragment : Fragment() {
                         warningMessage = getString(R.string.onboarding_goal_bmi_low_warning)
                         shouldBlock = true
                     }
-                    targetBMI > 30.0 -> {
+                    targetBMI > 27.0 -> {
                         warningMessage = getString(R.string.onboarding_goal_bmi_obese_warning)
                         shouldBlock = true
                     }
                 }
             } else if (selectedGoal == "Muscle Building") {
                 when {
-                    targetBMI > 30.0 -> {
+                    targetBMI > 27.0 -> {
                         warningMessage = getString(R.string.onboarding_goal_bmi_obese_warning)
                         shouldBlock = true
                     }

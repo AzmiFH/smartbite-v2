@@ -30,7 +30,8 @@ class ResultActivity : AppCompatActivity() {
     private var baseFat = 0.0
     private var baseCarbs = 0.0
     private var foodName = ""
-    private var unit = ""
+    private var unitResId = R.string.unit_portion
+    private var isGalleryScan = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -48,6 +49,7 @@ class ResultActivity : AppCompatActivity() {
 
         val result = intent.getSerializableExtra("result") as? FileUploadResponse
         val imageUri = intent.getStringExtra("imageUri")?.toUri()
+        isGalleryScan = intent.getBooleanExtra("is_gallery_scan", false)
 
         imageUri?.let {
             binding.previewImageView.setImageURI(it)
@@ -61,7 +63,7 @@ class ResultActivity : AppCompatActivity() {
             baseFat = nutrition.fat
             baseCarbs = nutrition.carbohydrate
             
-            unit = FoodMeasurementHelper.getUnitForFood(foodName)
+            unitResId = FoodMeasurementHelper.getUnitResIdForFood(foodName)
             
             updateUI()
         } ?: Log.e("ResultActivity", "No result received!")
@@ -75,7 +77,8 @@ class ResultActivity : AppCompatActivity() {
         
         val displayQty = if (quantity % 1.0 == 0.0) quantity.toInt().toString() else String.format("%.1f", quantity)
         binding.tvQuantity.text = displayQty
-        binding.tvTagPortion.text = "$displayQty ${unit.uppercase(Locale.getDefault())}"
+        val unitStr = getString(unitResId)
+        binding.tvTagPortion.text = "$displayQty ${unitStr.uppercase(Locale.getDefault())}"
 
         val totalCalories = FoodMeasurementHelper.calculateNutrient(baseCalories, quantity)
         val totalProtein = FoodMeasurementHelper.calculateNutrient(baseProtein, quantity)
@@ -114,6 +117,7 @@ class ResultActivity : AppCompatActivity() {
             val intent = Intent()
             intent.putExtra("last_result", result)
             intent.putExtra("last_imageUri", imageUri.toString())
+            intent.putExtra("is_gallery_scan", isGalleryScan)
             setResult(RESULT_RETAKE, intent)
             finish()
         }
@@ -136,7 +140,7 @@ class ResultActivity : AppCompatActivity() {
                             fat = totalFat,
                             carbs = totalCarbs,
                             quantity = quantity,
-                            unit = unit,
+                            unit = getString(unitResId),
                             imageUrl = imageUri?.toString()
                         )
                         

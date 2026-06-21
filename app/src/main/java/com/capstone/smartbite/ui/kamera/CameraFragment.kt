@@ -45,6 +45,7 @@ class CameraFragment : Fragment(){
 
     private var currentImageUri: Uri? = null
     private var imageUri: Uri? = null
+    private var isGalleryScan: Boolean = false
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -69,6 +70,7 @@ class CameraFragment : Fragment(){
         savedInstanceState?.let {
             currentImageUri = it.getParcelable(CURRENT_IMAGE_URI_KEY)
             imageUri = it.getParcelable(IMAGE_URI_KEY)
+            isGalleryScan = it.getBoolean(IS_GALLERY_SCAN_KEY, false)
         }
     }
 
@@ -127,12 +129,14 @@ class CameraFragment : Fragment(){
         // Simpan URI ke dalam Bundle
         currentImageUri?.let { outState.putParcelable(CURRENT_IMAGE_URI_KEY, it) }
         imageUri?.let { outState.putParcelable(IMAGE_URI_KEY, it) }
+        outState.putBoolean(IS_GALLERY_SCAN_KEY, isGalleryScan)
     }
 
 
     fun startCamera() {
         if (allPermissionsGranted()) {
             currentImageUri = getImageUri(requireContext())
+            isGalleryScan = false
             launcherIntentCamera.launch(currentImageUri!!)
         } else {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
@@ -153,6 +157,7 @@ class CameraFragment : Fragment(){
                 val intent = Intent(requireContext(), ResultActivity::class.java)
                 intent.putExtra("result", lastResult)
                 intent.putExtra("imageUri", lastImageUri)
+                intent.putExtra("is_gallery_scan", isGalleryScan)
                 launcherResultActivity.launch(intent)
                 
                 // Reset setelah digunakan
@@ -166,6 +171,7 @@ class CameraFragment : Fragment(){
     }
 
     private fun startGallery() {
+        isGalleryScan = true
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
         }
@@ -181,6 +187,19 @@ class CameraFragment : Fragment(){
             selectedImg.let { uri ->
                 currentImageUri = uri
                 startCrop(selectedImg)
+            }
+        } else {
+            // Jika gallery dibatalkan DAN kita punya data cadangan dari Retake
+            if (lastResult != null && lastImageUri != null) {
+                val intent = Intent(requireContext(), ResultActivity::class.java)
+                intent.putExtra("result", lastResult)
+                intent.putExtra("imageUri", lastImageUri)
+                intent.putExtra("is_gallery_scan", isGalleryScan)
+                launcherResultActivity.launch(intent)
+
+                // Reset setelah digunakan
+                lastResult = null
+                lastImageUri = null
             }
         }
     }
@@ -210,8 +229,19 @@ class CameraFragment : Fragment(){
             cropError?.let { showToast("Ada kesalahan crop gambar: ${it.message}") }
         } else if (result.resultCode == RESULT_CANCELED) {
             showToast("Crop dibatalkan")
-            binding.gambaruplode.setImageResource(R.drawable.baseline_image_24)
-            binding.buttonAnalisa.visibility = View.GONE
+            if (lastResult != null && lastImageUri != null) {
+                val intent = Intent(requireContext(), ResultActivity::class.java)
+                intent.putExtra("result", lastResult)
+                intent.putExtra("imageUri", lastImageUri)
+                intent.putExtra("is_gallery_scan", isGalleryScan)
+                launcherResultActivity.launch(intent)
+
+                lastResult = null
+                lastImageUri = null
+            } else {
+                binding.gambaruplode.setImageResource(R.drawable.baseline_image_24)
+                binding.buttonAnalisa.visibility = View.GONE
+            }
         }
     }
 
@@ -246,6 +276,7 @@ class CameraFragment : Fragment(){
                         val intent = Intent(requireContext(), ResultActivity::class.java)
                         intent.putExtra("result", response)
                         intent.putExtra("imageUri", uri.toString()) // Send image URI
+                        intent.putExtra("is_gallery_scan", isGalleryScan)
                         launcherResultActivity.launch(intent)
 
                     } catch (e: HttpException) {
@@ -276,8 +307,13 @@ class CameraFragment : Fragment(){
             val intent = result.data
             lastResult = intent?.getSerializableExtra("last_result") as? FileUploadResponse
             lastImageUri = intent?.getStringExtra("last_imageUri")
+            val wasGalleryScan = intent?.getBooleanExtra("is_gallery_scan", false) ?: false
             
-            startCamera()
+            if (wasGalleryScan) {
+                startGallery()
+            } else {
+                startCamera()
+            }
         } else if (result.resultCode == ResultActivity.RESULT_GO_TO_DASHBOARD) {
             // Pindah ke Dashboard
             findNavController().navigate(R.id.navigation_dashboard)
@@ -334,6 +370,7 @@ class CameraFragment : Fragment(){
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
         private const val CURRENT_IMAGE_URI_KEY = "currentImageUri"
         private const val IMAGE_URI_KEY = "imageUri"
+        private const val IS_GALLERY_SCAN_KEY = "isGalleryScan"
     }
 
 }

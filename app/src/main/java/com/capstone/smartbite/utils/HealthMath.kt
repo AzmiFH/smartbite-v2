@@ -5,8 +5,12 @@ import kotlin.math.min
 
 object HealthMath {
 
+    private fun isMale(gender: String?): Boolean {
+        return gender == "Male" || gender == "Pria"
+    }
+
     fun calculateBMR(user: UserModel): Double {
-        return if (user.gender == "Pria") {
+        return if (isMale(user.gender)) {
             (10.0 * user.weight) + (6.25 * user.height) - (5.0 * user.age) + 5.0
         } else {
             (10.0 * user.weight) + (6.25 * user.height) - (5.0 * user.age) - 161.0
@@ -15,9 +19,18 @@ object HealthMath {
 
     fun calculateTDEE(user: UserModel): Double {
         val bmr = calculateBMR(user)
+        /**
+         * Faktor Aktivitas (PAL - Physical Activity Level) sesuai standar WHO:
+         * - Low (Sedentary): 1.2
+         * - Medium (Lightly Active - Olahraga 1-3 hari): 1.375 (Diperbarui agar sinkron dengan deskripsi UI)
+         * - High (Very Active - Olahraga 4-7 hari): 1.725
+         * 
+         * Catatan: Level "Moderately Active" (1.55) dilewati untuk menyederhanakan pilihan user 
+         * menjadi 3 kategori utama yang kontras.
+         */
         val factor = when (user.activityLevel) {
             "Low" -> 1.2
-            "Medium" -> 1.55
+            "Medium" -> 1.375
             "High" -> 1.725
             else -> 1.2
         }
@@ -47,8 +60,7 @@ object HealthMath {
         val bmrProtectionDeficit = tdee - bmr
         
         // Aturan 2: Asupan Minimal Absolut (Kalori yang tersisa setelah defisit)
-        // Defisit tidak boleh > (TDEE - 1200/1500)
-        val absoluteMinCalories = if (user.gender == "Pria") 1500.0 else 1200.0
+        val absoluteMinCalories = if (isMale(user.gender)) 1500.0 else 1200.0
         val absoluteFloorDeficit = tdee - absoluteMinCalories
         
         // Ambil nilai terkecil dari berbagai batasan aman
@@ -62,6 +74,14 @@ object HealthMath {
     }
 
     /**
+     * Menentukan Maksimal (Max) Penambahan Berat Badan (kg/minggu)
+     * Standar lean bulking: Maksimal surplus 500 kkal/hari (~0.5 kg/minggu)
+     */
+    fun getMaxWeightGainPerWeek(): Double {
+        return 0.5
+    }
+
+    /**
      * Menghitung BMI (Body Mass Index)
      */
     fun calculateBMI(weight: Double, heightCm: Int): Double {
@@ -71,13 +91,13 @@ object HealthMath {
     }
 
     /**
-     * Mendapatkan kategori BMI
+     * Mendapatkan kategori BMI (Standar Kemenkes RI untuk Asia/Indonesia)
      */
     fun getBMICategory(bmi: Double): String {
         return when {
             bmi < 18.5 -> "Underweight"
-            bmi < 25.0 -> "Normal"
-            bmi < 30.0 -> "Overweight"
+            bmi <= 25.1 -> "Normal"
+            bmi <= 27.1 -> "Overweight"
             else -> "Obese"
         }
     }
@@ -97,16 +117,15 @@ object HealthMath {
     fun calculateDailyNutrition(user: com.capstone.smartbite.UserModel): DailyNutritionTargets {
         val tdee = calculateTDEE(user)
         
-        // Asumsi target mingguan (kg/minggu)
-        // Idealnya ini diambil dari UserPreference jika disimpan
-        val weeklyGoalRate = 0.5 
+        // Sekarang mengambil target mingguan dari profil user secara dinamis
+        val weeklyGoalRate = user.weeklyRate
         val dailyAdjustment = (weeklyGoalRate * 7700) / 7
 
         val targetCalories = when (user.goal) {
             "Weight Loss Focus" -> (tdee - dailyAdjustment).toInt()
             "Muscle Building" -> (tdee + dailyAdjustment).toInt()
             else -> tdee.toInt()
-        }.coerceAtLeast(if (user.gender == "Pria") 1500 else 1200)
+        }.coerceAtLeast(if (isMale(user.gender)) 1500 else 1200)
 
         // Distribusi Makro: 20% P, 55% C, 25% F
         val protein = (targetCalories * 0.20 / 4).toInt()

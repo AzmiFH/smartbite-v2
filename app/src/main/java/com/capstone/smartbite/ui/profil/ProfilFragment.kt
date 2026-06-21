@@ -363,7 +363,11 @@ class ProfilFragment : Fragment(), View.OnClickListener {
             else -> userModel.goal ?: getString(R.string.goal_target_weight)
         }
         
-        binding.tvGenderValue.text = userModel.gender?.takeIf { it.isNotEmpty() } ?: getString(R.string.not_set)
+        binding.tvGenderValue.text = when (userModel.gender) {
+            "Male" -> getString(R.string.gender_male)
+            "Female" -> getString(R.string.gender_female)
+            else -> userModel.gender?.takeIf { it.isNotEmpty() } ?: getString(R.string.not_set)
+        }
         binding.tvAgeValue.text = if (userModel.age > 0) "${userModel.age} ${getString(R.string.years)}" else "28 ${getString(R.string.years)}"
         binding.tvWeightValue.text = if (userModel.weight > 0) "${userModel.weight} ${getString(R.string.kg)}" else "64 ${getString(R.string.kg)}"
         binding.tvHeightValue.text = if (userModel.height > 0) "${userModel.height} ${getString(R.string.cm)}" else "165 ${getString(R.string.cm)}"

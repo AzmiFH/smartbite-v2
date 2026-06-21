@@ -221,4 +221,16 @@
     <string name="onboarding_finish_title">All Set!</string>
     <string name="onboarding_finish_subtitle">Your personalized nutrition plan is ready. Let\'s start your healthy journey!</string>
     <string name="onboarding_finish_button">Get Started</string>
+
+    <!-- Units -->
+    <string name="unit_piece">piece</string>
+    <string name="unit_plate">plate</string>
+    <string name="unit_grain">grain</string>
+    <string name="unit_pack">pack</string>
+    <string name="unit_skewer">skewer</string>
+    <string name="unit_bowl">bowl</string>
+    <string name="unit_portion">portion</string>
+    <string name="unit_fruit">fruit</string>
+    <string name="unit_glass">glass</string>
+    <string name="unit_cup">cup</string>
 </resources>

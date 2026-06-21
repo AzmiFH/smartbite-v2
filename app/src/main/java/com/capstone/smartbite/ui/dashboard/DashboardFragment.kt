@@ -169,9 +169,9 @@ class DashboardFragment : Fragment() {
                 else -> category
             }
 
-            // Map BMI range (15 - 35) to 0.0 - 1.0 bias
+            // Map BMI range (15 - 30) to 0.0 - 1.0 bias for Kemenkes (Max Obese is lower)
             val minBMI = 15f
-            val maxBMI = 35f
+            val maxBMI = 30f
             val bias = ((bmi.toFloat() - minBMI) / (maxBMI - minBMI)).coerceIn(0f, 1f)
             
             val params = binding.ivBmiThumb.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams

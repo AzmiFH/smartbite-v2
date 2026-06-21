@@ -18,6 +18,7 @@ internal class UserPreference(context: Context, email: String? = null) {
         private const val TARGET_WEIGHT = "target_weight"
         private const val GOAL = "goal"
         private const val ACTIVITY_LEVEL = "activity_level"
+        private const val WEEKLY_RATE = "weekly_rate"
         private const val IS_ONBOARDING_FINISHED = "is_onboarding_finished"
         private const val IS_DARK_MODE = "is_dark_mode"
         private const val LAST_GOAL_RESET_DATE = "last_goal_reset_date"
@@ -73,6 +74,7 @@ internal class UserPreference(context: Context, email: String? = null) {
         editor.putInt(TARGET_WEIGHT, value.targetWeight)
         editor.putString(GOAL, value.goal)
         editor.putString(ACTIVITY_LEVEL, value.activityLevel)
+        editor.putFloat(WEEKLY_RATE, value.weeklyRate.toFloat())
         editor.apply()
     }
 
@@ -106,6 +108,7 @@ internal class UserPreference(context: Context, email: String? = null) {
         model.targetWeight = preferences.getInt(TARGET_WEIGHT, 0)
         model.goal = preferences.getString(GOAL, null)
         model.activityLevel = preferences.getString(ACTIVITY_LEVEL, "")
+        model.weeklyRate = preferences.getFloat(WEEKLY_RATE, 0.5f).toDouble()
         return model
     }
 }

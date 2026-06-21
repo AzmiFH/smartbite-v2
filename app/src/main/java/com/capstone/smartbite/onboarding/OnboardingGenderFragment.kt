@@ -38,11 +38,11 @@ class OnboardingGenderFragment : Fragment() {
         }
 
         binding.btnMale.setOnClickListener {
-            updateUI("Pria")
+            updateUI("Male")
         }
 
         binding.btnFemale.setOnClickListener {
-            updateUI("Wanita")
+            updateUI("Female")
         }
 
         binding.btnNext.setOnClickListener {
@@ -59,18 +59,27 @@ class OnboardingGenderFragment : Fragment() {
 
     private fun updateUI(gender: String) {
         selectedGender = gender
-        if (gender == "Pria") {
+        val isMale = gender == "Male" || gender == "Pria"
+        val isFemale = gender == "Female" || gender == "Wanita"
+
+        if (isMale) {
+            selectedGender = "Male"
             binding.btnMale.setBackgroundResource(R.drawable.bg_gender_card_selected)
             binding.ivCheckMale.setImageResource(R.drawable.ic_check_circle_filled)
-            
+            binding.tvMaleLabel.setTextColor(resources.getColor(R.color.brand_green, null))
+
             binding.btnFemale.setBackgroundResource(R.drawable.bg_gender_card_unselected)
             binding.ivCheckFemale.setImageResource(R.drawable.ic_check_circle_outline)
-        } else if (gender == "Wanita") {
+            binding.tvFemaleLabel.setTextColor(resources.getColor(R.color.text_primary, null))
+        } else if (isFemale) {
+            selectedGender = "Female"
             binding.btnFemale.setBackgroundResource(R.drawable.bg_gender_card_selected)
             binding.ivCheckFemale.setImageResource(R.drawable.ic_check_circle_filled)
-            
+            binding.tvFemaleLabel.setTextColor(resources.getColor(R.color.brand_green, null))
+
             binding.btnMale.setBackgroundResource(R.drawable.bg_gender_card_unselected)
             binding.ivCheckMale.setImageResource(R.drawable.ic_check_circle_outline)
+            binding.tvMaleLabel.setTextColor(resources.getColor(R.color.text_primary, null))
         }
     }
 

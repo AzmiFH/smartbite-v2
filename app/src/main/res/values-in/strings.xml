@@ -194,4 +194,16 @@
     <string name="onboarding_finish_title">Semua Siap!</string>
     <string name="onboarding_finish_subtitle">Rencana nutrisi pribadi Anda sudah siap. Mari mulai perjalanan sehat Anda!</string>
     <string name="onboarding_finish_button">Mulai Sekarang</string>
+
+    <!-- Units -->
+    <string name="unit_piece">potong</string>
+    <string name="unit_plate">piring</string>
+    <string name="unit_grain">butir</string>
+    <string name="unit_pack">bungkus</string>
+    <string name="unit_skewer">tusuk</string>
+    <string name="unit_bowl">mangkok</string>
+    <string name="unit_portion">porsi</string>
+    <string name="unit_fruit">buah</string>
+    <string name="unit_glass">gelas</string>
+    <string name="unit_cup">cangkir</string>
 </resources>
