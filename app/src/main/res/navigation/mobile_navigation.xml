@@ -28,4 +28,10 @@
         android:name="com.capstone.smartbite.ui.profil.ProfilFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_profil" />
+
+    <fragment
+        android:id="@+id/navigation_recipe_detail"
+        android:name="com.capstone.smartbite.ui.recipe.RecipeDetailFragment"
+        android:label="Recipe Detail"
+        tools:layout="@layout/fragment_recipe_detail" />
 </navigation>

@@ -28,6 +28,9 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private val _dailyNutrition = MutableLiveData<HealthMath.DailyNutritionTargets>()
     val dailyNutrition: LiveData<HealthMath.DailyNutritionTargets> = _dailyNutrition
 
+    private val _personalizedMeals = MutableLiveData<List<com.capstone.smartbite.data.MealItem>>()
+    val personalizedMeals: LiveData<List<com.capstone.smartbite.data.MealItem>> = _personalizedMeals
+
     private val userEmailFlow = MutableStateFlow<String?>(null)
 
     /**
@@ -101,6 +104,21 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         viewModelScope.launch {
             if (user.height > 0 && user.weight > 0) {
                 _dailyNutrition.postValue(HealthMath.calculateDailyNutrition(user))
+            }
+        }
+    }
+
+    fun fetchPersonalizedMeals(targetCalories: Int, consumedCalories: Int) {
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+            try {
+                val apiService = com.capstone.smartbite.data.ApiConfig.getApiService()
+                val response = apiService.getPersonalizedMeals(targetCalories, consumedCalories)
+                _personalizedMeals.postValue(response.data)
+                _isLoading.postValue(false)
+            } catch (e: Exception) {
+                _isLoading.postValue(false)
+                _personalizedMeals.postValue(emptyList())
             }
         }
     }

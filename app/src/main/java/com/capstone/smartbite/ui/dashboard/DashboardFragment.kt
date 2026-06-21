@@ -13,20 +13,18 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.capstone.smartbite.R
 import com.capstone.smartbite.databinding.FragmentDashboardBinding
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
@@ -37,7 +35,9 @@ class DashboardFragment : Fragment() {
     private lateinit var adapter: DashboardAdapter
     private lateinit var progressPagerAdapter: ProgressPagerAdapter
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private var lastTargetCals = 0
+    private var lastConsumedCals = 0
+
     private lateinit var mAuth: FirebaseAuth
 
 
@@ -85,16 +85,13 @@ class DashboardFragment : Fragment() {
         dashboardViewModel = ViewModelProvider(requireActivity())[DashboardViewModel::class.java]
         mAuth = FirebaseAuth.getInstance()
         
-        // 1. Inisialisasi UI dasar SEGERA
         setupCurrentDate()
         setupRecyclerView()
         setupProgressPager()
         setupObservers()
 
-        // 2. Muat data dari cache/local secara asinkron tanpa delay buatan
         val user = Firebase.auth.currentUser
         if (user != null) {
-            // Gunakan Default Dispatcher untuk kalkulasi agar tidak membebani Main Thread
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
                 val userPreference = com.capstone.smartbite.UserPreference(requireContext(), user.email)
                 val userModel = userPreference.getUser()
@@ -104,22 +101,10 @@ class DashboardFragment : Fragment() {
                     val userName = userModel.name ?: user.displayName ?: "User"
                     binding.tvGreeting.text = getString(R.string.greeting_halo, userName)
                     
-                    // Trigger data flow
                     dashboardViewModel.setUserEmail(user.email!!)
                     dashboardViewModel.calculateDailyTargets(userModel)
                     setupBMIStatus(userModel)
                 }
-            }
-        }
-        
-        // 3. Konfigurasi Google Sign-In di latar belakang (Low Priority)
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-            withContext(Dispatchers.Main) {
-                mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
             }
         }
     }
@@ -137,20 +122,70 @@ class DashboardFragment : Fragment() {
                 adapter.submitList(it)
             }
         }
+        dashboardViewModel.personalizedMeals.observe(viewLifecycleOwner) {
+            populatePersonalizedMeals(it)
+        }
         dashboardViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
         dashboardViewModel.dailyNutrition.observe(viewLifecycleOwner) {
             progressPagerAdapter.setDailyNutrition(it)
+            lastTargetCals = it.calories
+            checkAndFetchMeals()
         }
         dashboardViewModel.consumedNutrition.observe(viewLifecycleOwner) {
             it?.let { log ->
                 progressPagerAdapter.setConsumedNutrition(log)
+                lastConsumedCals = log.calories
+                checkAndFetchMeals()
             }
         }
         dashboardViewModel.weeklyNutrition.observe(viewLifecycleOwner) {
             progressPagerAdapter.setWeeklyNutrition(it)
         }
+    }
+
+    private fun checkAndFetchMeals() {
+        if (lastTargetCals > 0) {
+            dashboardViewModel.fetchPersonalizedMeals(lastTargetCals, lastConsumedCals)
+        }
+    }
+
+    private fun populatePersonalizedMeals(meals: List<com.capstone.smartbite.data.MealItem>) {
+        if (meals.isEmpty()) return
+
+        // Card 1
+        val meal1 = meals[0]
+        binding.tvMealName1.text = meal1.title
+        binding.tvMealCal1.text = meal1.calories.toString()
+        binding.tvMealDesc1.text = meal1.description
+        Glide.with(this).load(meal1.imageUrl).into(binding.ivMealImg1)
+        
+        binding.ivMealImg1.setOnClickListener { navigateToDetail(meal1) }
+        binding.tvMealName1.setOnClickListener { navigateToDetail(meal1) }
+
+        // Card 2
+        if (meals.size > 1) {
+            val meal2 = meals[1]
+            binding.tvMealName2.text = meal2.title
+            binding.tvMealCal2.text = meal2.calories.toString()
+            binding.tvMealDesc2.text = meal2.description
+            Glide.with(this).load(meal2.imageUrl).into(binding.ivMealImg2)
+
+            binding.ivMealImg2.setOnClickListener { navigateToDetail(meal2) }
+            binding.tvMealName2.setOnClickListener { navigateToDetail(meal2) }
+        }
+    }
+
+    private fun navigateToDetail(meal: com.capstone.smartbite.data.MealItem) {
+        val bundle = Bundle().apply {
+            putString("meal_id", meal.id)
+            putString("meal_title", meal.title)
+            putInt("meal_cal", meal.calories)
+            putString("meal_img", meal.imageUrl)
+            putString("meal_desc", meal.description)
+        }
+        findNavController().navigate(R.id.navigation_recipe_detail, bundle)
     }
 
     private fun setupBMIStatus(user: com.capstone.smartbite.UserModel) {
@@ -169,7 +204,6 @@ class DashboardFragment : Fragment() {
                 else -> category
             }
 
-            // Map BMI range (15 - 30) to 0.0 - 1.0 bias for Kemenkes (Max Obese is lower)
             val minBMI = 15f
             val maxBMI = 30f
             val bias = ((bmi.toFloat() - minBMI) / (maxBMI - minBMI)).coerceIn(0f, 1f)
@@ -178,7 +212,6 @@ class DashboardFragment : Fragment() {
             params.horizontalBias = bias
             binding.ivBmiThumb.layoutParams = params
 
-            // Truly dynamic color based on gradient position (#80FF80 -> #8080FF -> #FF4040)
             val colorStart = android.graphics.Color.parseColor("#80FF80")
             val colorCenter = android.graphics.Color.parseColor("#8080FF")
             val colorEnd = android.graphics.Color.parseColor("#FF4040")
@@ -224,13 +257,10 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setupCurrentDate() {
-        val calendar = Calendar.getInstance().time
         val email = mAuth.currentUser?.email
         val userPreference = com.capstone.smartbite.UserPreference(requireContext(), email)
         val langCode = userPreference.getLanguage()
-        val locale = Locale(langCode)
         
-        // Manual formatting to ensure resource-based day and month names
         val dayName = when (Calendar.getInstance().get(Calendar.DAY_OF_WEEK)) {
             Calendar.MONDAY -> getString(R.string.monday)
             Calendar.TUESDAY -> getString(R.string.tuesday)
