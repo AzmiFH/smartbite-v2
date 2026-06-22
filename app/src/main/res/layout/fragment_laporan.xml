@@ -293,25 +293,32 @@
                                 android:translationZ="10dp"
                                 app:tint="@color/ring_green" />
 
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_carb_val"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="@color/text_black_bold"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_carb_unit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-4dp"
+                                    android:text="g"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="10sp" />
+                            </LinearLayout>
                         </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/tv_carb_val"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="-64dp"
-                            android:text="0"
-                            android:textColor="@color/text_black_bold"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_carb_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="g"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <!-- Protein (Orange/Red) -->
@@ -362,25 +369,32 @@
                                 android:translationZ="10dp"
                                 app:tint="@color/ring_orange" />
 
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_protein_val"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="@color/text_black_bold"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_protein_unit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-4dp"
+                                    android:text="g"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="10sp" />
+                            </LinearLayout>
                         </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/tv_protein_val"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="-64dp"
-                            android:text="0"
-                            android:textColor="@color/text_black_bold"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_protein_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="g"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <!-- Fat (Blue) -->
@@ -431,25 +445,32 @@
                                 android:translationZ="10dp"
                                 app:tint="@color/ring_blue" />
 
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_fat_val"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textColor="@color/text_black_bold"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_fat_unit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="-4dp"
+                                    android:text="g"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="10sp" />
+                            </LinearLayout>
                         </FrameLayout>
-
-                        <TextView
-                            android:id="@+id/tv_fat_val"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="-64dp"
-                            android:text="0"
-                            android:textColor="@color/text_black_bold"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_fat_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="g"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
                     </LinearLayout>
 
                 </LinearLayout>

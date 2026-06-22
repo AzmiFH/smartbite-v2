@@ -185,8 +185,11 @@ class LaporanFragment : Fragment() {
         binding.tvConsumedCalBig.text = "0"
         binding.tvTargetCalLabel.text = ""
         binding.tvCarbVal.text = "0"
+        binding.tvCarbUnit.text = "g"
         binding.tvProteinVal.text = "0"
+        binding.tvProteinUnit.text = "g"
         binding.tvFatVal.text = "0"
+        binding.tvFatUnit.text = "g"
         
         binding.cpRingOuter.progress = 0
         binding.cpRingMiddle.progress = 0
@@ -293,15 +296,18 @@ class LaporanFragment : Fragment() {
         binding.tvConsumedCalBig.text = log?.calories?.toString() ?: "0"
         binding.tvTargetCalLabel.text = getString(R.string.target_cal_format, targets.calories)
 
-        // Macros (No Target)
+        // Macros (With Target)
         binding.pbLaporanCarbs.progress = log?.let { (it.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.tvCarbVal.text = log?.carbs?.toString() ?: "0"
+        binding.tvCarbVal.text = (log?.carbs ?: 0).toString()
+        binding.tvCarbUnit.text = "/ ${targets.carbs} g"
 
         binding.pbLaporanProtein.progress = log?.let { (it.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.tvProteinVal.text = log?.protein?.toString() ?: "0"
+        binding.tvProteinVal.text = (log?.protein ?: 0).toString()
+        binding.tvProteinUnit.text = "/ ${targets.protein} g"
 
         binding.pbLaporanFat.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.tvFatVal.text = log?.fat?.toString() ?: "0"
+        binding.tvFatVal.text = (log?.fat ?: 0).toString()
+        binding.tvFatUnit.text = "/ ${targets.fat} g"
     }
 
     private fun dpToPx(dp: Int): Int {

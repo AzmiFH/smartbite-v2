@@ -127,10 +127,16 @@ object HealthMath {
             else -> tdee.toInt()
         }.coerceAtLeast(if (isMale(user.gender)) 1500 else 1200)
 
-        // Distribusi Makro: 20% P, 55% C, 25% F
-        val protein = (targetCalories * 0.20 / 4).toInt()
-        val carbs = (targetCalories * 0.55 / 4).toInt()
-        val fat = (targetCalories * 0.25 / 9).toInt()
+        // Distribusi Makro berdasarkan Goal (Standard Fitness/Indonesian AKG adjustment)
+        val (pRatio, cRatio, fRatio) = when (user.goal) {
+            "Weight Loss Focus" -> Triple(0.25, 0.50, 0.25) // High protein for satiety/muscle preservation
+            "Muscle Building" -> Triple(0.25, 0.55, 0.20)  // High carb for energy, high protein for growth
+            else -> Triple(0.15, 0.60, 0.25)                // Standard AKG Indonesia (approx)
+        }
+
+        val protein = (targetCalories * pRatio / 4).toInt()
+        val carbs = (targetCalories * cRatio / 4).toInt()
+        val fat = (targetCalories * fRatio / 9).toInt()
 
         return DailyNutritionTargets(targetCalories, protein, carbs, fat)
     }

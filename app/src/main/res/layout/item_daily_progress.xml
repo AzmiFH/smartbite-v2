@@ -113,14 +113,19 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/ring_orange" />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_prot_label"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/proteins"
                         android:textColor="@color/text_black_bold"
                         android:textSize="12sp"
                         android:textStyle="bold"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_prot_val"
                         app:layout_constraintStart_toEndOf="@+id/iv_prot"
                         app:layout_constraintTop_toTopOf="parent" />
                     <TextView
@@ -129,16 +134,17 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/text_subtitle"
                         android:textSize="11sp"
+                        android:textAlignment="viewEnd"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="117 g" />
+                        tools:text="117 / 150 g" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/pb_protein"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:progress="100"
                     app:indicatorColor="@color/ring_orange"
                     app:trackColor="@color/ring_bg_orange"
@@ -150,7 +156,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -165,14 +171,19 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/ring_green" />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_carb_label"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/carbs_label"
                         android:textColor="@color/text_black_bold"
                         android:textSize="12sp"
                         android:textStyle="bold"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_carb_val"
                         app:layout_constraintStart_toEndOf="@+id/iv_carb"
                         app:layout_constraintTop_toTopOf="parent" />
                     <TextView
@@ -181,16 +192,17 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/text_subtitle"
                         android:textSize="11sp"
+                        android:textAlignment="viewEnd"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="104 g" />
+                        tools:text="104 / 200 g" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/pb_carbs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:progress="100"
                     app:indicatorColor="@color/ring_green"
                     app:trackColor="@color/ring_bg_green"
@@ -202,7 +214,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -217,14 +229,19 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:tint="@color/progress_fat" />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_fat_label"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/fat_label"
                         android:textColor="@color/text_black_bold"
                         android:textSize="12sp"
                         android:textStyle="bold"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/tv_fat_val"
                         app:layout_constraintStart_toEndOf="@+id/iv_fat"
                         app:layout_constraintTop_toTopOf="parent" />
                     <TextView
@@ -233,16 +250,17 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/text_subtitle"
                         android:textSize="11sp"
+                        android:textAlignment="viewEnd"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="42 g" />
+                        tools:text="42 / 60 g" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/pb_fat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="8dp"
                     android:progress="100"
                     app:indicatorColor="@color/progress_fat"
                     app:trackColor="#E3F2FD"

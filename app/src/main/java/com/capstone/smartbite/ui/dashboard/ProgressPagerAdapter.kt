@@ -75,9 +75,10 @@ class ProgressPagerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val consFat = consumed?.fat ?: 0
 
             binding.tvCalVal.text = "$consCal / $targetCal"
-            binding.tvProtVal.text = "$consProt g"
-            binding.tvCarbVal.text = "$consCarb g"
-            binding.tvFatVal.text = "$consFat g"
+            
+            binding.tvProtVal.text = "$consProt / $targetProt g"
+            binding.tvCarbVal.text = "$consCarb / $targetCarb g"
+            binding.tvFatVal.text = "$consFat / $targetFat g"
             
             val progress = if (targetCal > 0) (consCal.toFloat() / targetCal * 100).toInt() else 0
             binding.progressCalCircle.progress = progress
