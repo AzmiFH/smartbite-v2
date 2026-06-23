@@ -268,6 +268,93 @@
 
             </LinearLayout>
 
+            <!-- Prep Info Card -->
+            <LinearLayout
+                android:id="@+id/layout_prep_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_card"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:visibility="gone">
+
+                <!-- Yields -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Porsi"
+                        android:textColor="#64748B"
+                        android:textSize="10sp" />
+                    <TextView
+                        android:id="@+id/txt_yields_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#1A1C1E"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="4" />
+                </LinearLayout>
+
+                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#14000000" />
+
+                <!-- Prep Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Persiapan"
+                        android:textColor="#64748B"
+                        android:textSize="10sp" />
+                    <TextView
+                        android:id="@+id/txt_prep_time_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#1A1C1E"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="15 mnt" />
+                </LinearLayout>
+
+                <View android:layout_width="1dp" android:layout_height="24dp" android:background="#14000000" />
+
+                <!-- Cook Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Masak"
+                        android:textColor="#64748B"
+                        android:textSize="10sp" />
+                    <TextView
+                        android:id="@+id/txt_cook_time_val"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#1A1C1E"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        tools:text="20 mnt" />
+                </LinearLayout>
+
+            </LinearLayout>
+
             <!-- Section Label -->
             <TextView
                 android:layout_width="match_parent"
@@ -305,72 +392,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <!-- Ingredient Row 1 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="6dp">
-
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="1 cangkir rolled oats gandum"
-                            android:textColor="#334155"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <!-- Ingredient Row 2 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="6dp">
-
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="1 buah pisang ambon matang, potong tipis"
-                            android:textColor="#334155"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <!-- Ingredient Row 3 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingVertical="6dp">
-
-                        <CheckBox
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="1/2 sdt bubuk kayumanis"
-                            android:textColor="#334155"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                    <!-- Dynamic items will be added here -->
                 </LinearLayout>
             </LinearLayout>
 
@@ -399,105 +421,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
-                    <!-- Instruction Step 1 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:orientation="horizontal"
-                        android:paddingVertical="8dp">
-
-                        <!-- Circle step wrapper -->
-                        <FrameLayout
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/bg_step_circle">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="1"
-                                android:textColor="#FFFFFF"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="Campurkan rolled oats dengan air atau susu rendah lemak, lalu hangatkan di atas panci."
-                            android:textColor="#334155"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <!-- Instruction Step 2 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:orientation="horizontal"
-                        android:paddingVertical="8dp">
-
-                        <!-- Circle step wrapper -->
-                        <FrameLayout
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/bg_step_circle">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="2"
-                                android:textColor="#FFFFFF"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="Masukkan potongan pisang ambon dan aduk hingga rata bersama bubuk kayumanis."
-                            android:textColor="#334155"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <!-- Instruction Step 3 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:orientation="horizontal"
-                        android:paddingVertical="8dp">
-
-                        <!-- Circle step wrapper -->
-                        <FrameLayout
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="@drawable/bg_step_circle">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="3"
-                                android:textColor="#FFFFFF"
-                                android:textSize="11sp"
-                                android:textStyle="bold" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:text="Sajikan saat hangat di mangkuk dan tambahkan topping buah segar lainnya sesuai selera."
-                            android:textColor="#334155"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                    <!-- Dynamic instructions will be added here -->
                 </LinearLayout>
             </LinearLayout>
 

@@ -114,7 +114,15 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
             try {
                 val apiService = com.capstone.smartbite.data.ApiConfig.getApiService()
                 val response = apiService.getPersonalizedMeals(targetCalories, consumedCalories)
-                _personalizedMeals.postValue(response.data)
+                
+                val allMeals = mutableListOf<com.capstone.smartbite.data.MealItem>()
+                // Prioritas: Makanan berat (kalori tinggi) di depan jika sisa kalori masih banyak
+                allMeals.addAll(response.data.over500)
+                allMeals.addAll(response.data.from250to500)
+                allMeals.addAll(response.data.from100to250)
+                allMeals.addAll(response.data.under100)
+                
+                _personalizedMeals.postValue(allMeals)
                 _isLoading.postValue(false)
             } catch (e: Exception) {
                 _isLoading.postValue(false)
@@ -125,5 +133,23 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadActiveEvents(){
         _isLoading.value = false
+    }
+
+    fun addMealToHistory(meal: com.capstone.smartbite.data.MealItem) {
+        val email = userEmailFlow.value ?: return
+        viewModelScope.launch {
+            foodRepository.addMeal(
+                email = email,
+                foodName = meal.title,
+                calories = meal.calories.toDouble(),
+                protein = meal.macros.protein,
+                fat = meal.macros.fat,
+                carbs = meal.macros.carbs,
+                quantity = 1.0,
+                unit = "porsi",
+                imageUrl = meal.imageUrl
+            )
+            _message.postValue("${meal.title} ditambahkan!")
+        }
     }
 }

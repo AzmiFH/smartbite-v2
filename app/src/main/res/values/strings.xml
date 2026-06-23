@@ -105,6 +105,7 @@
     <string name="see_all">See all</string>
     <string name="high_protein">High Protein</string>
     <string name="balanced">Balanced</string>
+    <string name="macros_format">P: %.1fg  C: %.1fg  F: %.1fg</string>
 
     <!-- Laporan Strings -->
     <string name="target_cal_format">/ %d kcal</string>

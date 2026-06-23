@@ -90,6 +90,14 @@ class DashboardFragment : Fragment() {
         setupProgressPager()
         setupObservers()
 
+        binding.tvSeeAll.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("target_cal", lastTargetCals)
+                putInt("consumed_cal", lastConsumedCals)
+            }
+            findNavController().navigate(R.id.navigation_recipe_list, bundle)
+        }
+
         val user = Firebase.auth.currentUser
         if (user != null) {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
@@ -143,6 +151,9 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.weeklyNutrition.observe(viewLifecycleOwner) {
             progressPagerAdapter.setWeeklyNutrition(it)
         }
+        dashboardViewModel.message.observe(viewLifecycleOwner) { msg ->
+            android.widget.Toast.makeText(requireContext(), msg, android.widget.Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun checkAndFetchMeals() {
@@ -154,26 +165,31 @@ class DashboardFragment : Fragment() {
     private fun populatePersonalizedMeals(meals: List<com.capstone.smartbite.data.MealItem>) {
         if (meals.isEmpty()) return
 
-        // Card 1
-        val meal1 = meals[0]
-        binding.tvMealName1.text = meal1.title
-        binding.tvMealCal1.text = meal1.calories.toString()
-        binding.tvMealDesc1.text = meal1.description
-        Glide.with(this).load(meal1.imageUrl).into(binding.ivMealImg1)
-        
-        binding.ivMealImg1.setOnClickListener { navigateToDetail(meal1) }
-        binding.tvMealName1.setOnClickListener { navigateToDetail(meal1) }
+        binding.llMealContainer.removeAllViews()
 
-        // Card 2
-        if (meals.size > 1) {
-            val meal2 = meals[1]
-            binding.tvMealName2.text = meal2.title
-            binding.tvMealCal2.text = meal2.calories.toString()
-            binding.tvMealDesc2.text = meal2.description
-            Glide.with(this).load(meal2.imageUrl).into(binding.ivMealImg2)
+        meals.forEach { meal ->
+            val cardBinding = com.capstone.smartbite.databinding.ItemPersonalizedMealBinding.inflate(
+                LayoutInflater.from(requireContext()),
+                binding.llMealContainer,
+                false
+            )
 
-            binding.ivMealImg2.setOnClickListener { navigateToDetail(meal2) }
-            binding.tvMealName2.setOnClickListener { navigateToDetail(meal2) }
+            cardBinding.tvMealName.text = meal.title
+            cardBinding.tvMealCal.text = meal.calories.toString()
+            cardBinding.tvMealDesc.text = meal.description
+            cardBinding.tvMealTag.text = meal.tag
+            cardBinding.tvMealMacros.text = getString(R.string.macros_format, 
+                meal.macros.protein, meal.macros.carbs, meal.macros.fat)
+            
+            Glide.with(this).load(meal.imageUrl).into(cardBinding.ivMealImg)
+
+            cardBinding.root.setOnClickListener { navigateToDetail(meal) }
+            
+            cardBinding.btnAddMeal.setOnClickListener {
+                dashboardViewModel.addMealToHistory(meal)
+            }
+            
+            binding.llMealContainer.addView(cardBinding.root)
         }
     }
 
@@ -184,6 +200,9 @@ class DashboardFragment : Fragment() {
             putInt("meal_cal", meal.calories)
             putString("meal_img", meal.imageUrl)
             putString("meal_desc", meal.description)
+            putDouble("meal_prot", meal.macros.protein)
+            putDouble("meal_carb", meal.macros.carbs)
+            putDouble("meal_fat", meal.macros.fat)
         }
         findNavController().navigate(R.id.navigation_recipe_detail, bundle)
     }

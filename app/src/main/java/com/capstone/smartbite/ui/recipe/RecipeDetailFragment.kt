@@ -40,12 +40,19 @@ class RecipeDetailFragment : Fragment() {
         val mealCal = arguments?.getInt("meal_cal") ?: 0
         val mealImg = arguments?.getString("meal_img")
         val mealDesc = arguments?.getString("meal_desc")
+        val mealProt = arguments?.getDouble("meal_prot") ?: 0.0
+        val mealCarb = arguments?.getDouble("meal_carb") ?: 0.0
+        val mealFat = arguments?.getDouble("meal_fat") ?: 0.0
         
         // Initial populate from Bundle
         binding.txtToolbarTitle.text = mealTitle ?: "Detail Resep"
         binding.txtMealTitle.text = mealTitle
         binding.txtCaloriesVal.text = if (mealCal > 0) "$mealCal kcal" else "-- kcal"
         binding.txtMealDesc.text = mealDesc
+
+        binding.txtProteinVal.text = String.format(java.util.Locale.US, "%.1fg", mealProt)
+        binding.txtCarbsVal.text = String.format(java.util.Locale.US, "%.1fg", mealCarb)
+        binding.txtFatVal.text = String.format(java.util.Locale.US, "%.1fg", mealFat)
 
         if (mealImg != null) {
             Glide.with(this).load(mealImg).placeholder(R.drawable.ic_gallery).into(binding.imgMealBanner)
@@ -71,6 +78,19 @@ class RecipeDetailFragment : Fragment() {
     }
 
     private fun updateDetailUI(detail: MealDetail) {
+        // Update basic info if returned by API
+        detail.tag?.let { binding.txtMealTag.text = it.uppercase() }
+        detail.description?.let { binding.txtMealDesc.text = it }
+        detail.calories?.let { binding.txtCaloriesVal.text = "$it kcal" }
+
+        // Update Prep Info
+        if (detail.yields != null || detail.prepTime != null || detail.cookTime != null) {
+            binding.layoutPrepCard.visibility = View.VISIBLE
+            binding.txtYieldsVal.text = detail.yields?.toString() ?: "--"
+            binding.txtPrepTimeVal.text = detail.prepTime ?: "--"
+            binding.txtCookTimeVal.text = detail.cookTime ?: "--"
+        }
+
         // Update Ingredients
         binding.layoutIngredientsContainer.removeAllViews()
         detail.ingredients.forEach { ingredient ->
@@ -81,18 +101,31 @@ class RecipeDetailFragment : Fragment() {
 
         // Update Instructions
         binding.layoutInstructionsContainer.removeAllViews()
-        detail.instructions.forEachIndexed { index, step ->
-            val row = LayoutInflater.from(requireContext()).inflate(R.layout.item_instruction, binding.layoutInstructionsContainer, false)
-            row.findViewById<TextView>(R.id.txt_step_number).text = (index + 1).toString()
-            row.findViewById<TextView>(R.id.txt_step_desc).text = step
-            binding.layoutInstructionsContainer.addView(row)
+        
+        // Memastikan instruksi diproses per langkah
+        val instructionList = detail.instructions
+        
+        instructionList.forEachIndexed { index, step ->
+            if (step.isNotBlank()) {
+                val row = LayoutInflater.from(requireContext()).inflate(R.layout.item_instruction, binding.layoutInstructionsContainer, false)
+                
+                // Set nomor urut (1, 2, 3...)
+                val tvNumber = row.findViewById<TextView>(R.id.txt_step_number)
+                tvNumber.text = (index + 1).toString()
+                
+                // Set teks instruksi
+                val tvDesc = row.findViewById<TextView>(R.id.txt_step_desc)
+                tvDesc.text = step.trim()
+                
+                binding.layoutInstructionsContainer.addView(row)
+            }
         }
         
         // Update Macros if available
         detail.macros?.let {
-            binding.txtProteinVal.text = "${it.protein}g"
-            binding.txtCarbsVal.text = "${it.carbs}g"
-            binding.txtFatVal.text = "${it.fat}g"
+            binding.txtProteinVal.text = String.format(java.util.Locale.US, "%.1fg", it.protein)
+            binding.txtCarbsVal.text = String.format(java.util.Locale.US, "%.1fg", it.carbs)
+            binding.txtFatVal.text = String.format(java.util.Locale.US, "%.1fg", it.fat)
         }
     }
 

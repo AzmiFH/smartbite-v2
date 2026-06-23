@@ -7,13 +7,24 @@ data class PersonalizedMealResponse(
     val status: String,
 
     @field:SerializedName("remaining_calories")
-    val remainingCalories: Int,
-
-    @field:SerializedName("total_results")
-    val totalResults: Int,
+    val remainingCalories: Double,
 
     @field:SerializedName("data")
-    val data: List<MealItem>
+    val data: CategorizedMeals
+)
+
+data class CategorizedMeals(
+    @field:SerializedName("under_100")
+    val under100: List<MealItem>,
+
+    @field:SerializedName("100_to_250")
+    val from100to250: List<MealItem>,
+
+    @field:SerializedName("250_to_500")
+    val from250to500: List<MealItem>,
+
+    @field:SerializedName("over_500")
+    val over500: List<MealItem>
 )
 
 data class MealItem(
@@ -41,13 +52,13 @@ data class MealItem(
 
 data class MealMacros(
     @field:SerializedName("protein")
-    val protein: Int,
+    val protein: Double,
 
     @field:SerializedName("carbs")
-    val carbs: Int,
+    val carbs: Double,
 
     @field:SerializedName("fat")
-    val fat: Int
+    val fat: Double
 )
 
 data class MealDetailResponse(
@@ -71,7 +82,18 @@ data class MealDetail(
     @field:SerializedName("instructions")
     val instructions: List<String>,
     
-    // Adding extra fields that might come from the list but are needed in detail
+    @field:SerializedName("yields")
+    val yields: Int? = null,
+
+    @field:SerializedName("prep_time")
+    val prepTime: String? = null,
+
+    @field:SerializedName("cook_time")
+    val cookTime: String? = null,
+
+    @field:SerializedName("meal_types")
+    val mealTypes: List<String>? = null,
+
     @field:SerializedName("calories")
     val calories: Int? = null,
     

@@ -66,6 +66,7 @@
     <string name="see_all">Lihat semua</string>
     <string name="high_protein">Tinggi Protein</string>
     <string name="balanced">Seimbang</string>
+    <string name="macros_format">P: %.1fg  K: %.1fg  L: %.1fg</string>
 
     <!-- Laporan Strings -->
     <string name="target_cal_format">/ %d kkal</string>
