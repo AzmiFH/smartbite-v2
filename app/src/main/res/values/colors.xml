@@ -76,4 +76,10 @@
     <color name="ring_calories">@color/ring_green</color>
     <color name="ring_duration">@color/ring_blue</color>
     <color name="ring_bg">#F5F5F5</color>
+
+    <!-- Multimodal Fusion Colors -->
+    <color name="fusion_vision">#34A853</color>
+    <color name="fusion_voice">#EA4335</color>
+    <color name="transcription_bg">#F8F9FD</color>
+    <color name="mic_bg_active">#EA4335</color>
 </resources>

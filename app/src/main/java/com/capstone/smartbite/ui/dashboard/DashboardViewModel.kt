@@ -93,8 +93,8 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private val _error = MutableLiveData<Boolean>()
     val isError: LiveData<Boolean> = _error
 
-    private val _message = MutableLiveData<String>()
-    val message: LiveData<String> = _message
+    private val _message = MutableLiveData<com.capstone.smartbite.utils.Event<String>>()
+    val message: LiveData<com.capstone.smartbite.utils.Event<String>> = _message
 
     fun setUserEmail(email: String) {
         userEmailFlow.value = email
@@ -149,7 +149,7 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
                 unit = "porsi",
                 imageUrl = meal.imageUrl
             )
-            _message.postValue("${meal.title} ditambahkan!")
+            _message.postValue(com.capstone.smartbite.utils.Event("${meal.title} ditambahkan!"))
         }
     }
 }

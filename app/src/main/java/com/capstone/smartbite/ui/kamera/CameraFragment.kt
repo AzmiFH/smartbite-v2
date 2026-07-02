@@ -281,8 +281,16 @@ class CameraFragment : Fragment(){
 
                     } catch (e: HttpException) {
                         val errorBody = e.response()?.errorBody()?.string()
-                        val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
-                        showToast(errorResponse.message)
+                        if (errorBody?.contains("LOW_CONFIDENCE") == true || errorBody?.contains("please try again later") == true) {
+                            showToast("Makanan tidak terdeteksi. Coba foto makanan dengan jelas.")
+                        } else {
+                            try {
+                                val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
+                                showToast(errorResponse.message)
+                            } catch (parseException: Exception) {
+                                showToast("Terjadi kesalahan pada server.")
+                            }
+                        }
                     } catch (e: Exception) {
                         Log.e("Upload Image", "Unexpected error: ${e.message}")
                         showToast("An unexpected error occurred. Please try again.")

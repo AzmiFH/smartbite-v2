@@ -151,8 +151,10 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.weeklyNutrition.observe(viewLifecycleOwner) {
             progressPagerAdapter.setWeeklyNutrition(it)
         }
-        dashboardViewModel.message.observe(viewLifecycleOwner) { msg ->
-            android.widget.Toast.makeText(requireContext(), msg, android.widget.Toast.LENGTH_SHORT).show()
+        dashboardViewModel.message.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { msg ->
+                android.widget.Toast.makeText(requireContext(), msg, android.widget.Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

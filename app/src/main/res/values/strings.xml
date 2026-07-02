@@ -136,6 +136,13 @@
     <string name="add_meal">Add Meal</string>
     <string name="success_add_meal">Meal added successfully!</string>
 
+    <!-- Multimodal Fusion Strings -->
+    <string name="fusion_processing">Processing Fusion...</string>
+    <string name="fusion_vision">Vision</string>
+    <string name="fusion_voice">Voice</string>
+    <string name="transcription_label">TRANSCRIPTION REAL-TIME</string>
+    <string name="mic_prompt">Speak additional items...</string>
+
     <!-- Onboarding Strings -->
     <string name="onboarding_next">Next</string>
     <string name="onboarding_skip">Skip</string>

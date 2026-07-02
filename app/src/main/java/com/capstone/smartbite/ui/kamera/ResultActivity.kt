@@ -14,6 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import com.capstone.smartbite.data.FileUploadResponse
 import com.capstone.smartbite.data.FoodRepository
 import com.capstone.smartbite.R
+import android.speech.RecognizerIntent
+import android.view.View
+import com.capstone.smartbite.data.Nutrition
+import androidx.activity.result.contract.ActivityResultContracts
 import com.capstone.smartbite.databinding.ActivityResultBinding
 import com.capstone.smartbite.utils.FoodMeasurementHelper
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +36,20 @@ class ResultActivity : AppCompatActivity() {
     private var foodName = ""
     private var unitResId = R.string.unit_portion
     private var isGalleryScan = false
+
+    private val detectedFoods = mutableListOf<Nutrition>()
+
+    private val speechRecognizerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK && result.data != null) {
+            val results = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val spokenText = results?.get(0) ?: ""
+            binding.tvTranscription.text = spokenText
+            binding.badgeVoice.visibility = View.VISIBLE
+            processVoiceInput(spokenText)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -58,6 +76,8 @@ class ResultActivity : AppCompatActivity() {
         result?.let {
             foodName = it.food
             val nutrition = it.nutrition
+            detectedFoods.add(nutrition)
+            
             baseCalories = nutrition.calories
             baseProtein = nutrition.proteins
             baseFat = nutrition.fat
@@ -72,7 +92,8 @@ class ResultActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        binding.tvFoodName.text = foodName
+        val displayFoodName = detectedFoods.joinToString(" + ") { it.name }
+        binding.tvFoodName.text = if (displayFoodName.isNotEmpty()) displayFoodName else foodName
         binding.tvTagCategory.text = getString(R.string.food_label)
         
         val displayQty = if (quantity % 1.0 == 0.0) quantity.toInt().toString() else String.format("%.1f", quantity)
@@ -80,10 +101,15 @@ class ResultActivity : AppCompatActivity() {
         val unitStr = getString(unitResId)
         binding.tvTagPortion.text = "$displayQty ${unitStr.uppercase(Locale.getDefault())}"
 
-        val totalCalories = FoodMeasurementHelper.calculateNutrient(baseCalories, quantity)
-        val totalProtein = FoodMeasurementHelper.calculateNutrient(baseProtein, quantity)
-        val totalFat = FoodMeasurementHelper.calculateNutrient(baseFat, quantity)
-        val totalCarbs = FoodMeasurementHelper.calculateNutrient(baseCarbs, quantity)
+        val totalBaseCalories = detectedFoods.sumOf { it.calories }
+        val totalBaseProtein = detectedFoods.sumOf { it.proteins }
+        val totalBaseFat = detectedFoods.sumOf { it.fat }
+        val totalBaseCarbs = detectedFoods.sumOf { it.carbohydrate }
+
+        val totalCalories = FoodMeasurementHelper.calculateNutrient(totalBaseCalories, quantity)
+        val totalProtein = FoodMeasurementHelper.calculateNutrient(totalBaseProtein, quantity)
+        val totalFat = FoodMeasurementHelper.calculateNutrient(totalBaseFat, quantity)
+        val totalCarbs = FoodMeasurementHelper.calculateNutrient(totalBaseCarbs, quantity)
 
         binding.tvCalories.text = getString(R.string.total_calories_format, totalCalories)
         binding.tvProteinVal.text = String.format("%.1fg", totalProtein)
@@ -121,20 +147,29 @@ class ResultActivity : AppCompatActivity() {
             setResult(RESULT_RETAKE, intent)
             finish()
         }
+
+        binding.btnMic.setOnClickListener {
+            startVoiceInput()
+        }
         
         binding.btnAddMeal.setOnClickListener {
             val email = FirebaseAuth.getInstance().currentUser?.email
             if (email != null && result != null) {
                 lifecycleScope.launch {
                     try {
-                        val totalCalories = FoodMeasurementHelper.calculateNutrient(baseCalories, quantity)
-                        val totalProtein = FoodMeasurementHelper.calculateNutrient(baseProtein, quantity)
-                        val totalFat = FoodMeasurementHelper.calculateNutrient(baseFat, quantity)
-                        val totalCarbs = FoodMeasurementHelper.calculateNutrient(baseCarbs, quantity)
+                        val totalBaseCalories = detectedFoods.sumOf { it.calories }
+                        val totalBaseProtein = detectedFoods.sumOf { it.proteins }
+                        val totalBaseFat = detectedFoods.sumOf { it.fat }
+                        val totalBaseCarbs = detectedFoods.sumOf { it.carbohydrate }
+
+                        val totalCalories = FoodMeasurementHelper.calculateNutrient(totalBaseCalories, quantity)
+                        val totalProtein = FoodMeasurementHelper.calculateNutrient(totalBaseProtein, quantity)
+                        val totalFat = FoodMeasurementHelper.calculateNutrient(totalBaseFat, quantity)
+                        val totalCarbs = FoodMeasurementHelper.calculateNutrient(totalBaseCarbs, quantity)
 
                         foodRepository.addMeal(
                             email = email,
-                            foodName = foodName,
+                            foodName = binding.tvFoodName.text.toString(),
                             calories = totalCalories.toDouble(),
                             protein = totalProtein,
                             fat = totalFat,
@@ -153,6 +188,46 @@ class ResultActivity : AppCompatActivity() {
                 }
             } else {
                 finish()
+            }
+        }
+    }
+
+    private fun startVoiceInput() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "id-ID")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.mic_prompt))
+        }
+        try {
+            speechRecognizerLauncher.launch(intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Speech recognition tidak tersedia", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun processVoiceInput(text: String) {
+        val lowercaseText = text.lowercase()
+        lifecycleScope.launch {
+            try {
+                val keywords = listOf("telur", "tempe", "tahu", "ayam", "nasi")
+                keywords.forEach { keyword ->
+                    if (lowercaseText.contains(keyword)) {
+                        val mockNutrition = when (keyword) {
+                            "telur" -> Nutrition(0, 78, 6.0, 5.0, 0.6, "Telur")
+                            "tempe" -> Nutrition(0, 193, 19.0, 11.0, 9.0, "Tempe")
+                            "tahu" -> Nutrition(0, 76, 8.0, 4.8, 1.9, "Tahu")
+                            else -> null
+                        }
+                        mockNutrition?.let { nutrition ->
+                            if (detectedFoods.none { it.name == nutrition.name }) {
+                                detectedFoods.add(nutrition)
+                                updateUI()
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("ResultActivity", "Fusion error: ${e.message}")
             }
         }
     }

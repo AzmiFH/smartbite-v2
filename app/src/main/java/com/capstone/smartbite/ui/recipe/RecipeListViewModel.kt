@@ -20,8 +20,8 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
     private var currentMealType: String = "Semua Tipe"
     private var currentCalorieCategory: String = "Semua Kalori"
 
-    private val _message = MutableLiveData<String>()
-    val message: LiveData<String> = _message
+    private val _message = MutableLiveData<com.capstone.smartbite.utils.Event<String>>()
+    val message: LiveData<com.capstone.smartbite.utils.Event<String>> = _message
 
     fun fetchAllRecipes(targetCalories: Int, consumedCalories: Int) {
         viewModelScope.launch {
@@ -93,7 +93,7 @@ class RecipeListViewModel(application: Application) : AndroidViewModel(applicati
                 unit = "porsi",
                 imageUrl = meal.imageUrl
             )
-            _message.postValue("${meal.title} ditambahkan!")
+            _message.postValue(com.capstone.smartbite.utils.Event("${meal.title} ditambahkan!"))
         }
     }
 }
