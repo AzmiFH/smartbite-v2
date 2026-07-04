@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import androidx.navigation.fragment.findNavController
 
 class LaporanFragment : Fragment() {
 
@@ -93,8 +94,17 @@ class LaporanFragment : Fragment() {
             } else {
                 binding.rvHistory.visibility = View.VISIBLE
                 binding.tvHistoryEmpty.visibility = View.GONE
-                historyAdapter.submitList(history)
+                historyAdapter.submitList(history.take(10))
             }
+        }
+        
+        // See All Navigation
+        binding.tvHistorySeeAll.setOnClickListener {
+            val selectedDateStr = dateFormatter.format(viewModel.selectedDate.value.time)
+            val bundle = Bundle().apply {
+                putString("selected_date", selectedDateStr)
+            }
+            findNavController().navigate(R.id.navigation_full_history, bundle)
         }
         
         // Observe Targets

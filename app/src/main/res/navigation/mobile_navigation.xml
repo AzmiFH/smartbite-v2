@@ -40,4 +40,10 @@
         android:name="com.capstone.smartbite.ui.recipe.RecipeListFragment"
         android:label="All Recipes"
         tools:layout="@layout/fragment_recipe_list" />
+
+    <fragment
+        android:id="@+id/navigation_full_history"
+        android:name="com.capstone.smartbite.ui.history.HistoryFragment"
+        android:label="Full History"
+        tools:layout="@layout/fragment_history" />
 </navigation>

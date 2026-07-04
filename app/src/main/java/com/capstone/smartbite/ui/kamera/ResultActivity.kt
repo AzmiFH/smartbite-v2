@@ -22,6 +22,10 @@ import com.capstone.smartbite.databinding.ActivityResultBinding
 import com.capstone.smartbite.utils.FoodMeasurementHelper
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import com.capstone.smartbite.data.ApiConfig
+import com.capstone.smartbite.databinding.ItemFoodFusionBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class ResultActivity : AppCompatActivity() {
@@ -101,24 +105,34 @@ class ResultActivity : AppCompatActivity() {
         val unitStr = getString(unitResId)
         binding.tvTagPortion.text = "$displayQty ${unitStr.uppercase(Locale.getDefault())}"
 
+        // Update list of items in the container
+        binding.fusionItemsContainer.removeAllViews()
+        detectedFoods.forEach { nutrition ->
+            val itemBinding = ItemFoodFusionBinding.inflate(layoutInflater, binding.fusionItemsContainer, false)
+            
+            val itemCal = FoodMeasurementHelper.calculateNutrient(nutrition.calories, quantity)
+            val p = FoodMeasurementHelper.calculateNutrient(nutrition.proteins, quantity)
+            val f = FoodMeasurementHelper.calculateNutrient(nutrition.fat, quantity)
+            val c = FoodMeasurementHelper.calculateNutrient(nutrition.carbohydrate, quantity)
+
+            itemBinding.tvItemName.text = nutrition.name
+            itemBinding.tvItemCalories.text = getString(R.string.total_calories_format, itemCal)
+            
+            itemBinding.tvProteinVal.text = String.format("%.1fg", p)
+            itemBinding.progressProtein.progress = (p * 2).toInt().coerceAtMost(100)
+
+            itemBinding.tvFatVal.text = String.format("%.1fg", f)
+            itemBinding.progressFat.progress = (f * 2).toInt().coerceAtMost(100)
+
+            itemBinding.tvCarbsVal.text = String.format("%.1fg", c)
+            itemBinding.progressCarbs.progress = (c * 2).toInt().coerceAtMost(100)
+
+            binding.fusionItemsContainer.addView(itemBinding.root)
+        }
+
         val totalBaseCalories = detectedFoods.sumOf { it.calories }
-        val totalBaseProtein = detectedFoods.sumOf { it.proteins }
-        val totalBaseFat = detectedFoods.sumOf { it.fat }
-        val totalBaseCarbs = detectedFoods.sumOf { it.carbohydrate }
-
         val totalCalories = FoodMeasurementHelper.calculateNutrient(totalBaseCalories, quantity)
-        val totalProtein = FoodMeasurementHelper.calculateNutrient(totalBaseProtein, quantity)
-        val totalFat = FoodMeasurementHelper.calculateNutrient(totalBaseFat, quantity)
-        val totalCarbs = FoodMeasurementHelper.calculateNutrient(totalBaseCarbs, quantity)
-
         binding.tvCalories.text = getString(R.string.total_calories_format, totalCalories)
-        binding.tvProteinVal.text = String.format("%.1fg", totalProtein)
-        binding.tvFatVal.text = String.format("%.1fg", totalFat)
-        binding.tvCarbsVal.text = String.format("%.1fg", totalCarbs)
-
-        binding.progressProtein.progress = (totalProtein * 2).toInt().coerceAtMost(100)
-        binding.progressFat.progress = (totalFat * 2).toInt().coerceAtMost(100)
-        binding.progressCarbs.progress = (totalCarbs * 2).toInt().coerceAtMost(100)
     }
 
     private fun setupListeners(result: FileUploadResponse?, imageUri: Uri?) {
@@ -157,27 +171,26 @@ class ResultActivity : AppCompatActivity() {
             if (email != null && result != null) {
                 lifecycleScope.launch {
                     try {
-                        val totalBaseCalories = detectedFoods.sumOf { it.calories }
-                        val totalBaseProtein = detectedFoods.sumOf { it.proteins }
-                        val totalBaseFat = detectedFoods.sumOf { it.fat }
-                        val totalBaseCarbs = detectedFoods.sumOf { it.carbohydrate }
+                        detectedFoods.forEachIndexed { index, nutrition ->
+                            val itemCalories = FoodMeasurementHelper.calculateNutrient(nutrition.calories, quantity)
+                            val itemProtein = FoodMeasurementHelper.calculateNutrient(nutrition.proteins, quantity)
+                            val itemFat = FoodMeasurementHelper.calculateNutrient(nutrition.fat, quantity)
+                            val itemCarbs = FoodMeasurementHelper.calculateNutrient(nutrition.carbohydrate, quantity)
+                            
+                            val itemImageUri = if (index == 0) imageUri?.toString() else null
 
-                        val totalCalories = FoodMeasurementHelper.calculateNutrient(totalBaseCalories, quantity)
-                        val totalProtein = FoodMeasurementHelper.calculateNutrient(totalBaseProtein, quantity)
-                        val totalFat = FoodMeasurementHelper.calculateNutrient(totalBaseFat, quantity)
-                        val totalCarbs = FoodMeasurementHelper.calculateNutrient(totalBaseCarbs, quantity)
-
-                        foodRepository.addMeal(
-                            email = email,
-                            foodName = binding.tvFoodName.text.toString(),
-                            calories = totalCalories.toDouble(),
-                            protein = totalProtein,
-                            fat = totalFat,
-                            carbs = totalCarbs,
-                            quantity = quantity,
-                            unit = getString(unitResId),
-                            imageUrl = imageUri?.toString()
-                        )
+                            foodRepository.addMeal(
+                                email = email,
+                                foodName = nutrition.name,
+                                calories = itemCalories.toDouble(),
+                                protein = itemProtein,
+                                fat = itemFat,
+                                carbs = itemCarbs,
+                                quantity = quantity,
+                                unit = getString(unitResId),
+                                imageUrl = itemImageUri
+                            )
+                        }
                         
                         Toast.makeText(this@ResultActivity, getString(R.string.success_add_meal), Toast.LENGTH_SHORT).show()
                         setResult(RESULT_GO_TO_DASHBOARD)
@@ -209,25 +222,43 @@ class ResultActivity : AppCompatActivity() {
         val lowercaseText = text.lowercase()
         lifecycleScope.launch {
             try {
-                val keywords = listOf("telur", "tempe", "tahu", "ayam", "nasi")
-                keywords.forEach { keyword ->
-                    if (lowercaseText.contains(keyword)) {
-                        val mockNutrition = when (keyword) {
-                            "telur" -> Nutrition(0, 78, 6.0, 5.0, 0.6, "Telur")
-                            "tempe" -> Nutrition(0, 193, 19.0, 11.0, 9.0, "Tempe")
-                            "tahu" -> Nutrition(0, 76, 8.0, 4.8, 1.9, "Tahu")
-                            else -> null
+                binding.tvFusionStatus.text = getString(R.string.fusion_processing)
+                
+                // Call API to search for food items in CSV
+                val apiService = ApiConfig.getApiService()
+                val results = apiService.searchFood(lowercaseText)
+                
+                if (results.isNotEmpty()) {
+                    results.forEach { nutrition: Nutrition ->
+                        if (detectedFoods.none { it.name.lowercase() == nutrition.name.lowercase() }) {
+                            detectedFoods.add(nutrition)
                         }
-                        mockNutrition?.let { nutrition ->
-                            if (detectedFoods.none { it.name == nutrition.name }) {
-                                detectedFoods.add(nutrition)
-                                updateUI()
+                    }
+                    binding.tvFusionStatus.text = getString(R.string.fusion_vision) // Reuse existing string for "Success" look
+                    updateUI()
+                } else {
+                    // Fallback to local keyword matching if API returns empty
+                    val keywords = listOf("telur", "tempe", "tahu", "ayam", "nasi")
+                    keywords.forEach { keyword ->
+                        if (lowercaseText.contains(keyword)) {
+                            val mockNutrition = when (keyword) {
+                                "telur" -> Nutrition(0, 78, 6.0, 5.0, 0.6, "Telur")
+                                "tempe" -> Nutrition(0, 193, 19.0, 11.0, 9.0, "Tempe")
+                                "tahu" -> Nutrition(0, 76, 8.0, 4.8, 1.9, "Tahu")
+                                else -> null
+                            }
+                            mockNutrition?.let { nutrition ->
+                                if (detectedFoods.none { it.name.lowercase() == nutrition.name.lowercase() }) {
+                                    detectedFoods.add(nutrition)
+                                    updateUI()
+                                }
                             }
                         }
                     }
                 }
             } catch (e: Exception) {
                 Log.e("ResultActivity", "Fusion error: ${e.message}")
+                binding.tvFusionStatus.text = "Fusion Error"
             }
         }
     }

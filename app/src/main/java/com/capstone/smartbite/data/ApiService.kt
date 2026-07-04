@@ -27,4 +27,9 @@ interface ApiService {
     suspend fun getMealDetail(
         @Path("id") id: String
     ): MealDetailResponse
+
+    @GET("/search")
+    suspend fun searchFood(
+        @Query("query") query: String
+    ): List<Nutrition>
 }

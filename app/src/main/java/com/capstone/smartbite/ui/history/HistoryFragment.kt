@@ -51,7 +51,9 @@ class HistoryFragment : Fragment() {
     private fun observeHistory() {
         val email = FirebaseAuth.getInstance().currentUser?.email
         if (email != null) {
-            val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            val passedDateStr = arguments?.getString("selected_date")
+            val dateString = passedDateStr ?: SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            
             viewLifecycleOwner.lifecycleScope.launch {
                 foodRepository.getDailyHistory(email, dateString).collectLatest { list ->
                     if (list.isEmpty()) {

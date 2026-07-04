@@ -87,7 +87,7 @@
     <!-- Camera Strings -->
     <string name="camera_title">Pindai Makanan </string>
     <string name="camera_subtitle">Ambil foto yang jelas untuk menganalisis informasi nutrisi dan melacak makanan Anda secara instan.</string>
-    <string name="scan_food">Pindai Makanan</string>
+    <string name="scan_food">Pindai</string>
     <string name="security_footer">Foto Anda aman dan tidak dibagikan.</string>
 
     <!-- Result Strings -->

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_macro_card">
+
+    <ImageView
+        android:id="@+id/iv_food_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_food_fork_knife"
+        app:tint="@color/brand_green"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_item_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/iv_food_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Ayam Goreng" />
+
+    <TextView
+        android:id="@+id/tv_item_calories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/brand_green"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="260 kcal" />
+
+    <!-- Macros Row (Buletan untuk tiap item) -->
+    <LinearLayout
+        android:id="@+id/macros_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tv_item_name">
+
+        <!-- Protein -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_macro_card"
+            android:padding="12dp">
+            <TextView android:id="@+id/lbl_protein" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/proteins" android:textColor="#555555" android:textSize="13sp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            <ProgressBar android:id="@+id/progress_protein" style="?android:attr/progressBarStyleHorizontal" android:layout_width="70dp" android:layout_height="70dp" android:layout_marginTop="8dp" android:max="100" android:progressDrawable="@drawable/circular_progress_protein" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/lbl_protein" />
+            <TextView android:id="@+id/tv_protein_val" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:textSize="13sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@+id/progress_protein" app:layout_constraintEnd_toEndOf="@+id/progress_protein" app:layout_constraintStart_toStartOf="@+id/progress_protein" app:layout_constraintTop_toTopOf="@+id/progress_protein" tools:text="21.9g" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Fat -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="4dp"
+            android:background="@drawable/bg_macro_card"
+            android:padding="12dp">
+            <TextView android:id="@+id/lbl_fat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fat_label" android:textColor="#555555" android:textSize="13sp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            <ProgressBar android:id="@+id/progress_fat" style="?android:attr/progressBarStyleHorizontal" android:layout_width="70dp" android:layout_height="70dp" android:layout_marginTop="8dp" android:max="100" android:progressDrawable="@drawable/circular_progress_fat" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/lbl_fat" />
+            <TextView android:id="@+id/tv_fat_val" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:textSize="13sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@+id/progress_fat" app:layout_constraintEnd_toEndOf="@+id/progress_fat" app:layout_constraintStart_toStartOf="@+id/progress_fat" app:layout_constraintTop_toTopOf="@+id/progress_fat" tools:text="12.5g" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Carbs -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_macro_card"
+            android:padding="12dp">
+            <TextView android:id="@+id/lbl_carbs" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/carbs_label" android:textColor="#555555" android:textSize="13sp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+            <ProgressBar android:id="@+id/progress_carbs" style="?android:attr/progressBarStyleHorizontal" android:layout_width="70dp" android:layout_height="70dp" android:layout_marginTop="8dp" android:max="100" android:progressDrawable="@drawable/circular_progress_carbs" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/lbl_carbs" />
+            <TextView android:id="@+id/tv_carbs_val" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#000000" android:textSize="13sp" android:textStyle="bold" app:layout_constraintBottom_toBottomOf="@+id/progress_carbs" app:layout_constraintEnd_toEndOf="@+id/progress_carbs" app:layout_constraintStart_toStartOf="@+id/progress_carbs" app:layout_constraintTop_toTopOf="@+id/progress_carbs" tools:text="10.7g" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
