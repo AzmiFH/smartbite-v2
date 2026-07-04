@@ -25,9 +25,10 @@ class FoodRepository(private val context: Context) {
         carbs: Double,
         quantity: Double,
         unit: String,
-        imageUrl: String? = null
+        imageUrl: String? = null,
+        customTimestamp: Long? = null
     ) {
-        val timestamp = System.currentTimeMillis()
+        val timestamp = customTimestamp ?: System.currentTimeMillis()
         val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date(timestamp))
 
         // 1. Save to Room (Local)

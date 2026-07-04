@@ -94,7 +94,8 @@ class LaporanFragment : Fragment() {
             } else {
                 binding.rvHistory.visibility = View.VISIBLE
                 binding.tvHistoryEmpty.visibility = View.GONE
-                historyAdapter.submitList(history.take(10))
+                historyAdapter.submitList(null) // Force refresh list
+                historyAdapter.submitList(history)
             }
         }
         
@@ -298,25 +299,27 @@ class LaporanFragment : Fragment() {
     private fun updateMainUI(log: FirebaseService.DailyNutritionLog?) {
         val targets = viewModel.dailyTargets.value ?: return
         
-        // Progress Rings
-        binding.cpRingOuter.progress = log?.let { (it.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.cpRingMiddle.progress = log?.let { (it.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.cpRingInner.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
+        // Progress Rings - Make sure we use current state if log is null (due to offline/initial)
+        val currentLog = log ?: FirebaseService.DailyNutritionLog(0, 0, 0, 0)
 
-        binding.tvConsumedCalBig.text = log?.calories?.toString() ?: "0"
+        binding.cpRingOuter.progress = (currentLog.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100)
+        binding.cpRingMiddle.progress = (currentLog.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100)
+        binding.cpRingInner.progress = (currentLog.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100)
+
+        binding.tvConsumedCalBig.text = currentLog.calories.toString()
         binding.tvTargetCalLabel.text = getString(R.string.target_cal_format, targets.calories)
 
         // Macros (With Target)
-        binding.pbLaporanCarbs.progress = log?.let { (it.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.tvCarbVal.text = (log?.carbs ?: 0).toString()
+        binding.pbLaporanCarbs.progress = (currentLog.carbs.toFloat() / targets.carbs * 100).toInt().coerceIn(0, 100)
+        binding.tvCarbVal.text = currentLog.carbs.toString()
         binding.tvCarbUnit.text = "/ ${targets.carbs} g"
 
-        binding.pbLaporanProtein.progress = log?.let { (it.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.tvProteinVal.text = (log?.protein ?: 0).toString()
+        binding.pbLaporanProtein.progress = (currentLog.protein.toFloat() / targets.protein * 100).toInt().coerceIn(0, 100)
+        binding.tvProteinVal.text = currentLog.protein.toString()
         binding.tvProteinUnit.text = "/ ${targets.protein} g"
 
-        binding.pbLaporanFat.progress = log?.let { (it.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100) } ?: 0
-        binding.tvFatVal.text = (log?.fat ?: 0).toString()
+        binding.pbLaporanFat.progress = (currentLog.fat.toFloat() / targets.fat * 100).toInt().coerceIn(0, 100)
+        binding.tvFatVal.text = currentLog.fat.toString()
         binding.tvFatUnit.text = "/ ${targets.fat} g"
     }
 

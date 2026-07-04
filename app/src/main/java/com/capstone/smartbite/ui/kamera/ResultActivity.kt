@@ -171,13 +171,15 @@ class ResultActivity : AppCompatActivity() {
             if (email != null && result != null) {
                 lifecycleScope.launch {
                     try {
-                        detectedFoods.forEachIndexed { index, nutrition ->
+                        val baseTimestamp = System.currentTimeMillis()
+                        // Use reversed so the first item in the list gets the latest timestamp and shows on top
+                        detectedFoods.reversed().forEachIndexed { index, nutrition ->
                             val itemCalories = FoodMeasurementHelper.calculateNutrient(nutrition.calories, quantity)
                             val itemProtein = FoodMeasurementHelper.calculateNutrient(nutrition.proteins, quantity)
                             val itemFat = FoodMeasurementHelper.calculateNutrient(nutrition.fat, quantity)
                             val itemCarbs = FoodMeasurementHelper.calculateNutrient(nutrition.carbohydrate, quantity)
                             
-                            val itemImageUri = if (index == 0) imageUri?.toString() else null
+                            val itemImageUri = if (nutrition.name == foodName) imageUri?.toString() else null
 
                             foodRepository.addMeal(
                                 email = email,
@@ -188,7 +190,8 @@ class ResultActivity : AppCompatActivity() {
                                 carbs = itemCarbs,
                                 quantity = quantity,
                                 unit = getString(unitResId),
-                                imageUrl = itemImageUri
+                                imageUrl = itemImageUri,
+                                customTimestamp = baseTimestamp + index // Ensure unique and ordered timestamps
                             )
                         }
                         

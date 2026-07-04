@@ -40,7 +40,6 @@ class HistoryAdapter : ListAdapter<FoodHistoryEntity, HistoryAdapter.HistoryView
 
             if (item.imageUrl.isNullOrEmpty()) {
                 binding.ivFoodHistory.setImageResource(R.drawable.ic_food_fork_knife)
-                // Jika ingin warna hijau seperti sebelumnya (brand_green)
                 binding.ivFoodHistory.setColorFilter(androidx.core.content.ContextCompat.getColor(binding.root.context, R.color.brand_green))
             } else {
                 binding.ivFoodHistory.clearColorFilter()
