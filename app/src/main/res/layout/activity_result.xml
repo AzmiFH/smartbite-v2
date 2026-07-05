@@ -76,81 +76,89 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Ayam Goreng" />
+                tools:text="Nasi Putih" />
 
-            <!-- Tags -->
+            <!-- Portion Selection (Dropdown) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_portion"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_food_name">
+
+                <AutoCompleteTextView
+                    android:id="@+id/actv_portion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:inputType="none"
+                    android:padding="0dp"
+                    android:text="Piring Sedang"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:ignore="LabelFor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Gram Detail Text -->
+            <TextView
+                android:id="@+id/tv_gram_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="(setara dengan ± 200 gram)"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_portion" />
+
+            <!-- Manual Gram Input (Initially Hidden) -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_manual_grams"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Gram (g)"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_gram_detail">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_manual_grams"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Tags (Category Only) -->
             <LinearLayout
                 android:id="@+id/tag_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_food_name">
+                app:layout_constraintTop_toBottomOf="@+id/til_manual_grams">
 
                 <TextView
                     android:id="@+id/tv_tag_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_tag"
-                    android:text="CHICKEN"
+                    android:text="CARBOHYDRATE"
                     android:textAllCaps="true"
                     android:textColor="#555555"
                     android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tv_tag_portion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/bg_tag"
-                    android:text="1 POTONG"
-                    android:textAllCaps="true"
-                    android:textColor="#555555"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <!-- Quantity Selector -->
-            <LinearLayout
-                android:id="@+id/quantity_selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_tag"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tag_container">
-
-                <ImageButton
-                    android:id="@+id/btn_minus"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_chevron_left"
-                    app:tint="@color/ring_orange" />
-
-                <TextView
-                    android:id="@+id/tv_quantity"
-                    android:layout_width="40dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="1"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:id="@+id/btn_plus"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/ic_chevron_right"
-                    app:tint="@color/ring_orange" />
             </LinearLayout>
 
             <!-- Total Kalori Bar -->
@@ -161,7 +169,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_total_calories"
                 android:paddingHorizontal="20dp"
-                app:layout_constraintTop_toBottomOf="@+id/quantity_selector">
+                app:layout_constraintTop_toBottomOf="@+id/tag_container">
 
                 <TextView
                     android:id="@+id/tv_calories"

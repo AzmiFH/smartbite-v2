@@ -23,6 +23,9 @@ import com.capstone.smartbite.utils.FoodMeasurementHelper
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import com.capstone.smartbite.data.ApiConfig
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.ArrayAdapter
 import com.capstone.smartbite.databinding.ItemFoodFusionBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -32,16 +35,17 @@ class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
     private lateinit var foodRepository: FoodRepository
     
-    private var quantity = 1.0
+    private var selectedMultiplier = 1.0
     private var baseCalories = 0
     private var baseProtein = 0.0
     private var baseFat = 0.0
     private var baseCarbs = 0.0
     private var foodName = ""
-    private var unitResId = R.string.unit_portion
     private var isGalleryScan = false
+    private var isManualMode = false
 
     private val detectedFoods = mutableListOf<Nutrition>()
+    private var portions = listOf<FoodMeasurementHelper.Portion>()
 
     private val speechRecognizerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -87,33 +91,78 @@ class ResultActivity : AppCompatActivity() {
             baseFat = nutrition.fat
             baseCarbs = nutrition.carbohydrate
             
-            unitResId = FoodMeasurementHelper.getUnitResIdForFood(foodName)
-            
+            setupPortionDropdown()
             updateUI()
         } ?: Log.e("ResultActivity", "No result received!")
 
         setupListeners(result, imageUri)
     }
 
+    private fun setupPortionDropdown() {
+        portions = FoodMeasurementHelper.getPortionsForFood(foodName)
+        val options = portions.map { "${it.label} (${it.weightGrams}g)" }.toMutableList()
+        options.add("Masukkan dalam Gram ")
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, options)
+        binding.actvPortion.setAdapter(adapter)
+
+        // Set default to Medium portion if available, else first
+        val mediumIndex = portions.indexOfFirst { it.label.contains("Sedang") }
+        val defaultIndex = if (mediumIndex != -1) mediumIndex else 0
+        
+        if (portions.isNotEmpty()) {
+            binding.actvPortion.setText(options[defaultIndex], false)
+            selectedMultiplier = portions[defaultIndex].multiplier
+            updateGramDetail(portions[defaultIndex].weightGrams)
+        }
+
+        binding.actvPortion.setOnItemClickListener { _, _, position, _ ->
+            if (position < portions.size) {
+                isManualMode = false
+                binding.tilManualGrams.visibility = View.GONE
+                selectedMultiplier = portions[position].multiplier
+                updateGramDetail(portions[position].weightGrams)
+                updateUI()
+            } else {
+                isManualMode = true
+                binding.tilManualGrams.visibility = View.VISIBLE
+                binding.tvGramDetail.text = "(Masukkan berat dalam gram)"
+                binding.etManualGrams.requestFocus()
+                // Nutrition will be updated via TextWatcher on etManualGrams
+            }
+        }
+
+        binding.etManualGrams.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (isManualMode) {
+                    val grams = s.toString().toDoubleOrNull() ?: 0.0
+                    selectedMultiplier = grams / 100.0 // Assuming API base is 100g
+                    updateUI()
+                }
+            }
+        })
+    }
+
+    private fun updateGramDetail(grams: Int) {
+        binding.tvGramDetail.text = "(setara dengan ± $grams gram)"
+    }
+
     private fun updateUI() {
         val displayFoodName = detectedFoods.joinToString(" + ") { it.name }
         binding.tvFoodName.text = if (displayFoodName.isNotEmpty()) displayFoodName else foodName
         binding.tvTagCategory.text = getString(R.string.food_label)
-        
-        val displayQty = if (quantity % 1.0 == 0.0) quantity.toInt().toString() else String.format("%.1f", quantity)
-        binding.tvQuantity.text = displayQty
-        val unitStr = getString(unitResId)
-        binding.tvTagPortion.text = "$displayQty ${unitStr.uppercase(Locale.getDefault())}"
 
         // Update list of items in the container
         binding.fusionItemsContainer.removeAllViews()
         detectedFoods.forEach { nutrition ->
             val itemBinding = ItemFoodFusionBinding.inflate(layoutInflater, binding.fusionItemsContainer, false)
             
-            val itemCal = FoodMeasurementHelper.calculateNutrient(nutrition.calories, quantity)
-            val p = FoodMeasurementHelper.calculateNutrient(nutrition.proteins, quantity)
-            val f = FoodMeasurementHelper.calculateNutrient(nutrition.fat, quantity)
-            val c = FoodMeasurementHelper.calculateNutrient(nutrition.carbohydrate, quantity)
+            val itemCal = FoodMeasurementHelper.calculateNutrient(nutrition.calories, selectedMultiplier)
+            val p = FoodMeasurementHelper.calculateNutrient(nutrition.proteins, selectedMultiplier)
+            val f = FoodMeasurementHelper.calculateNutrient(nutrition.fat, selectedMultiplier)
+            val c = FoodMeasurementHelper.calculateNutrient(nutrition.carbohydrate, selectedMultiplier)
 
             itemBinding.tvItemName.text = nutrition.name
             itemBinding.tvItemCalories.text = getString(R.string.total_calories_format, itemCal)
@@ -131,23 +180,11 @@ class ResultActivity : AppCompatActivity() {
         }
 
         val totalBaseCalories = detectedFoods.sumOf { it.calories }
-        val totalCalories = FoodMeasurementHelper.calculateNutrient(totalBaseCalories, quantity)
+        val totalCalories = FoodMeasurementHelper.calculateNutrient(totalBaseCalories, selectedMultiplier)
         binding.tvCalories.text = getString(R.string.total_calories_format, totalCalories)
     }
 
     private fun setupListeners(result: FileUploadResponse?, imageUri: Uri?) {
-        binding.btnMinus.setOnClickListener {
-            if (quantity > 0.5) {
-                quantity -= 0.5
-                updateUI()
-            }
-        }
-
-        binding.btnPlus.setOnClickListener {
-            quantity += 0.5
-            updateUI()
-        }
-
         binding.btnBack.setOnClickListener { finish() }
         binding.btnClose.setOnClickListener {
             setResult(RESULT_GO_TO_DASHBOARD)
@@ -174,12 +211,20 @@ class ResultActivity : AppCompatActivity() {
                         val baseTimestamp = System.currentTimeMillis()
                         // Use reversed so the first item in the list gets the latest timestamp and shows on top
                         detectedFoods.reversed().forEachIndexed { index, nutrition ->
-                            val itemCalories = FoodMeasurementHelper.calculateNutrient(nutrition.calories, quantity)
-                            val itemProtein = FoodMeasurementHelper.calculateNutrient(nutrition.proteins, quantity)
-                            val itemFat = FoodMeasurementHelper.calculateNutrient(nutrition.fat, quantity)
-                            val itemCarbs = FoodMeasurementHelper.calculateNutrient(nutrition.carbohydrate, quantity)
+                            val itemCalories = FoodMeasurementHelper.calculateNutrient(nutrition.calories, selectedMultiplier)
+                            val itemProtein = FoodMeasurementHelper.calculateNutrient(nutrition.proteins, selectedMultiplier)
+                            val itemFat = FoodMeasurementHelper.calculateNutrient(nutrition.fat, selectedMultiplier)
+                            val itemCarbs = FoodMeasurementHelper.calculateNutrient(nutrition.carbohydrate, selectedMultiplier)
                             
                             val itemImageUri = if (nutrition.name == foodName) imageUri?.toString() else null
+
+                            val displayUnit = if (isManualMode) {
+                                "${binding.etManualGrams.text} g"
+                            } else {
+                                binding.actvPortion.text.toString()
+                                    .replace("[Porsi] ", "")
+                                    .substringBefore(" (")
+                            }
 
                             foodRepository.addMeal(
                                 email = email,
@@ -188,8 +233,8 @@ class ResultActivity : AppCompatActivity() {
                                 protein = itemProtein,
                                 fat = itemFat,
                                 carbs = itemCarbs,
-                                quantity = quantity,
-                                unit = getString(unitResId),
+                                quantity = selectedMultiplier,
+                                unit = displayUnit,
                                 imageUrl = itemImageUri,
                                 customTimestamp = baseTimestamp + index // Ensure unique and ordered timestamps
                             )
