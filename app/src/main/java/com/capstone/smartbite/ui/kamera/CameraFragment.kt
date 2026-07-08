@@ -281,15 +281,23 @@ class CameraFragment : Fragment(){
 
                     } catch (e: HttpException) {
                         val errorBody = e.response()?.errorBody()?.string()
-                        if (errorBody?.contains("LOW_CONFIDENCE") == true || errorBody?.contains("please try again later") == true) {
-                            showToast("Makanan tidak terdeteksi. Coba foto makanan dengan jelas.")
-                        } else {
+                        if (errorBody != null) {
                             try {
-                                val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
-                                showToast(errorResponse.message)
+                                val jsonObject = org.json.JSONObject(errorBody)
+                                // Karena FastAPI selalu mengirim error dengan nama "detail"
+                                if (jsonObject.has("detail")) {
+                                    val errorMessage = jsonObject.getString("detail")
+                                    showToast(errorMessage)
+                                } else {
+                                    // Fallback jika format berbeda
+                                    val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
+                                    showToast(errorResponse.message)
+                                }
                             } catch (parseException: Exception) {
-                                showToast("Terjadi kesalahan pada server.")
+                                showToast("Terjadi kesalahan sistem dari server.")
                             }
+                        } else {
+                            showToast("Gagal terhubung ke server.")
                         }
                     } catch (e: Exception) {
                         Log.e("Upload Image", "Unexpected error: ${e.message}")
